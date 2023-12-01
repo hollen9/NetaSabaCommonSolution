@@ -1,0 +1,11 @@
+{
+  "directories": {
+    "cs2": "",
+    "steam": "C:/Program Files (x86)/Steam/steam.exe",
+    "cs2workshop": ""
+  },
+  "advanced": {
+    "isDisabledAutoDelete": false,
+    "isPermanentDeleteNoRecycleBin": false
+  }
+}
