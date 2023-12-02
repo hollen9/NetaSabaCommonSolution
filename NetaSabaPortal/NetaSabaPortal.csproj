@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Images\animated\padoru\padoru-smooth.gif" />
     <None Remove="Resources\Images\roundCancel.png" />
     <None Remove="Resources\Images\roundChecked.png" />
   </ItemGroup>
@@ -21,6 +22,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.0" />
     <PackageReference Include="SteamKit2" Version="2.5.0" />
+    <PackageReference Include="XamlAnimatedGif" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\Images\animated\padoru\padoru-smooth.gif" />
     <Resource Include="Resources\Images\roundCancel.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>

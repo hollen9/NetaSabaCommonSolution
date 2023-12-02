@@ -7,5 +7,6 @@
     <Application.Resources>
         <BitmapImage x:Key="imgRoundChecked" UriSource="Resources/Images/roundChecked.png"/>
         <BitmapImage x:Key="imgRoundCancel" UriSource="Resources/Images/roundCancel.png"/>
+        <BitmapImage x:Key="imgAniPadoruSmooth" UriSource="Resources/Images/animated/padoru/padoru-smooth.gif"/>
     </Application.Resources>
 </Application>

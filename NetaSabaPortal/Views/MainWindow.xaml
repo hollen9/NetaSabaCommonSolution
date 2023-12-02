@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:NetaSabaPortal"
         xmlns:viewModels="clr-namespace:NetaSabaPortal.ViewModels"
         xmlns:converter="clr-namespace:NetaSabaPortal.Views.Converters"
+        xmlns:gif="https://github.com/XamlAnimatedGif/XamlAnimatedGif"
         mc:Ignorable="d"
         Title="NetaSaba Portal" Height="450" Width="800" Loaded="Window_Loaded"
         >
@@ -20,7 +21,7 @@
         <TabItem>
             <TabItem.Header>
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="🍥" Foreground="Pink" />
+                    <TextBlock Text="🔧" Foreground="Gray" />
                     <TextBlock Text="Location Settings" />
                 </StackPanel>
             </TabItem.Header>
@@ -90,18 +91,49 @@
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
+                    <ColumnDefinition/>
                     <ColumnDefinition Width="75"/>
                 </Grid.ColumnDefinitions>
                 <ComboBox x:Name="cbEntities"
                     FontSize="24"
-                    Grid.Row="0" Grid.Column="0"
+                    Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
                     ItemsSource="{Binding EntitiesDefinitions}"
                     DisplayMemberPath="EntityName"
                     SelectedItem="{Binding SelectedEntity}"
                     />
                 <Button
-                    Grid.Row="0" Grid.Column="1" Command="{Binding ExtractCommand}">Extract</Button>
+                    Grid.Row="0" Grid.Column="2" Command="{Binding ExtractCommand}">Extract</Button>
+                <Image Grid.Column="1" Grid.Row="1" gif:AnimationBehavior.SourceUri="pack://application:,,,/Resources/Images/animated/padoru/padoru-smooth.gif"
+                       Visibility="{Binding IsExtracting, Converter={StaticResource BoolVisConverter}, ConverterParameter=Normal}"/>
                 <TextBlock Grid.Row="1" FontSize="16" Text="{Binding SelectedEntity.EntityDescription}"/>
+            </Grid>
+        </TabItem>
+        <TabItem>
+            <TabItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="🍥" Foreground="Pink" />
+                    <TextBlock Text="About" />
+                </StackPanel>
+            </TabItem.Header>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Row="0" Grid.Column="0" Margin="10">
+                    <TextBlock Text="NetaSaba Portal" FontSize="24" FontWeight="Bold"/>
+                    <TextBlock Text="Version 0.1.0" FontSize="16"/>
+                    <TextBlock Text="Made by Hollen9" FontSize="16"/>
+                    <TextBlock>
+                        <Hyperlink NavigateUri="https://hollen9.com" RequestNavigate="Hyperlink_RequestNavigate">
+                            <Run Text="https://hollen.tech"/>
+                        </Hyperlink>
+                    </TextBlock>
+                </StackPanel>
             </Grid>
         </TabItem>
     </TabControl>

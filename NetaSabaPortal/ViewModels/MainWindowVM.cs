@@ -64,6 +64,9 @@ namespace NetaSabaPortal.ViewModels
         private EntityDefinition _selectedEntity;
         public EntityDefinition SelectedEntity { get => _selectedEntity; set => SetProperty(ref _selectedEntity, value); }
 
+        private bool _isExtracting = false;
+        public bool IsExtracting { get => _isExtracting; set => SetProperty(ref _isExtracting, value); }
+
         public ICommand ExtractCommand => new RelayCommand(() =>
         {
             if (SelectedEntity == null)            
@@ -79,8 +82,15 @@ namespace NetaSabaPortal.ViewModels
             
             // Optionally verify hashes and signatures of the file if there are any
             // package.VerifyHashes();
-            
-            ExtractSpecificFilesFromVpk(vpkPath, SelectedEntity.Copies, SelectedEntity.Types, "J:\\TestVpk");
+            string destFolder = Path.GetFullPath(Path.Combine(CS2Path, $"../../../../csgo"));
+            if (!Directory.Exists(destFolder))
+            {
+                //MessageBox.Show()
+                // Show error msgbox
+                MessageBox.Show($"CS2(CSGO) Root Folder not found.\r\n{destFolder}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            ExtractSpecificFilesFromVpk(vpkPath, SelectedEntity.Copies, SelectedEntity.Types, destFolder);
 
             // Extract filtered files to directory "J:\Test"
             // filtered rules are defined in SelectedEntity.Copy (List)
@@ -103,39 +113,50 @@ namespace NetaSabaPortal.ViewModels
             ////read UTF8 bytes[] into string
             //var rawText = Encoding.UTF8.GetString(fileContents);
             //RawText = rawText;
-        });
+        }, ()=> !IsExtracting);
 
         private void ExtractSpecificFilesFromVpk(string vpkPath, string[] copies, string[] types, string dest)
         {
-            using var package = new SteamDatabase.ValvePak.Package();
-            package.Read(vpkPath);
-            foreach (var kv in package.Entries)
+            Task.Run(() => 
             {
-                string fileType = kv.Key;
-                if (types == null || types.Length == 0 || types.Contains(fileType.ToLower()))
+                if (!File.Exists(vpkPath))
                 {
-                    var fileEntries = kv.Value;
-                    foreach (var copy in copies)
+                    return;
+                }
+                IsExtracting = true;
+                ExtractCommand.CanExecute(false);
+                using var package = new SteamDatabase.ValvePak.Package();
+                package.Read(vpkPath);
+                foreach (var kv in package.Entries)
+                {
+                    string fileType = kv.Key;
+                    if (types == null || types.Length == 0 || types.Contains(fileType.ToLower()))
                     {
-                        // List<SteamDatabase.ValvePak.PackageEntry> list = fileEntries.Where(x => x.FileName.StartsWith(copy)).ToList();
-                        foreach (var fileEntry in fileEntries)
+                        var fileEntries = kv.Value;
+                        foreach (var copy in copies)
                         {
-                            string destPath = Path.GetFullPath(Path.Combine(dest, fileEntry.DirectoryName, $"{Path.GetFileName(fileEntry.FileName)}.{fileType}"));
-                            string destDir = Path.GetDirectoryName(destPath);
-
-                            if (!Directory.Exists(destDir))
+                            // List<SteamDatabase.ValvePak.PackageEntry> list = fileEntries.Where(x => x.FileName.StartsWith(copy)).ToList();
+                            foreach (var fileEntry in fileEntries)
                             {
-                                Directory.CreateDirectory(destDir);
+                                string destPath = Path.GetFullPath(Path.Combine(dest, fileEntry.DirectoryName, $"{Path.GetFileName(fileEntry.FileName)}.{fileType}"));
+                                string destDir = Path.GetDirectoryName(destPath);
+
+                                if (!Directory.Exists(destDir))
+                                {
+                                    Directory.CreateDirectory(destDir);
+                                }
+
+                                package.ReadEntry(fileEntry, out byte[] fileContents);
+
+                                // If file already exists, overwrite it
+                                File.WriteAllBytes(destPath, fileContents);
                             }
-
-                            package.ReadEntry(fileEntry, out byte[] fileContents);
-
-                            // If file already exists, overwrite it
-                            File.WriteAllBytes(destPath, fileContents);
                         }
                     }
                 }
-            }
+                ExtractCommand.CanExecute(true);
+                IsExtracting = false;
+            });
         }
 
         public ICommand BrowseCommand => new RelayCommand<string>((typesConcat) =>
