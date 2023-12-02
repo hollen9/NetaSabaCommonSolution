@@ -71,10 +71,25 @@ namespace NetaSabaPortal.ViewModels
         {
             if (SelectedEntity == null)            
             {
-                // Show Err MsgBox
                 MessageBox.Show("No entity is selected.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
+            if (!IsSteamPathValid)
+            {
+                MessageBox.Show("Steam Client path not specified.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            if (!IsCS2PathValid)
+            {
+                MessageBox.Show("CS2 Client path not specified.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            if (!IsCS2AcfPathValid)
+            {
+                MessageBox.Show("CS2 Workshop ACF path not specified.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
 
             string workshopDir = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(CS2AcfPath), @"content\730"));
             string vpkPath = Path.Combine(workshopDir, $"{SelectedEntity.WorkshopId}\\{SelectedEntity.WorkshopId}.vpk");
@@ -82,7 +97,7 @@ namespace NetaSabaPortal.ViewModels
             
             // Optionally verify hashes and signatures of the file if there are any
             // package.VerifyHashes();
-            string destFolder = Path.GetFullPath(Path.Combine(CS2Path, $"../../../../csgo"));
+            string destFolder = Path.GetFullPath(Path.Combine(CS2Path, $"../../../../game/csgo"));
             if (!Directory.Exists(destFolder))
             {
                 //MessageBox.Show()
@@ -184,7 +199,7 @@ namespace NetaSabaPortal.ViewModels
                 // Let user select cs2.exe or csgo.exe at the same time
                 dialog.Filter = "CS2/CSGO Client|cs2.exe; csgo.exe";
                 dialog.Title = "Select CS2/CSGO Client";
-                string steamDir = IsSteamPathValid ? Path.GetDirectoryName(SteamPath) : null;
+                string steamDir = IsSteamPathValid ? Path.GetDirectoryName(SteamPath) : string.Empty;
                 string steamGameDir = Path.Combine(steamDir, @"steamapps\common\");
 
                 dialog.InitialDirectory = IsSteamPathValid ? steamGameDir : @"C:\";
@@ -199,8 +214,9 @@ namespace NetaSabaPortal.ViewModels
                 // Let user select appworkshop_730.acf
                 dialog.Filter = "CS2 Workshop ACF|appworkshop_730.acf";
                 dialog.Title = "Select appworkshop_730.acf";
-                string cs2Dir = IsCS2PathValid ? Path.GetDirectoryName(CS2Path) : null;
-                string cs2WorkshopDir = Path.Combine(cs2Dir, @"\..\..\workshop");
+                string cs2Dir = IsCS2PathValid ? Path.GetDirectoryName(CS2Path) : string.Empty;
+                
+                string cs2WorkshopDir = Path.GetFullPath(Path.Combine(cs2Dir, @"..\..\..\..\workshop"));
 
                 dialog.InitialDirectory = IsCS2PathValid ? cs2WorkshopDir : @"C:\";
                 if (dialog.ShowDialog() != true)

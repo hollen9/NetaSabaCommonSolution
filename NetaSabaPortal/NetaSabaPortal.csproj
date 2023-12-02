@@ -6,12 +6,17 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Resources\Images\guncat.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Resources\Images\animated\padoru\padoru-smooth.gif" />
     <None Remove="Resources\Images\roundCancel.png" />
     <None Remove="Resources\Images\roundChecked.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\Images\guncat.ico" />
   </ItemGroup>
 
   <ItemGroup>

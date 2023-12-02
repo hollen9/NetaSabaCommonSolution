@@ -102,13 +102,14 @@
                     SelectedItem="{Binding SelectedEntity}"
                     />
                 <Button
-                    Grid.Row="0" Grid.Column="2" Command="{Binding ExtractCommand}">Extract</Button>
+                    Grid.Row="0" Grid.Column="2" Command="{Binding ExtractCommand}"
+                    Visibility="{Binding IsExtracting, Converter={StaticResource BoolVisConverter}, ConverterParameter=Inverted}">Extract</Button>
                 <Image Grid.Column="1" Grid.Row="1" gif:AnimationBehavior.SourceUri="pack://application:,,,/Resources/Images/animated/padoru/padoru-smooth.gif"
                        Visibility="{Binding IsExtracting, Converter={StaticResource BoolVisConverter}, ConverterParameter=Normal}"/>
                 <TextBlock Grid.Row="1" FontSize="16" Text="{Binding SelectedEntity.EntityDescription}"/>
             </Grid>
         </TabItem>
-        <TabItem>
+        <TabItem><!--About Page-->
             <TabItem.Header>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="🍥" Foreground="Pink" />
@@ -126,7 +127,7 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Row="0" Grid.Column="0" Margin="10">
                     <TextBlock Text="NetaSaba Portal" FontSize="24" FontWeight="Bold"/>
-                    <TextBlock Text="Version 0.1.0" FontSize="16"/>
+                    <TextBlock Text="Version 0.1.1" FontSize="16"/>
                     <TextBlock Text="Made by Hollen9" FontSize="16"/>
                     <TextBlock>
                         <Hyperlink NavigateUri="https://hollen9.com" RequestNavigate="Hyperlink_RequestNavigate">
