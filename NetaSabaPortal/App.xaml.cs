@@ -47,6 +47,7 @@ namespace NetaSabaPortal
             var configuration = new ConfigurationBuilder()
             .SetBasePath(currentDir)
             .AddJsonFile("config.jsonc")
+            .AddJsonFile("config_entities.jsonc")
             //.AddJsonFile("config_secret.jsonc")
             .Build();
 
@@ -54,6 +55,7 @@ namespace NetaSabaPortal
 
             // services.AddOptions<PathOptions>().Configure(x => configuration.Bind("path", x));
             services.ConfigureWritable<PathOptions>(configuration.GetSection("path"), "config.jsonc");
+            services.ConfigureWritable<EntitiesOptions>(configuration.GetSection("entities"), "config_entities.jsonc");
 
             services.AddTransient<MainWindowVM>();
             services.AddSingleton<MainWindow>();

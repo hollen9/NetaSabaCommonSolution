@@ -1,0 +1,19 @@
+{
+  "entities": {
+    "definitions": [
+      {
+        "entityName": "KuromeKuro - DLC",
+        "workshopId": "3101610901",
+        "serverId": "kuromekuro",
+        "EntityDescription": "Test\rTest\rTest",
+        "copies": [
+          "sounds/kurome"
+        ],
+        "types": [
+          "vsnd_c"
+        ],
+        "isDefault": true
+      }
+    ]
+  }
+}

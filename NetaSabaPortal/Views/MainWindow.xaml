@@ -16,7 +16,7 @@
         <converter:BooleanToGreenRedColorConverter x:Key="BooleanToGreenRedColorConverter"/>
         <converter:InvertableBooleanToVisibilityConverter x:Key="BoolVisConverter"/>
     </Window.Resources>
-    <TabControl>
+    <TabControl Margin="6">
         <TabItem>
             <TabItem.Header>
                 <StackPanel Orientation="Horizontal">
@@ -26,11 +26,11 @@
             </TabItem.Header>
             <Grid Margin="10">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
                     <RowDefinition Height="25"/>
+                    <RowDefinition Height="30"/>
                     <RowDefinition Height="25"/>
-                    <RowDefinition Height="25"/>
-                    <RowDefinition Height="25"/>
-                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="30"/>
                     <RowDefinition Height="25"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
@@ -39,7 +39,7 @@
                     <ColumnDefinition Width="70"/>
                     <ColumnDefinition Width="70"/>
                 </Grid.ColumnDefinitions>
-                <StackPanel Grid.Row="0" Grid.Column="0" Margin="1"  Orientation="Horizontal">
+                <StackPanel Grid.Row="0" Grid.Column="0" Margin="1,6,1,1"  Orientation="Horizontal">
                     <Image Visibility="{Binding IsSteamPathValid, Converter={StaticResource BoolVisConverter}, ConverterParameter=Normal}" Height="15" Width="15" Source="{StaticResource imgRoundChecked}" Margin="2" VerticalAlignment="Top"/>
                     <Image Visibility="{Binding IsSteamPathValid, Converter={StaticResource BoolVisConverter}, ConverterParameter=Inverted}" Height="15" Width="15" Source="{StaticResource imgRoundCancel}" Margin="2" VerticalAlignment="Top"/>
 
@@ -50,7 +50,7 @@
                 <Button Grid.Row="1" Grid.Column="1" Margin="1" Command="{Binding BrowseCommand}" CommandParameter="steam">Browse</Button>
                 <Button Grid.Row="1" Grid.Column="2" Margin="1" Command="{Binding AutoCommand}" CommandParameter="steam">Auto</Button>
                 <!--CS2-->
-                <StackPanel Grid.Row="2" Grid.Column="0" Margin="1"  Orientation="Horizontal">
+                <StackPanel Grid.Row="2" Grid.Column="0" Margin="1,6,1,1"  Orientation="Horizontal">
                     <Image Visibility="{Binding IsCS2PathValid, Converter={StaticResource BoolVisConverter}, ConverterParameter=Normal}" Height="15" Width="15" Source="{StaticResource imgRoundChecked}" Margin="2" VerticalAlignment="Top"/>
                     <Image Visibility="{Binding IsCS2PathValid, Converter={StaticResource BoolVisConverter}, ConverterParameter=Inverted}" Height="15" Width="15" Source="{StaticResource imgRoundCancel}" Margin="2" VerticalAlignment="Top"/>
                     <TextBlock Text="Path to " />
@@ -63,7 +63,7 @@
                 <Button Grid.Row="3" Grid.Column="1" Margin="1" Command="{Binding BrowseCommand}" CommandParameter="cs2">Browse</Button>
                 <Button Grid.Row="3" Grid.Column="2" Margin="1" Command="{Binding AutoCommand}" CommandParameter="cs2">Auto</Button>
                 <!--CS2Workshop-->
-                <StackPanel Grid.Row="4" Grid.Column="0" Margin="1"  Orientation="Horizontal">
+                <StackPanel Grid.Row="4" Grid.Column="0" Margin="1,6,1,1"  Orientation="Horizontal">
                     <Image Visibility="{Binding IsCS2AcfPathValid, Converter={StaticResource BoolVisConverter}, ConverterParameter=Normal}" Height="15" Width="15" Source="{StaticResource imgRoundChecked}" Margin="2" VerticalAlignment="Top"/>
                     <Image Visibility="{Binding IsCS2AcfPathValid, Converter={StaticResource BoolVisConverter}, ConverterParameter=Inverted}" Height="15" Width="15" Source="{StaticResource imgRoundCancel}" Margin="2" VerticalAlignment="Top"/>
                     <TextBlock Text="Path to " />
@@ -75,5 +75,35 @@
                 <Button Grid.Row="5" Grid.Column="2" Margin="1" Command="{Binding AutoCommand}" CommandParameter="cs2acf">Auto</Button>
             </Grid>
         </TabItem>
+        <TabItem>
+            <TabItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="🧸" Foreground="Orange" />
+                    <TextBlock Text="Extract" />
+                </StackPanel>
+            </TabItem.Header>
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="36"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="30"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="75"/>
+                </Grid.ColumnDefinitions>
+                <ComboBox x:Name="cbEntities"
+                    FontSize="24"
+                    Grid.Row="0" Grid.Column="0"
+                    ItemsSource="{Binding EntitiesDefinitions}"
+                    DisplayMemberPath="EntityName"
+                    SelectedItem="{Binding SelectedEntity}"
+                    />
+                <Button
+                    Grid.Row="0" Grid.Column="1" Command="{Binding ExtractCommand}">Extract</Button>
+                <TextBlock Grid.Row="1" FontSize="16" Text="{Binding SelectedEntity.EntityDescription}"/>
+            </Grid>
+        </TabItem>
     </TabControl>
 </Window>
+

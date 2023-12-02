@@ -30,6 +30,17 @@ namespace NetaSabaPortal.Views
         {
             MainWindowVM vm = (ViewModels.MainWindowVM)DataContext;
             vm.AutoCommand.Execute("steam");
+
+            int selectedIdx = 0;
+            for (int i = vm.EntitiesDefinitions.Count - 1; i >= 0; i--)
+            {
+                Models.EntityDefinition entity = vm.EntitiesDefinitions[i];
+                if (entity.IsDefault ?? false)
+                {
+                    selectedIdx = i;
+                }
+            }
+            cbEntities.SelectedIndex = selectedIdx;
         }
     }
 }

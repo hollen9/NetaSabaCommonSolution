@@ -17,6 +17,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Markup;
+using static NetaSabaPortal.Options.EntitiesOptions;
+using System.Collections.ObjectModel;
+using NetaSabaPortal.Models;
 
 namespace NetaSabaPortal.ViewModels
 {
@@ -32,14 +35,21 @@ namespace NetaSabaPortal.ViewModels
 
         // public IOptions<PathOptions> _dirOptions;
         public IWritableOptions<PathOptions> _dirOptions;
+        public IWritableOptions<EntitiesOptions> _entOptions;
 
-        public MainWindowVM(IWritableOptions<PathOptions> dirOptions)
+        public MainWindowVM(
+            IWritableOptions<PathOptions> dirOptions,
+            IWritableOptions<EntitiesOptions> entOptions
+            )
         {
             _dirOptions = dirOptions;
-            
+            _entOptions = entOptions;
+
             CS2AcfPath = _dirOptions.Value.Cs2acf;
             CS2Path = _dirOptions.Value.Cs2;
             SteamPath = _dirOptions.Value.Steam;
+
+            EntitiesDefinitions = new ObservableCollection<EntityDefinition>(_entOptions.Value.Definitions);
         }
         public string SteamPath { get => _steamPath; set => SetProperty(ref _steamPath, value); }
         public bool IsSteamPathValid { get => _isSteamPathValid; set => SetProperty(ref _isSteamPathValid, value); }
@@ -47,7 +57,86 @@ namespace NetaSabaPortal.ViewModels
         public bool IsCS2PathValid { get => _isCS2PathValid; set => SetProperty(ref _isCS2PathValid, value); }
         public string CS2AcfPath { get => _cs2acfPath; set => SetProperty(ref _cs2acfPath, value); }
         public bool IsCS2AcfPathValid { get => _isCS2AcfPathValid; set => SetProperty(ref _isCS2AcfPathValid, value); }
-        
+
+        private ObservableCollection<EntityDefinition> _entitiesDef;
+        public ObservableCollection<EntityDefinition> EntitiesDefinitions { get => _entitiesDef; set => SetProperty(ref _entitiesDef, value); }
+
+        private EntityDefinition _selectedEntity;
+        public EntityDefinition SelectedEntity { get => _selectedEntity; set => SetProperty(ref _selectedEntity, value); }
+
+        public ICommand ExtractCommand => new RelayCommand(() =>
+        {
+            if (SelectedEntity == null)            
+            {
+                // Show Err MsgBox
+                MessageBox.Show("No entity is selected.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            string workshopDir = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(CS2AcfPath), @"content\730"));
+            string vpkPath = Path.Combine(workshopDir, $"{SelectedEntity.WorkshopId}\\{SelectedEntity.WorkshopId}.vpk");
+
+            
+            // Optionally verify hashes and signatures of the file if there are any
+            // package.VerifyHashes();
+            
+            ExtractSpecificFilesFromVpk(vpkPath, SelectedEntity.Copies, SelectedEntity.Types, "J:\\TestVpk");
+
+            // Extract filtered files to directory "J:\Test"
+            // filtered rules are defined in SelectedEntity.Copy (List)
+
+
+
+
+            //// Find a file, this returns a PackageEntry
+            //var file = package.Di.FindEntry("botprofile.db");
+
+            //if (file == null)
+            //{
+            //    string msg = "Cannot find botprofile.db inside this VPK.";
+            //    MessageBox.Show(msg, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            //    return;
+            //}
+            //// Read a file to a byte array
+            //package.ReadEntry(file, out byte[] fileContents);
+
+            ////read UTF8 bytes[] into string
+            //var rawText = Encoding.UTF8.GetString(fileContents);
+            //RawText = rawText;
+        });
+
+        private void ExtractSpecificFilesFromVpk(string vpkPath, string[] copies, string[] types, string dest)
+        {
+            using var package = new SteamDatabase.ValvePak.Package();
+            package.Read(vpkPath);
+            foreach (var kv in package.Entries)
+            {
+                string fileType = kv.Key;
+                if (types == null || types.Length == 0 || types.Contains(fileType.ToLower()))
+                {
+                    var fileEntries = kv.Value;
+                    foreach (var copy in copies)
+                    {
+                        // List<SteamDatabase.ValvePak.PackageEntry> list = fileEntries.Where(x => x.FileName.StartsWith(copy)).ToList();
+                        foreach (var fileEntry in fileEntries)
+                        {
+                            string destPath = Path.GetFullPath(Path.Combine(dest, fileEntry.DirectoryName, $"{Path.GetFileName(fileEntry.FileName)}.{fileType}"));
+                            string destDir = Path.GetDirectoryName(destPath);
+
+                            if (!Directory.Exists(destDir))
+                            {
+                                Directory.CreateDirectory(destDir);
+                            }
+
+                            package.ReadEntry(fileEntry, out byte[] fileContents);
+
+                            // If file already exists, overwrite it
+                            File.WriteAllBytes(destPath, fileContents);
+                        }
+                    }
+                }
+            }
+        }
 
         public ICommand BrowseCommand => new RelayCommand<string>((typesConcat) =>
         {
