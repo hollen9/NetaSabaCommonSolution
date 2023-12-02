@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Nogic.WritableOptions;
 
 using NetaSabaPortal.Options;
 using NetaSabaPortal.ViewModels;
@@ -10,6 +11,8 @@ using System.Data;
 using System.IO;
 using System.Windows;
 using System.Xaml;
+
+
 
 namespace NetaSabaPortal
 {
@@ -49,7 +52,8 @@ namespace NetaSabaPortal
 
             var services = new ServiceCollection();
 
-            services.AddOptions<PathOptions>().Configure(x => configuration.Bind("path", x));
+            // services.AddOptions<PathOptions>().Configure(x => configuration.Bind("path", x));
+            services.ConfigureWritable<PathOptions>(configuration.GetSection("path"), "config.jsonc");
 
             services.AddTransient<MainWindowVM>();
             services.AddSingleton<MainWindow>();

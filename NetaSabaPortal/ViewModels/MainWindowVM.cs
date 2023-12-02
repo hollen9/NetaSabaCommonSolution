@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Options;
+using Nogic.WritableOptions;
+
 using NetaSabaPortal.Options;
 using SteamKit2.Internal;
 using SteamKit2;
@@ -20,7 +22,7 @@ namespace NetaSabaPortal.ViewModels
 {
     public class MainWindowVM : ObservableObject
     {
-        public IOptions<PathOptions> _dirOptions;
+        
         private string _steamPath;
         private bool _isSteamPathValid;
         private string _cs2Path;
@@ -28,7 +30,10 @@ namespace NetaSabaPortal.ViewModels
         private string _cs2acfPath;
         private bool _isCS2AcfPathValid;
 
-        public MainWindowVM(IOptions<PathOptions> dirOptions)
+        // public IOptions<PathOptions> _dirOptions;
+        public IWritableOptions<PathOptions> _dirOptions;
+
+        public MainWindowVM(IWritableOptions<PathOptions> dirOptions)
         {
             _dirOptions = dirOptions;
             
@@ -250,6 +255,36 @@ namespace NetaSabaPortal.ViewModels
             else if (e.PropertyName == "CS2AcfPath")
             {
                 IsCS2AcfPathValid = File.Exists(CS2AcfPath);
+            }
+            else if (
+                e.PropertyName == "IsSteamPathValid" ||
+                e.PropertyName == "IsCS2PathValid" ||
+                e.PropertyName == "IsCS2AcfPathValid")
+            {
+                if (IsSteamPathValid && IsCS2PathValid && IsCS2AcfPathValid)
+                {
+                    // Save to config.jsonc
+                    _dirOptions.Value.Steam = SteamPath;
+                    _dirOptions.Value.Cs2 = CS2Path;
+                    _dirOptions.Value.Cs2acf = CS2AcfPath;
+
+                    var pathOpt = new PathOptions 
+                    {
+                        Cs2 = CS2Path,
+                        Cs2acf = CS2AcfPath,
+                        Steam = SteamPath
+                    };
+                    
+                    _dirOptions.Update(pathOpt, false);
+                }
+                else
+                {
+                    // do nothing
+                }
+            }
+            else
+            {
+                // do nothing
             }
             base.OnPropertyChanged(e);
         }
