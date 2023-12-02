@@ -5,6 +5,7 @@
              Startup="Application_Startup">
     <!--StartupUri="Views/MainWindow.xaml"-->
     <Application.Resources>
-         
+        <BitmapImage x:Key="imgRoundChecked" UriSource="Resources/Images/roundChecked.png"/>
+        <BitmapImage x:Key="imgRoundCancel" UriSource="Resources/Images/roundCancel.png"/>
     </Application.Resources>
 </Application>

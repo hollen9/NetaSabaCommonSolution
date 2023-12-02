@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace NetaSabaPortal.Options
 {
-    public class DirectoryOptions
+    public class PathOptions
     {
         public string Steam { get; set; }
         public string Cs2 { get; set; }
-        public string Cs2workshop { get; set; }
+        public string Cs2acf { get; set; }
     }
 }

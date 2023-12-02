@@ -46,15 +46,11 @@ namespace NetaSabaPortal
             .AddJsonFile("config.jsonc")
             //.AddJsonFile("config_secret.jsonc")
             .Build();
-//
-            //configuration.Bind("directories", new DirectoryOptions());
 
             var services = new ServiceCollection();
 
-            //services.AddOptions<DirectoryOptions>().Bind(configuration.GetSection("revive"));
-            
-            // services.AddOptions<DirectoryOptions>().Configure(x=> configuration.Bind("directories"));
-            services.AddOptions<DirectoryOptions>().Configure(x => configuration.Bind("directories", x));
+            services.AddOptions<PathOptions>().Configure(x => configuration.Bind("path", x));
+
             services.AddTransient<MainWindowVM>();
             services.AddSingleton<MainWindow>();
 

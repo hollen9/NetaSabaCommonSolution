@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using NetaSabaPortal.ViewModels;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,10 +21,15 @@ namespace NetaSabaPortal.Views
         public MainWindow()
         {
             InitializeComponent();
-            var svc = App.Current.Services;
+            var services = App.Current.Services;
+            var viewmodel = services.GetService<NetaSabaPortal.ViewModels.MainWindowVM>();
+            DataContext = viewmodel;
+        }
 
-            var vm = svc.GetService<NetaSabaPortal.ViewModels.MainWindowVM>();
-            DataContext = vm;
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            MainWindowVM vm = (ViewModels.MainWindowVM)DataContext;
+            vm.AutoCommand.Execute("steam");
         }
     }
 }

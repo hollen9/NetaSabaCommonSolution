@@ -7,13 +7,14 @@
         xmlns:viewModels="clr-namespace:NetaSabaPortal.ViewModels"
         xmlns:converter="clr-namespace:NetaSabaPortal.Views.Converters"
         mc:Ignorable="d"
-        Title="NetaSaba Portal" Height="450" Width="800">
+        Title="NetaSaba Portal" Height="450" Width="800" Loaded="Window_Loaded"
+        >
     <!--<Window.DataContext>
         <viewModels:MainWindowVM x:Name="vm"/>
     </Window.DataContext>-->
     <Window.Resources>
         <converter:BooleanToGreenRedColorConverter x:Key="BooleanToGreenRedColorConverter"/>
-        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+        <converter:InvertableBooleanToVisibilityConverter x:Key="BoolVisConverter"/>
     </Window.Resources>
     <TabControl>
         <TabItem>
@@ -27,6 +28,10 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="25"/>
                     <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="25"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
@@ -34,13 +39,40 @@
                     <ColumnDefinition Width="70"/>
                     <ColumnDefinition Width="70"/>
                 </Grid.ColumnDefinitions>
-                <StackPanel   Grid.Row="0" Grid.Column="0" Margin="1"  Orientation="Horizontal">
-                    <TextBlock Text="🍥"/>
-                    <TextBlock Text="Steam Path:" />
+                <StackPanel Grid.Row="0" Grid.Column="0" Margin="1"  Orientation="Horizontal">
+                    <Image Visibility="{Binding IsSteamPathValid, Converter={StaticResource BoolVisConverter}, ConverterParameter=Normal}" Height="15" Width="15" Source="{StaticResource imgRoundChecked}" Margin="2" VerticalAlignment="Top"/>
+                    <Image Visibility="{Binding IsSteamPathValid, Converter={StaticResource BoolVisConverter}, ConverterParameter=Inverted}" Height="15" Width="15" Source="{StaticResource imgRoundCancel}" Margin="2" VerticalAlignment="Top"/>
+
+                    <TextBlock Text="Path to " />
+                    <TextBlock FontWeight="Bold" Text="steam.exe:" />
                 </StackPanel>
                 <TextBox Grid.Row="1" Grid.Column="0" Margin="1" Text="{Binding SteamPath}" Background="{Binding IsSteamPathValid, Converter={StaticResource BooleanToGreenRedColorConverter}}" />
                 <Button Grid.Row="1" Grid.Column="1" Margin="1" Command="{Binding BrowseCommand}" CommandParameter="steam">Browse</Button>
                 <Button Grid.Row="1" Grid.Column="2" Margin="1" Command="{Binding AutoCommand}" CommandParameter="steam">Auto</Button>
+                <!--CS2-->
+                <StackPanel Grid.Row="2" Grid.Column="0" Margin="1"  Orientation="Horizontal">
+                    <Image Visibility="{Binding IsCS2PathValid, Converter={StaticResource BoolVisConverter}, ConverterParameter=Normal}" Height="15" Width="15" Source="{StaticResource imgRoundChecked}" Margin="2" VerticalAlignment="Top"/>
+                    <Image Visibility="{Binding IsCS2PathValid, Converter={StaticResource BoolVisConverter}, ConverterParameter=Inverted}" Height="15" Width="15" Source="{StaticResource imgRoundCancel}" Margin="2" VerticalAlignment="Top"/>
+                    <TextBlock Text="Path to " />
+                    <TextBlock FontWeight="Bold" Text="cs2.exe" />
+                    <TextBlock Text=" (You can also select " />
+                    <TextBlock FontWeight="Bold" Text="csgo.exe" />
+                    <TextBlock Text=")" />
+                </StackPanel>
+                <TextBox Grid.Row="3" Grid.Column="0" Margin="1" Text="{Binding CS2Path}" Background="{Binding IsCS2PathValid, Converter={StaticResource BooleanToGreenRedColorConverter}}" />
+                <Button Grid.Row="3" Grid.Column="1" Margin="1" Command="{Binding BrowseCommand}" CommandParameter="cs2">Browse</Button>
+                <Button Grid.Row="3" Grid.Column="2" Margin="1" Command="{Binding AutoCommand}" CommandParameter="cs2">Auto</Button>
+                <!--CS2Workshop-->
+                <StackPanel Grid.Row="4" Grid.Column="0" Margin="1"  Orientation="Horizontal">
+                    <Image Visibility="{Binding IsCS2AcfPathValid, Converter={StaticResource BoolVisConverter}, ConverterParameter=Normal}" Height="15" Width="15" Source="{StaticResource imgRoundChecked}" Margin="2" VerticalAlignment="Top"/>
+                    <Image Visibility="{Binding IsCS2AcfPathValid, Converter={StaticResource BoolVisConverter}, ConverterParameter=Inverted}" Height="15" Width="15" Source="{StaticResource imgRoundCancel}" Margin="2" VerticalAlignment="Top"/>
+                    <TextBlock Text="Path to " />
+                    <TextBlock FontWeight="Bold" Text="appmanifest_730.acf" />
+                    <TextBlock Text=" (CS2 Workshop File)" />
+                </StackPanel>
+                <TextBox Grid.Row="5" Grid.Column="0" Margin="1" Text="{Binding CS2AcfPath}" Background="{Binding IsCS2AcfPathValid, Converter={StaticResource BooleanToGreenRedColorConverter}}" />
+                <Button Grid.Row="5" Grid.Column="1" Margin="1" Command="{Binding BrowseCommand}" CommandParameter="cs2acf">Browse</Button>
+                <Button Grid.Row="5" Grid.Column="2" Margin="1" Command="{Binding AutoCommand}" CommandParameter="cs2acf">Auto</Button>
             </Grid>
         </TabItem>
     </TabControl>
