@@ -44,6 +44,9 @@ namespace NetaSabaPortal.ViewModels
             )
         {
             _barMessageQueue = new SnackbarMessageQueue(TimeSpan.FromSeconds(1));
+            ExtractingProgressMax = 100;
+            ExtractingProgressMin = 0;
+            ExtractingProgressNow = 0;
 
             _dirOptions = dirOptions;
             _entOptions = entOptions;
@@ -73,6 +76,21 @@ namespace NetaSabaPortal.ViewModels
 
         private SnackbarMessageQueue _barMessageQueue;
         public SnackbarMessageQueue BarMessageQueue { get => _barMessageQueue; set => SetProperty(ref _barMessageQueue, value); }
+
+        private int _extractingProgressNow;
+        public int ExtractingProgressNow
+        { get=>_extractingProgressNow; 
+            set
+            {
+                SetProperty(ref _extractingProgressNow, value);
+                OnPropertyChanged(nameof(ExtractingProgressPercentage));
+            }
+        }
+        private int _extractingProgressMax;
+        public int ExtractingProgressMax { get => _extractingProgressMax; set => SetProperty(ref _extractingProgressMax, value); }
+        private int _extractingProgressMin;
+        public int ExtractingProgressMin { get => _extractingProgressMin; set => SetProperty(ref _extractingProgressMin, value); }
+        public int ExtractingProgressPercentage => (int)((float)ExtractingProgressNow / (float)ExtractingProgressMax * 100);
 
         public ICommand ExtractCommand => new RelayCommand(() =>
         {
@@ -145,6 +163,14 @@ namespace NetaSabaPortal.ViewModels
                 ExtractCommand.CanExecute(false);
                 using var package = new SteamDatabase.ValvePak.Package();
                 package.Read(vpkPath);
+                
+                // Get file count without looping and filtering
+                int fileCountTotal = package.Entries.Sum(x => x.Value.Count);
+
+                ExtractingProgressMax = fileCountTotal;
+                ExtractingProgressMin = 0;
+                ExtractingProgressNow = 0;
+
                 foreach (var kv in package.Entries)
                 {
                     string fileType = kv.Key;
@@ -153,9 +179,16 @@ namespace NetaSabaPortal.ViewModels
                         var fileEntries = kv.Value;
                         foreach (var copy in copies)
                         {
-                            // List<SteamDatabase.ValvePak.PackageEntry> list = fileEntries.Where(x => x.FileName.StartsWith(copy)).ToList();
+                            string copy_p = copy.Trim().ToLower();
                             foreach (var fileEntry in fileEntries)
                             {
+                                // Skip if entry is not in the copy list
+                                if (!fileEntry.DirectoryName.StartsWith(copy_p))
+                                {
+                                    ExtractingProgressNow++;
+                                    continue;
+                                }
+
                                 string destPath = Path.GetFullPath(Path.Combine(dest, fileEntry.DirectoryName, $"{Path.GetFileName(fileEntry.FileName)}.{fileType}"));
                                 string destDir = Path.GetDirectoryName(destPath);
 
@@ -168,6 +201,7 @@ namespace NetaSabaPortal.ViewModels
 
                                 // If file already exists, overwrite it
                                 File.WriteAllBytes(destPath, fileContents);
+                                ExtractingProgressNow++;
                             }
                         }
                     }
@@ -417,9 +451,17 @@ namespace NetaSabaPortal.ViewModels
                     // do nothing
                 }
             }
-            else
+            else if (e.PropertyName == "IsExtracting")
             {
-                // do nothing
+                if (IsExtracting)
+                {
+                    BarMessageQueue.Enqueue("Extracting...", false);
+                }
+                else
+                {
+                    BarMessageQueue.Enqueue("Extracting finished.", false);
+                    ExtractingProgressNow = 0;
+                }
             }
             base.OnPropertyChanged(e);
         }
