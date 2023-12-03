@@ -20,6 +20,7 @@ using System.Windows.Markup;
 using static NetaSabaPortal.Options.EntitiesOptions;
 using System.Collections.ObjectModel;
 using NetaSabaPortal.Models;
+using MaterialDesignThemes.Wpf;
 
 namespace NetaSabaPortal.ViewModels
 {
@@ -42,6 +43,8 @@ namespace NetaSabaPortal.ViewModels
             IWritableOptions<EntitiesOptions> entOptions
             )
         {
+            _barMessageQueue = new SnackbarMessageQueue(TimeSpan.FromSeconds(1));
+
             _dirOptions = dirOptions;
             _entOptions = entOptions;
 
@@ -50,6 +53,7 @@ namespace NetaSabaPortal.ViewModels
             SteamPath = _dirOptions.Value.Steam;
 
             EntitiesDefinitions = new ObservableCollection<EntityDefinition>(_entOptions.Value.Definitions);
+            
         }
         public string SteamPath { get => _steamPath; set => SetProperty(ref _steamPath, value); }
         public bool IsSteamPathValid { get => _isSteamPathValid; set => SetProperty(ref _isSteamPathValid, value); }
@@ -67,42 +71,41 @@ namespace NetaSabaPortal.ViewModels
         private bool _isExtracting = false;
         public bool IsExtracting { get => _isExtracting; set => SetProperty(ref _isExtracting, value); }
 
+        private SnackbarMessageQueue _barMessageQueue;
+        public SnackbarMessageQueue BarMessageQueue { get => _barMessageQueue; set => SetProperty(ref _barMessageQueue, value); }
+
         public ICommand ExtractCommand => new RelayCommand(() =>
         {
             if (SelectedEntity == null)            
             {
-                MessageBox.Show("No entity is selected.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                BarMessageQueue.Enqueue("No entity is selected.", true);
                 return;
             }
             if (!IsSteamPathValid)
             {
-                MessageBox.Show("Steam Client path not specified.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                BarMessageQueue.Enqueue("Steam Client path not specified.", true);
                 return;
             }
             if (!IsCS2PathValid)
             {
-                MessageBox.Show("CS2 Client path not specified.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                BarMessageQueue.Enqueue("CS2 Client path not specified.", true);
                 return;
             }
             if (!IsCS2AcfPathValid)
             {
-                MessageBox.Show("CS2 Workshop ACF path not specified.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                BarMessageQueue.Enqueue("CS2 Workshop ACF path not specified.", true);
                 return;
             }
-
 
             string workshopDir = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(CS2AcfPath), @"content\730"));
             string vpkPath = Path.Combine(workshopDir, $"{SelectedEntity.WorkshopId}\\{SelectedEntity.WorkshopId}.vpk");
 
-            
             // Optionally verify hashes and signatures of the file if there are any
             // package.VerifyHashes();
             string destFolder = Path.GetFullPath(Path.Combine(CS2Path, $"../../../../game/csgo"));
             if (!Directory.Exists(destFolder))
             {
-                //MessageBox.Show()
-                // Show error msgbox
-                MessageBox.Show($"CS2(CSGO) Root Folder not found.\r\n{destFolder}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                BarMessageQueue.Enqueue($"CS2(CSGO) Root Folder not found.\r\n{destFolder}", true);
                 return;
             }
             ExtractSpecificFilesFromVpk(vpkPath, SelectedEntity.Copies, SelectedEntity.Types, destFolder);
@@ -218,7 +221,7 @@ namespace NetaSabaPortal.ViewModels
                 
                 string cs2WorkshopDir = Path.GetFullPath(Path.Combine(cs2Dir, @"..\..\..\..\workshop"));
 
-                dialog.InitialDirectory = IsCS2PathValid ? cs2WorkshopDir : @"C:\";
+                dialog.InitialDirectory = IsCS2PathValid ? cs2WorkshopDir : (IsSteamPathValid ? Path.GetDirectoryName(SteamPath) : "C:");
                 if (dialog.ShowDialog() != true)
                 {
                     return;
@@ -302,14 +305,12 @@ namespace NetaSabaPortal.ViewModels
                         }
                         else
                         {
-                            // Show Error Message on MsgBox
-                            // MessageBox.Show("CS2 Client Installation Folder not found. Please select manually.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                            BarMessageQueue.Enqueue("CS2 Client Installation Folder not found. Please select manually.", false);
                         }
                     }
                     else
                     {
-                        // Show Error Message on MsgBox
-                        // MessageBox.Show("Steam Client Installation Folder not found. Please select manually.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        BarMessageQueue.Enqueue("Steam Client path not specified. Please set it first or select manually.", false);
                     }
                 }
             }
@@ -336,20 +337,22 @@ namespace NetaSabaPortal.ViewModels
                             else
                             {
                                 // Show Error Message on MsgBox
-                                // MessageBox.Show("CS2 Workshop ACF not found. Please select manually.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                                BarMessageQueue.Enqueue("CS2 Workshop ACF not found. Please select manually.");
                             }
                         }
-                        // Show Error Message on MsgBox
-                        // MessageBox.Show("CS2 Workshop ACF not found. Please select manually.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        else
+                        {
+                            BarMessageQueue.Enqueue("Steam Client path not specified. Please set it first or select manually.", false);
+                        }
                     }
+                }
+                else
+                {
+                    BarMessageQueue.Enqueue("CS2 Client path not specified. Please set it first or select manually.", false);
                 }
             }
             else
-            {
-                // Get Steam Client Installation Folder
-            }
-            // Get Steam Client Installation Folder
-
+            {}
         }
 
         protected override void OnPropertyChanged(PropertyChangedEventArgs e)
@@ -390,9 +393,9 @@ namespace NetaSabaPortal.ViewModels
                 if (IsSteamPathValid && IsCS2PathValid && IsCS2AcfPathValid)
                 {
                     // Save to config.jsonc
-                    _dirOptions.Value.Steam = SteamPath;
-                    _dirOptions.Value.Cs2 = CS2Path;
-                    _dirOptions.Value.Cs2acf = CS2AcfPath;
+                    //_dirOptions.Value.Steam = SteamPath;
+                    //_dirOptions.Value.Cs2 = CS2Path;
+                    //_dirOptions.Value.Cs2acf = CS2AcfPath;
 
                     var pathOpt = new PathOptions 
                     {
@@ -401,7 +404,13 @@ namespace NetaSabaPortal.ViewModels
                         Steam = SteamPath
                     };
                     
-                    _dirOptions.Update(pathOpt, false);
+                    if (pathOpt.Steam != _dirOptions.Value.Steam ||
+                        pathOpt.Cs2 != _dirOptions.Value.Cs2 ||
+                        pathOpt.Cs2acf != _dirOptions.Value.Cs2acf)
+                    {
+                        _dirOptions.Update(pathOpt, false);
+                        BarMessageQueue.Enqueue("Settings saved.", false);
+                    }
                 }
                 else
                 {

@@ -13,14 +13,17 @@ namespace NetaSabaPortal.Views.Converters
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
+            SolidColorBrush colorBrush;
             switch ((bool)value)
             {
                 case true:
-                    //return Color.Green;
-                    return new SolidColorBrush(Colors.LightGreen);
+                    colorBrush = new SolidColorBrush(Colors.DarkGray);
+                    //colorBrush = new SolidColorBrush(Colors.LightGreen);
+                    return colorBrush;
                 case false:
-                    //return Color.Red;
-                    return new SolidColorBrush(Colors.LightSalmon);
+                    colorBrush = new SolidColorBrush(Colors.Crimson);
+                    //colorBrush = new SolidColorBrush(Colors.LightSalmon);
+                    return colorBrush;
             }
         }
 

@@ -57,7 +57,7 @@ namespace NetaSabaPortal
             services.ConfigureWritable<PathOptions>(configuration.GetSection("path"), "config.jsonc");
             services.ConfigureWritable<EntitiesOptions>(configuration.GetSection("entities"), "config_entities.jsonc");
 
-            services.AddTransient<MainWindowVM>();
+            services.AddSingleton<MainWindowVM>();
             services.AddSingleton<MainWindow>();
 
             return services.BuildServiceProvider();

@@ -2,7 +2,7 @@
   "path": {
     "steam": "C:\\Program Files (x86)\\Steam\\steam.exe",
     "cs2": "D:\\Libraries\\GameFiles\\SteamLib\\steamapps\\common\\Counter-Strike Global Offensive\\game\\bin\\win64\\cs2.exe",
-    "cs2acf": ""
+    "cs2acf": "D:\\Libraries\\GameFiles\\SteamLib\\steamapps\\workshop\\appworkshop_730.acf"
   },
   "advanced": {
     "isDisabledAutoDelete": false,

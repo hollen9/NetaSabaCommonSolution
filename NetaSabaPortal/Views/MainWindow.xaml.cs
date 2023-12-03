@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using MaterialDesignExtensions.Controls;
+using Microsoft.Extensions.DependencyInjection;
 using NetaSabaPortal.ViewModels;
 using System.Text;
 using System.Windows;
@@ -16,7 +17,7 @@ namespace NetaSabaPortal.Views
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow// : MaterialWindow
     {
         public MainWindow()
         {

@@ -7,8 +7,18 @@
         xmlns:viewModels="clr-namespace:NetaSabaPortal.ViewModels"
         xmlns:converter="clr-namespace:NetaSabaPortal.Views.Converters"
         xmlns:gif="https://github.com/XamlAnimatedGif/XamlAnimatedGif"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml" 
         mc:Ignorable="d"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="{DynamicResource MaterialDesignPaper}"
+        TextElement.FontWeight="Medium"
+        TextElement.FontSize="14"
+        FontFamily="{materialDesign:MaterialDesignFont}"
+        
         Title="NetaSaba Portal" Height="450" Width="800" Loaded="Window_Loaded"
+        
         >
     <!--<Window.DataContext>
         <viewModels:MainWindowVM x:Name="vm"/>
@@ -17,126 +27,138 @@
         <converter:BooleanToGreenRedColorConverter x:Key="BooleanToGreenRedColorConverter"/>
         <converter:InvertableBooleanToVisibilityConverter x:Key="BoolVisConverter"/>
     </Window.Resources>
-    <TabControl Margin="6">
-        <TabItem>
-            <TabItem.Header>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="🔧" Foreground="Gray" />
-                    <TextBlock Text="Location Settings" />
-                </StackPanel>
-            </TabItem.Header>
-            <Grid Margin="10">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="25"/>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="25"/>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="25"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="70"/>
-                    <ColumnDefinition Width="70"/>
-                </Grid.ColumnDefinitions>
-                <StackPanel Grid.Row="0" Grid.Column="0" Margin="1,6,1,1"  Orientation="Horizontal">
-                    <Image Visibility="{Binding IsSteamPathValid, Converter={StaticResource BoolVisConverter}, ConverterParameter=Normal}" Height="15" Width="15" Source="{StaticResource imgRoundChecked}" Margin="2" VerticalAlignment="Top"/>
-                    <Image Visibility="{Binding IsSteamPathValid, Converter={StaticResource BoolVisConverter}, ConverterParameter=Inverted}" Height="15" Width="15" Source="{StaticResource imgRoundCancel}" Margin="2" VerticalAlignment="Top"/>
+    <materialDesign:DialogHost SnackbarMessageQueue="{Binding ElementName=snackbarMain, Path=MessageQueue}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="75"/>
+            </Grid.RowDefinitions>
+            <TabControl Margin="6" Grid.Row="0">
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🔧" Foreground="Gray" />
+                            <TextBlock Text="Location Settings" />
+                        </StackPanel>
+                    </TabItem.Header>
+                    <Grid Margin="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="90"/>
+                            <ColumnDefinition Width="90"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Row="0" Grid.Column="0" Margin="1,6,1,1"  Orientation="Horizontal">
+                            <Image Visibility="{Binding IsSteamPathValid, Converter={StaticResource BoolVisConverter}, ConverterParameter=Normal}" Height="15" Width="15" Source="{StaticResource imgRoundChecked}" Margin="2" VerticalAlignment="Top"/>
+                            <Image Visibility="{Binding IsSteamPathValid, Converter={StaticResource BoolVisConverter}, ConverterParameter=Inverted}" Height="15" Width="15" Source="{StaticResource imgRoundCancel}" Margin="2" VerticalAlignment="Top"/>
 
-                    <TextBlock Text="Path to " />
-                    <TextBlock FontWeight="Bold" Text="steam.exe:" />
-                </StackPanel>
-                <TextBox Grid.Row="1" Grid.Column="0" Margin="1" Text="{Binding SteamPath}" Background="{Binding IsSteamPathValid, Converter={StaticResource BooleanToGreenRedColorConverter}}" />
-                <Button Grid.Row="1" Grid.Column="1" Margin="1" Command="{Binding BrowseCommand}" CommandParameter="steam">Browse</Button>
-                <Button Grid.Row="1" Grid.Column="2" Margin="1" Command="{Binding AutoCommand}" CommandParameter="steam">Auto</Button>
-                <!--CS2-->
-                <StackPanel Grid.Row="2" Grid.Column="0" Margin="1,6,1,1"  Orientation="Horizontal">
-                    <Image Visibility="{Binding IsCS2PathValid, Converter={StaticResource BoolVisConverter}, ConverterParameter=Normal}" Height="15" Width="15" Source="{StaticResource imgRoundChecked}" Margin="2" VerticalAlignment="Top"/>
-                    <Image Visibility="{Binding IsCS2PathValid, Converter={StaticResource BoolVisConverter}, ConverterParameter=Inverted}" Height="15" Width="15" Source="{StaticResource imgRoundCancel}" Margin="2" VerticalAlignment="Top"/>
-                    <TextBlock Text="Path to " />
-                    <TextBlock FontWeight="Bold" Text="cs2.exe" />
-                    <TextBlock Text=" (You can also select " />
-                    <TextBlock FontWeight="Bold" Text="csgo.exe" />
-                    <TextBlock Text=")" />
-                </StackPanel>
-                <TextBox Grid.Row="3" Grid.Column="0" Margin="1" Text="{Binding CS2Path}" Background="{Binding IsCS2PathValid, Converter={StaticResource BooleanToGreenRedColorConverter}}" />
-                <Button Grid.Row="3" Grid.Column="1" Margin="1" Command="{Binding BrowseCommand}" CommandParameter="cs2">Browse</Button>
-                <Button Grid.Row="3" Grid.Column="2" Margin="1" Command="{Binding AutoCommand}" CommandParameter="cs2">Auto</Button>
-                <!--CS2Workshop-->
-                <StackPanel Grid.Row="4" Grid.Column="0" Margin="1,6,1,1"  Orientation="Horizontal">
-                    <Image Visibility="{Binding IsCS2AcfPathValid, Converter={StaticResource BoolVisConverter}, ConverterParameter=Normal}" Height="15" Width="15" Source="{StaticResource imgRoundChecked}" Margin="2" VerticalAlignment="Top"/>
-                    <Image Visibility="{Binding IsCS2AcfPathValid, Converter={StaticResource BoolVisConverter}, ConverterParameter=Inverted}" Height="15" Width="15" Source="{StaticResource imgRoundCancel}" Margin="2" VerticalAlignment="Top"/>
-                    <TextBlock Text="Path to " />
-                    <TextBlock FontWeight="Bold" Text="appmanifest_730.acf" />
-                    <TextBlock Text=" (CS2 Workshop File)" />
-                </StackPanel>
-                <TextBox Grid.Row="5" Grid.Column="0" Margin="1" Text="{Binding CS2AcfPath}" Background="{Binding IsCS2AcfPathValid, Converter={StaticResource BooleanToGreenRedColorConverter}}" />
-                <Button Grid.Row="5" Grid.Column="1" Margin="1" Command="{Binding BrowseCommand}" CommandParameter="cs2acf">Browse</Button>
-                <Button Grid.Row="5" Grid.Column="2" Margin="1" Command="{Binding AutoCommand}" CommandParameter="cs2acf">Auto</Button>
-            </Grid>
-        </TabItem>
-        <TabItem>
-            <TabItem.Header>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="🧸" Foreground="Orange" />
-                    <TextBlock Text="Extract" />
-                </StackPanel>
-            </TabItem.Header>
-            <Grid Margin="10">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="36"/>
-                    <RowDefinition/>
-                    <RowDefinition Height="30"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="75"/>
-                </Grid.ColumnDefinitions>
-                <ComboBox x:Name="cbEntities"
-                    FontSize="24"
-                    Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
-                    ItemsSource="{Binding EntitiesDefinitions}"
-                    DisplayMemberPath="EntityName"
-                    SelectedItem="{Binding SelectedEntity}"
-                    />
-                <Button
-                    Grid.Row="0" Grid.Column="2" Command="{Binding ExtractCommand}"
-                    Visibility="{Binding IsExtracting, Converter={StaticResource BoolVisConverter}, ConverterParameter=Inverted}">Extract</Button>
-                <Image Grid.Column="1" Grid.Row="1" gif:AnimationBehavior.SourceUri="pack://application:,,,/Resources/Images/animated/padoru/padoru-smooth.gif"
-                       Visibility="{Binding IsExtracting, Converter={StaticResource BoolVisConverter}, ConverterParameter=Normal}"/>
-                <TextBlock Grid.Row="1" FontSize="16" Text="{Binding SelectedEntity.EntityDescription}"/>
-            </Grid>
-        </TabItem>
-        <TabItem><!--About Page-->
-            <TabItem.Header>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="🍥" Foreground="Pink" />
-                    <TextBlock Text="About" />
-                </StackPanel>
-            </TabItem.Header>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <StackPanel Grid.Row="0" Grid.Column="0" Margin="10">
-                    <TextBlock Text="NetaSaba Portal" FontSize="24" FontWeight="Bold"/>
-                    <TextBlock Text="Version 0.1.1" FontSize="16"/>
-                    <TextBlock Text="Made by Hollen9" FontSize="16"/>
-                    <TextBlock>
-                        <Hyperlink NavigateUri="https://hollen9.com" RequestNavigate="Hyperlink_RequestNavigate">
-                            <Run Text="https://hollen.tech"/>
-                        </Hyperlink>
-                    </TextBlock>
-                </StackPanel>
-            </Grid>
-        </TabItem>
-    </TabControl>
+                            <TextBlock Text="Path to " />
+                            <TextBlock FontWeight="Bold" Text="steam.exe:" />
+                        </StackPanel>
+                        <TextBox Grid.Row="1" Grid.Column="0" Margin="5,1" Text="{Binding SteamPath}" Foreground="{Binding IsSteamPathValid, Converter={StaticResource BooleanToGreenRedColorConverter}}" />
+                        <Button Grid.Row="1" Grid.Column="1" Margin="5,1" Command="{Binding BrowseCommand}" CommandParameter="steam">Browse</Button>
+                        <Button Grid.Row="1" Grid.Column="2" Margin="5,1" Style="{DynamicResource MaterialDesignFlatButton}" Command="{Binding AutoCommand}" CommandParameter="steam">Auto</Button>
+                        <!--CS2-->
+                        <StackPanel Grid.Row="2" Grid.Column="0" Margin="1,6,1,1"  Orientation="Horizontal">
+                            <Image Visibility="{Binding IsCS2PathValid, Converter={StaticResource BoolVisConverter}, ConverterParameter=Normal}" Height="15" Width="15" Source="{StaticResource imgRoundChecked}" Margin="2" VerticalAlignment="Top"/>
+                            <Image Visibility="{Binding IsCS2PathValid, Converter={StaticResource BoolVisConverter}, ConverterParameter=Inverted}" Height="15" Width="15" Source="{StaticResource imgRoundCancel}" Margin="2" VerticalAlignment="Top"/>
+                            <TextBlock Text="Path to " />
+                            <TextBlock FontWeight="Bold" Text="cs2.exe" />
+                            <TextBlock Text=" (You can also select " />
+                            <TextBlock FontWeight="Bold" Text="csgo.exe" />
+                            <TextBlock Text=")" />
+                        </StackPanel>
+                        <TextBox Grid.Row="3" Grid.Column="0" Margin="5,1" Text="{Binding CS2Path}" Foreground="{Binding IsCS2PathValid, Converter={StaticResource BooleanToGreenRedColorConverter}}" />
+                        <Button Grid.Row="3" Grid.Column="1" Margin="5,1" Command="{Binding BrowseCommand}" CommandParameter="cs2">Browse</Button>
+                        <Button Grid.Row="3" Grid.Column="2" Margin="5,1" Style="{DynamicResource MaterialDesignFlatButton}" Command="{Binding AutoCommand}" CommandParameter="cs2">Auto</Button>
+                        <!--CS2Workshop-->
+                        <StackPanel Grid.Row="4" Grid.Column="0" Margin="1,6,1,1"  Orientation="Horizontal">
+                            <Image Visibility="{Binding IsCS2AcfPathValid, Converter={StaticResource BoolVisConverter}, ConverterParameter=Normal}" Height="15" Width="15" Source="{StaticResource imgRoundChecked}" Margin="2" VerticalAlignment="Top"/>
+                            <Image Visibility="{Binding IsCS2AcfPathValid, Converter={StaticResource BoolVisConverter}, ConverterParameter=Inverted}" Height="15" Width="15" Source="{StaticResource imgRoundCancel}" Margin="2" VerticalAlignment="Top"/>
+                            <TextBlock Text="Path to " />
+                            <TextBlock FontWeight="Bold" Text="appmanifest_730.acf" />
+                            <TextBlock Text=" (CS2 Workshop File)" />
+                        </StackPanel>
+                        <TextBox Grid.Row="5" Grid.Column="0" Margin="5,1" Text="{Binding CS2AcfPath}" Foreground="{Binding IsCS2AcfPathValid, Converter={StaticResource BooleanToGreenRedColorConverter}}" />
+                        <Button Grid.Row="5" Grid.Column="1" Margin="5,1" Command="{Binding BrowseCommand}" CommandParameter="cs2acf">Browse</Button>
+                        <Button Grid.Row="5" Grid.Column="2" Margin="5,1" Style="{DynamicResource MaterialDesignFlatButton}" Command="{Binding AutoCommand}" CommandParameter="cs2acf">Auto</Button>
+                    </Grid>
+                </TabItem>
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🧸" Foreground="Orange" />
+                            <TextBlock Text="Extract" />
+                        </StackPanel>
+                    </TabItem.Header>
+                    <Grid Margin="10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="36"/>
+                            <RowDefinition/>
+                            <RowDefinition Height="30"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="100"/>
+                        </Grid.ColumnDefinitions>
+                        <ComboBox x:Name="cbEntities"
+                        FontSize="20" Margin="5,1"
+                        Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+                        ItemsSource="{Binding EntitiesDefinitions}"
+                        DisplayMemberPath="EntityName"
+                        SelectedItem="{Binding SelectedEntity}"
+                        />
+                        <Button
+                        Grid.Row="0" Grid.Column="2" Margin="5,1" Command="{Binding ExtractCommand}"
+                        Visibility="{Binding IsExtracting, Converter={StaticResource BoolVisConverter}, ConverterParameter=Inverted}">Extract</Button>
+                        <Image Grid.Column="1" Grid.Row="1" gif:AnimationBehavior.SourceUri="pack://application:,,,/Resources/Images/animated/padoru/padoru-smooth.gif"
+                   Visibility="{Binding IsExtracting, Converter={StaticResource BoolVisConverter}, ConverterParameter=Normal}"/>
+                        <TextBlock Grid.Row="1" FontSize="16" Text="{Binding SelectedEntity.EntityDescription}"/>
+                    </Grid>
+                </TabItem>
+                <!--About Page-->
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🍥" Foreground="Pink" />
+                            <TextBlock Text="About" />
+                        </StackPanel>
+                    </TabItem.Header>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Row="0" Grid.Column="0" Margin="10">
+                            <TextBlock Text="NetaSaba Portal" FontSize="24" FontWeight="Bold"/>
+                            <TextBlock Text="Version 0.1.1" FontSize="16"/>
+                            <TextBlock Text="Made by Hollen9" FontSize="16"/>
+                            <TextBlock>
+                    <Hyperlink NavigateUri="https://hollen9.com" RequestNavigate="Hyperlink_RequestNavigate">
+                        <Run Text="https://hollen.tech"/>
+                    </Hyperlink>
+                            </TextBlock>
+                        </StackPanel>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+            <materialDesign:Snackbar Grid.Row="2" Margin="0,0,0,5" x:Name="snackbarMain" MessageQueue="{Binding BarMessageQueue}"/>
+
+        </Grid>
+    </materialDesign:DialogHost>
+
 </Window>
 
