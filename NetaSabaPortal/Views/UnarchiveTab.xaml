@@ -1,0 +1,58 @@
+﻿<UserControl x:Class="NetaSabaPortal.Views.UnarchiveTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NetaSabaPortal.Views"
+             
+             xmlns:converter="clr-namespace:NetaSabaPortal.Views.Converters"
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             lex:LocalizeDictionary.DesignCulture="zh-tw"
+             xmlns:gif="https://github.com/XamlAnimatedGif/XamlAnimatedGif"
+             
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" d:Background="White"
+             Loaded="UserControl_Loaded">
+    <UserControl.Resources>
+        <converter:BooleanToGreenRedColorConverter x:Key="BooleanToGreenRedColorConverter"/>
+        <converter:InvertableBooleanToVisibilityConverter x:Key="BoolVisConverter"/>
+    </UserControl.Resources>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="36"/>
+            <RowDefinition/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="100"/>
+        </Grid.ColumnDefinitions>
+        <ComboBox x:Name="cbEntities"
+     FontSize="20" Margin="5,1"
+     Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+     ItemsSource="{Binding EntitiesDefinitions}"
+     DisplayMemberPath="EntityName"
+     SelectedItem="{Binding SelectedEntity}"
+     />
+        <Button
+     Grid.Row="0" Grid.Column="2" Margin="5,1" Command="{Binding ExtractCommand}" Style="{DynamicResource MaterialDesignRaisedAccentButton}"
+     Visibility="{Binding IsExtracting, Converter={StaticResource BoolVisConverter}, ConverterParameter=Inverted}" Content="{lex:Loc _ButtonExtract_Caption}"/>
+        <Image Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Right" Grid.Row="1" gif:AnimationBehavior.SourceUri="pack://application:,,,/Resources/Images/animated/padoru/padoru-smooth.gif"
+Visibility="{Binding IsExtracting, Converter={StaticResource BoolVisConverter}, ConverterParameter=Normal}"/>
+        <TextBlock Grid.Row="1" FontSize="16" Text="{Binding SelectedEntity.EntityDescription}"/>
+        <StackPanel Grid.Row="2" Grid.ColumnSpan="3" Orientation="Vertical"
+                 Visibility="{Binding IsExtracting, Converter={StaticResource BoolVisConverter}, ConverterParameter=Normal}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" HorizontalAlignment="Left" Text="{lex:Loc _ProgressLabel}"/>
+                <TextBlock Grid.Column="1" Text="{Binding ExtractingProgressPercentage}" HorizontalAlignment="Right"/>
+            </Grid>
+            <ProgressBar 
+              Value="{Binding ExtractingProgressNow}" Maximum="{Binding ExtractingProgressMax}" Minimum="{Binding ExtractingProgressMin}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

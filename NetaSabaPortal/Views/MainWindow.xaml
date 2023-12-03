@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NetaSabaPortal"
         xmlns:viewModels="clr-namespace:NetaSabaPortal.ViewModels"
+        xmlns:views="clr-namespace:NetaSabaPortal.Views"
         xmlns:converter="clr-namespace:NetaSabaPortal.Views.Converters"
         xmlns:gif="https://github.com/XamlAnimatedGif/XamlAnimatedGif"
         
@@ -47,62 +48,7 @@
                             <TextBlock Text="{lex:Loc _TabSettings_Caption}" />
                         </StackPanel>
                     </TabItem.Header>
-                    <Grid Margin="10">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="35"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="35"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition Height="35"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="120"/>
-                            <ColumnDefinition Width="120"/>
-                        </Grid.ColumnDefinitions>
-                        <StackPanel Grid.Row="0" Grid.Column="0" Margin="1,6,1,1"  Orientation="Horizontal">
-                            <Image Visibility="{Binding IsSteamPathValid, Converter={StaticResource BoolVisConverter}, ConverterParameter=Normal}" Height="15" Width="15" Source="{StaticResource imgRoundChecked}" Margin="2" VerticalAlignment="Top"/>
-                            <Image Visibility="{Binding IsSteamPathValid, Converter={StaticResource BoolVisConverter}, ConverterParameter=Inverted}" Height="15" Width="15" Source="{StaticResource imgRoundCancel}" Margin="2" VerticalAlignment="Top"/>
-
-                            <TextBlock Text="{lex:Loc TabSettings_SteamPathLabel_0}" />
-                            <TextBlock FontWeight="Bold" Text="{lex:Loc TabSettings_SteamPathLabel_1}" />
-                            <TextBlock Text="{lex:Loc TabSettings_SteamPathLabel_2}" />
-                        </StackPanel>
-                        <TextBox Grid.Row="1" Grid.Column="0" Margin="5,1" Text="{Binding SteamPath}" Foreground="{Binding IsSteamPathValid, Converter={StaticResource BooleanToGreenRedColorConverter}}" />
-                        <Button Grid.Row="1" Grid.Column="1" Margin="5,1" Command="{Binding BrowseCommand}" CommandParameter="steam" Content="{lex:Loc _ButtonBrowse_Caption}"/>
-                        <Button Grid.Row="1" Grid.Column="2" Margin="5,1" Style="{DynamicResource MaterialDesignFlatButton}" Command="{Binding AutoCommand}" CommandParameter="steam" Content="{lex:Loc _ButtonAuto_Caption}"/>
-                        <!--CS2-->
-                        <StackPanel Grid.Row="2" Grid.Column="0" Margin="1,6,1,1"  Orientation="Horizontal">
-                            <Image Visibility="{Binding IsCS2PathValid, Converter={StaticResource BoolVisConverter}, ConverterParameter=Normal}" Height="15" Width="15" Source="{StaticResource imgRoundChecked}" Margin="2" VerticalAlignment="Top"/>
-                            <Image Visibility="{Binding IsCS2PathValid, Converter={StaticResource BoolVisConverter}, ConverterParameter=Inverted}" Height="15" Width="15" Source="{StaticResource imgRoundCancel}" Margin="2" VerticalAlignment="Top"/>
-                            <TextBlock Text="{lex:Loc TabSettings_Cs2PathLabel_0}" />
-                            <TextBlock FontWeight="Bold" Text="{lex:Loc TabSettings_Cs2PathLabel_1}" />
-                            <TextBlock Text="{lex:Loc TabSettings_Cs2PathLabel_2}" />
-                            <TextBlock FontWeight="Bold" Text="{lex:Loc TabSettings_Cs2PathLabel_3}" />
-                            <TextBlock Text="{lex:Loc TabSettings_Cs2PathLabel_4}" />
-                        </StackPanel>
-                        <TextBox Grid.Row="3" Grid.Column="0" Margin="5,1" Text="{Binding CS2Path}" Foreground="{Binding IsCS2PathValid, Converter={StaticResource BooleanToGreenRedColorConverter}}" />
-                        <Button Grid.Row="3" Grid.Column="1" Margin="5,1" Command="{Binding BrowseCommand}" CommandParameter="cs2" Content="{lex:Loc _ButtonBrowse_Caption}"/>
-                        <Button Grid.Row="3" Grid.Column="2" Margin="5,1" Style="{DynamicResource MaterialDesignFlatButton}" Command="{Binding AutoCommand}" CommandParameter="cs2" Content="{lex:Loc _ButtonAuto_Caption}"/>
-                        <!--CS2Workshop-->
-                        <StackPanel Grid.Row="4" Grid.Column="0" Margin="1,6,1,1"  Orientation="Horizontal">
-                            <Image Visibility="{Binding IsCS2AcfPathValid, Converter={StaticResource BoolVisConverter}, ConverterParameter=Normal}" Height="15" Width="15" Source="{StaticResource imgRoundChecked}" Margin="2" VerticalAlignment="Top"/>
-                            <Image Visibility="{Binding IsCS2AcfPathValid, Converter={StaticResource BoolVisConverter}, ConverterParameter=Inverted}" Height="15" Width="15" Source="{StaticResource imgRoundCancel}" Margin="2" VerticalAlignment="Top"/>
-                            <TextBlock Text="{lex:Loc TabSettings_Cs2AcfPathLabel_0}" />
-                            <TextBlock FontWeight="Bold" Text="{lex:Loc TabSettings_Cs2AcfPathLabel_1}" />
-                            <TextBlock Text="{lex:Loc TabSettings_Cs2AcfPathLabel_2}" />
-                        </StackPanel>
-                        <TextBox Grid.Row="5" Grid.Column="0" Margin="5,1" Text="{Binding CS2AcfPath}" Foreground="{Binding IsCS2AcfPathValid, Converter={StaticResource BooleanToGreenRedColorConverter}}" />
-                        <Button Grid.Row="5" Grid.Column="1" Margin="5,1" Command="{Binding BrowseCommand}" CommandParameter="cs2acf" Content="{lex:Loc _ButtonBrowse_Caption}"/>
-                        <Button Grid.Row="5" Grid.Column="2" Margin="5,1" Style="{DynamicResource MaterialDesignFlatButton}" Command="{Binding AutoCommand}" CommandParameter="cs2acf" Content="{lex:Loc _ButtonAuto_Caption}"/>
-                        <ComboBox Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2"
-                            ItemsSource="{Binding Source={x:Static lex:LocalizeDictionary.Instance}, Path=MergedAvailableCultures}"
-                                  SelectedItem="{Binding Source={x:Static lex:LocalizeDictionary.Instance}, Path=Culture}"
-                                  DisplayMemberPath="NativeName"
-                                  Margin="2"/>
-                    </Grid>
+                    <views:SettingsTab/>
                 </TabItem>
                 <TabItem>
                     <TabItem.Header>
@@ -111,44 +57,7 @@
                             <TextBlock Text="{lex:Loc _TabExtract_Caption}" />
                         </StackPanel>
                     </TabItem.Header>
-                    <Grid Margin="10">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="36"/>
-                            <RowDefinition/>
-                            <RowDefinition Height="30"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="100"/>
-                        </Grid.ColumnDefinitions>
-                        <ComboBox x:Name="cbEntities"
-                        FontSize="20" Margin="5,1"
-                        Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
-                        ItemsSource="{Binding EntitiesDefinitions}"
-                        DisplayMemberPath="EntityName"
-                        SelectedItem="{Binding SelectedEntity}"
-                        />
-                        <Button
-                        Grid.Row="0" Grid.Column="2" Margin="5,1" Command="{Binding ExtractCommand}" Style="{DynamicResource MaterialDesignRaisedAccentButton}"
-                        Visibility="{Binding IsExtracting, Converter={StaticResource BoolVisConverter}, ConverterParameter=Inverted}">Extract</Button>
-                        <Image Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Right" Grid.Row="1" gif:AnimationBehavior.SourceUri="pack://application:,,,/Resources/Images/animated/padoru/padoru-smooth.gif"
-                   Visibility="{Binding IsExtracting, Converter={StaticResource BoolVisConverter}, ConverterParameter=Normal}"/>
-                        <TextBlock Grid.Row="1" FontSize="16" Text="{Binding SelectedEntity.EntityDescription}"/>
-                        <StackPanel Grid.Row="2" Grid.ColumnSpan="3" Orientation="Vertical"
-                                    Visibility="{Binding IsExtracting, Converter={StaticResource BoolVisConverter}, ConverterParameter=Normal}">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Text="Progress" HorizontalAlignment="Left"/>
-                                <TextBlock Grid.Column="1" Text="{Binding ExtractingProgressPercentage}" HorizontalAlignment="Right"/>
-                            </Grid>
-                            <ProgressBar 
-                                 Value="{Binding ExtractingProgressNow}" Maximum="{Binding ExtractingProgressMax}" Minimum="{Binding ExtractingProgressMin}"/>
-                        </StackPanel>
-                    </Grid>
+                    <views:UnarchiveTab x:Name="tabUnarchive"/>
                 </TabItem>
                 <!--About Page-->
                 <TabItem>
@@ -158,27 +67,7 @@
                             <TextBlock Text="{lex:Loc _TabAbout_Caption}" />
                         </StackPanel>
                     </TabItem.Header>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <StackPanel Grid.Row="0" Grid.Column="0" Margin="10">
-                            <TextBlock Text="NetaSaba Portal" FontSize="24" FontWeight="Bold"/>
-                            <TextBlock Text="Version 0.2.0" FontSize="16"/>
-                            <TextBlock Text="Made by Hollen9" FontSize="16"/>
-                            <TextBlock>
-                                <Hyperlink NavigateUri="https://hollen9.com" RequestNavigate="Hyperlink_RequestNavigate">
-                                    <Run Text="https://hollen.tech"/>
-                                </Hyperlink>
-                            </TextBlock>
-                        </StackPanel>
-                        <Image Margin="0,0,50,0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Column="1" Grid.Row="1" Source="{StaticResource imgAkCat}"/>
-                    </Grid>
+                    <views:InfoTab/>
                 </TabItem>
             </TabControl>
             <materialDesign:Snackbar Grid.Row="2" Margin="0,0,0,5" x:Name="snackbarMain" MessageQueue="{Binding BarMessageQueue}"/>

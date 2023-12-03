@@ -79,6 +79,24 @@ namespace NetaSabaPortal.Resources.Locales {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Extract.
+        /// </summary>
+        internal static string _ButtonExtract_Caption {
+            get {
+                return ResourceManager.GetString("_ButtonExtract_Caption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Progress.
+        /// </summary>
+        internal static string _ProgressLabel {
+            get {
+                return ResourceManager.GetString("_ProgressLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Info.
         /// </summary>
         internal static string _TabAbout_Caption {
@@ -88,7 +106,7 @@ namespace NetaSabaPortal.Resources.Locales {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Extract.
+        ///   Looks up a localized string similar to Unarchive.
         /// </summary>
         internal static string _TabExtract_Caption {
             get {
@@ -102,6 +120,24 @@ namespace NetaSabaPortal.Resources.Locales {
         internal static string _TabSettings_Caption {
             get {
                 return ResourceManager.GetString("_TabSettings_Caption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Extracting finished..
+        /// </summary>
+        internal static string ExtractingTab_Msg_WorkFinished {
+            get {
+                return ResourceManager.GetString("ExtractingTab_Msg_WorkFinished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Extracting....
+        /// </summary>
+        internal static string ExtractingTab_Msg_WorkStarted {
+            get {
+                return ResourceManager.GetString("ExtractingTab_Msg_WorkStarted", resourceCulture);
             }
         }
         

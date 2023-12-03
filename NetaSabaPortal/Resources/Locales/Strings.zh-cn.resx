@@ -104,7 +104,7 @@
     <value>设置</value>
   </data>
   <data name="_TabExtract_Caption" xml:space="preserve">
-    <value>解压</value>
+    <value>展开</value>
   </data>
   <data name="_TabAbout_Caption" xml:space="preserve">
     <value>信息</value>
@@ -129,5 +129,14 @@
   </data>
   <data name="_ButtonAuto_Caption" xml:space="preserve">
     <value>自动检测</value>
+  </data>
+  <data name="_ButtonExtract_Caption" xml:space="preserve">
+    <value>解压</value>
+  </data>
+  <data name="TabSettings_Cs2PathLabel_0" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="_ProgressLabel" xml:space="preserve">
+    <value>进度</value>
   </data>
 </root>

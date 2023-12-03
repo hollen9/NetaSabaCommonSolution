@@ -104,7 +104,7 @@
     <value>設定</value>
   </data>
   <data name="_TabExtract_Caption" xml:space="preserve">
-    <value>解凍</value>
+    <value>展開</value>
   </data>
   <data name="_TabAbout_Caption" xml:space="preserve">
     <value>情報</value>
@@ -113,9 +113,6 @@
     <value> のパス</value>
   </data>
   <data name="TabSettings_SteamPathLabel_0" xml:space="preserve">
-    <value> </value>
-  </data>
-  <data name="TabSettings_Cs2PathLabel_1" xml:space="preserve">
     <value> </value>
   </data>
   <data name="TabSettings_Cs2PathLabel_2" xml:space="preserve">
@@ -132,5 +129,14 @@
   </data>
   <data name="_ButtonAuto_Caption" xml:space="preserve">
     <value>自動検出</value>
+  </data>
+  <data name="_ButtonExtract_Caption" xml:space="preserve">
+    <value>解凍</value>
+  </data>
+  <data name="TabSettings_Cs2PathLabel_0" xml:space="preserve">
+    <value> </value>
+  </data>
+  <data name="_ProgressLabel" xml:space="preserve">
+    <value>進捗</value>
   </data>
 </root>

@@ -104,7 +104,7 @@
     <value>Settings</value>
   </data>
   <data name="_TabExtract_Caption" xml:space="preserve">
-    <value>Extract</value>
+    <value>Unarchive</value>
   </data>
   <data name="_TabAbout_Caption" xml:space="preserve">
     <value>Info</value>
@@ -148,5 +148,17 @@
   </data>
   <data name="_ButtonAuto_Caption" xml:space="preserve">
     <value>Auto Detect</value>
+  </data>
+  <data name="_ButtonExtract_Caption" xml:space="preserve">
+    <value>Extract</value>
+  </data>
+  <data name="_ProgressLabel" xml:space="preserve">
+    <value>Progress</value>
+  </data>
+  <data name="ExtractingTab_Msg_WorkFinished" xml:space="preserve">
+    <value>Extracting finished.</value>
+  </data>
+  <data name="ExtractingTab_Msg_WorkStarted" xml:space="preserve">
+    <value>Extracting...</value>
   </data>
 </root>

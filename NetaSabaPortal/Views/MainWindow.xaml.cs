@@ -32,22 +32,16 @@ namespace NetaSabaPortal.Views
             MainWindowVM vm = (ViewModels.MainWindowVM)DataContext;
             vm.AutoCommand.Execute("steam");
 
-            int selectedIdx = 0;
-            for (int i = vm.EntitiesDefinitions.Count - 1; i >= 0; i--)
-            {
-                Models.EntityDefinition entity = vm.EntitiesDefinitions[i];
-                if (entity.IsDefault ?? false)
-                {
-                    selectedIdx = i;
-                }
-            }
-            cbEntities.SelectedIndex = selectedIdx;
-        }
-
-        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
-        {
-            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(e.Uri.AbsoluteUri) { UseShellExecute = true });
-            e.Handled = true;
+            //int selectedIdx = 0;
+            //for (int i = vm.EntitiesDefinitions.Count - 1; i >= 0; i--)
+            //{
+            //    Models.EntityDefinition entity = vm.EntitiesDefinitions[i];
+            //    if (entity.IsDefault ?? false)
+            //    {
+            //        selectedIdx = i;
+            //    }
+            //}
+            tabUnarchive.DataContext = vm;            
         }
     }
 }

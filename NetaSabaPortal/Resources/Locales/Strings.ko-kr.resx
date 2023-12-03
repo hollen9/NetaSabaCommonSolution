@@ -104,7 +104,7 @@
     <value>설정</value>
   </data>
   <data name="_TabExtract_Caption" xml:space="preserve">
-    <value>압축 풀기</value>
+    <value>펼치기</value>
   </data>
   <data name="_TabAbout_Caption" xml:space="preserve">
     <value>정보</value>
@@ -132,5 +132,11 @@
   </data>
   <data name="_ButtonAuto_Caption" xml:space="preserve">
     <value>자동감지</value>
+  </data>
+  <data name="_ButtonExtract_Caption" xml:space="preserve">
+    <value>압축 풀기</value>
+  </data>
+  <data name="_ProgressLabel" xml:space="preserve">
+    <value>진행</value>
   </data>
 </root>
