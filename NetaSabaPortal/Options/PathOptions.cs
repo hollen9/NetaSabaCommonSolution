@@ -9,6 +9,7 @@ namespace NetaSabaPortal.Options
 {
     public class PathOptions
     {
+        public const string DefaultFileName = "config_path.jsonc";
         public string Steam { get; set; }
         public string Cs2 { get; set; }
         public string Cs2acf { get; set; }

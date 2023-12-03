@@ -1,62 +1,121 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows7.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <UseWPF>true</UseWPF>
-    <ApplicationIcon>Resources\Images\guncat.ico</ApplicationIcon>
-  </PropertyGroup>
+		<PropertyGroup>
+				<OutputType>WinExe</OutputType>
+				<TargetFramework>net8.0-windows7.0</TargetFramework>
+				<Nullable>enable</Nullable>
+				<ImplicitUsings>enable</ImplicitUsings>
+				<UseWPF>true</UseWPF>
+				<ApplicationIcon>Resources\Images\guncat.ico</ApplicationIcon>
+		</PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="Resources\Images\animated\padoru\padoru-smooth.gif" />
-    <None Remove="Resources\Images\purplecat.png" />
-    <None Remove="Resources\Images\roundCancel.png" />
-    <None Remove="Resources\Images\roundChecked.png" />
-  </ItemGroup>
+		<!--<ItemGroup>
+				<EmbeddedResource Remove="Resources\Locales\Strings.resx" />
+				<EmbeddedResource Remove="Resources\Locales\Strings.zh-tw.resx" />
+		</ItemGroup>-->
 
-  <ItemGroup>
-    <Content Include="Resources\Images\guncat.ico" />
-  </ItemGroup>
+		<ItemGroup>
+				<None Remove="Resources\Images\animated\padoru\padoru-smooth.gif" />
+				<None Remove="Resources\Images\purplecat.png" />
+				<None Remove="Resources\Images\roundCancel.png" />
+				<None Remove="Resources\Images\roundChecked.png" />
+		</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
-    <PackageReference Include="MaterialDesignExtensions" Version="4.0.0-a02" />
-    <PackageReference Include="MaterialDesignThemes" Version="5.0.0-ci465" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.0" />
-    <PackageReference Include="ShowMeTheXAML.MSBuild" Version="2.0.0" />
-    <PackageReference Include="SteamKit2" Version="2.5.0" />
-    <PackageReference Include="XamlAnimatedGif" Version="2.2.0" />
-  </ItemGroup>
+		<ItemGroup>
+				<Content Include="Resources\Images\guncat.ico" />
+		</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Nogic.WritableOptions\Nogic.WritableOptions.csproj" />
-    <ProjectReference Include="..\ValvePak\ValvePak.csproj" />
-  </ItemGroup>
+		<ItemGroup>
+				<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+				<PackageReference Include="MaterialDesignExtensions" Version="4.0.0-a02" />
+				<PackageReference Include="MaterialDesignThemes" Version="5.0.0-ci465" />
+				<PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+				<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.0" />
+				<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+				<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+				<PackageReference Include="Microsoft.Extensions.Options" Version="8.0.0" />
+				<PackageReference Include="ShowMeTheXAML.MSBuild" Version="2.0.0" />
+				<PackageReference Include="SteamKit2" Version="2.5.0" />
+				<PackageReference Include="WPFLocalizeExtension" Version="3.10.0" />
+				<PackageReference Include="XamlAnimatedGif" Version="2.2.0" />
+		</ItemGroup>
 
-  <ItemGroup>
-    <Resource Include="Resources\Images\animated\padoru\padoru-smooth.gif" />
-    <Resource Include="Resources\Images\purplecat.png" />
-    <Resource Include="Resources\Images\roundCancel.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\Images\roundChecked.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-  </ItemGroup>
+		<ItemGroup>
+				<ProjectReference Include="..\Nogic.WritableOptions\Nogic.WritableOptions.csproj" />
+				<ProjectReference Include="..\ValvePak\ValvePak.csproj" />
+		</ItemGroup>
 
-  <ItemGroup>
-    <None Update="config_entities.jsonc">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="config.jsonc">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+		<ItemGroup>
+				<Resource Include="Resources\Images\animated\padoru\padoru-smooth.gif" />
+				<Resource Include="Resources\Images\purplecat.png" />
+				<Resource Include="Resources\Images\roundCancel.png">
+						<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+				</Resource>
+				<Resource Include="Resources\Images\roundChecked.png">
+						<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+				</Resource>
+
+		</ItemGroup>
+
+		<!-- 新版 Visual Studio 會把資料夾底下的檔案都加進來，所以要先除掉一次，否則會編譯不過說有重複引用。-->
+		<ItemGroup>
+				<EmbeddedResource Remove="Resources\Locales\Strings.zh-tw.resx" />
+				<EmbeddedResource Remove="Resources\Locales\Strings.zh-cn.resx" />
+				<EmbeddedResource Remove="Resources\Locales\Strings.ja-jp.resx" />
+				<EmbeddedResource Remove="Resources\Locales\Strings.ko-kr.resx" />
+				<EmbeddedResource Remove="Resources\Locales\Strings.en-us.resx" />
+		</ItemGroup>
+
+		<ItemGroup>
+				<EmbeddedResource Include="Resources\Locales\Strings.en-us.resx">
+						<SubType>Designer</SubType>
+						<DependentUpon>Strings.resx</DependentUpon>
+				</EmbeddedResource>
+				<EmbeddedResource Include="Resources\Locales\Strings.zh-cn.resx">
+						<SubType>Designer</SubType>
+						<DependentUpon>Strings.resx</DependentUpon>
+				</EmbeddedResource>
+				<EmbeddedResource Include="Resources\Locales\Strings.zh-tw.resx">
+						<SubType>Designer</SubType>
+						<DependentUpon>Strings.resx</DependentUpon>
+				</EmbeddedResource>
+				<EmbeddedResource Include="Resources\Locales\Strings.ko-kr.resx">
+						<SubType>Designer</SubType>
+						<DependentUpon>Strings.resx</DependentUpon>
+				</EmbeddedResource>
+				<EmbeddedResource Include="Resources\Locales\Strings.ja-jp.resx">
+						<SubType>Designer</SubType>
+						<DependentUpon>Strings.resx</DependentUpon>
+				</EmbeddedResource>
+		</ItemGroup>
+
+		<ItemGroup>
+		  <Compile Update="Resources\Locales\Strings.Designer.cs">
+		    <DesignTime>True</DesignTime>
+		    <AutoGen>True</AutoGen>
+		    <DependentUpon>Strings.resx</DependentUpon>
+		  </Compile>
+		</ItemGroup>
+
+		<ItemGroup>
+		  <EmbeddedResource Update="Resources\Locales\Strings.resx">
+		    <Generator>ResXFileCodeGenerator</Generator>
+		    <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+		  </EmbeddedResource>
+		</ItemGroup>
+
+		
+
+		<ItemGroup>
+				<None Update="config_advanced.jsonc">
+				  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+				</None>
+				<None Update="config_entities.jsonc">
+						<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+				</None>
+				<None Update="config.jsonc">
+						<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+				</None>
+		</ItemGroup>
 
 </Project>

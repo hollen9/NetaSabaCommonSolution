@@ -1,0 +1,7 @@
+{
+  "advanced": {
+    "isDisabledAutoDelete": false,
+    "isPermanentDeleteNoRecycleBin": false,
+    "langs": ["en-us", "ja-jp", "ko-kr", "zh-tw", "zh-cn"]
+  }
+}

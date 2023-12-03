@@ -7,7 +7,13 @@
         xmlns:viewModels="clr-namespace:NetaSabaPortal.ViewModels"
         xmlns:converter="clr-namespace:NetaSabaPortal.Views.Converters"
         xmlns:gif="https://github.com/XamlAnimatedGif/XamlAnimatedGif"
-        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml" 
+        
+        xmlns:lex="http://wpflocalizeextension.codeplex.com"
+        lex:LocalizeDictionary.DesignCulture="zh-tw"
+        lex:LocalizeDictionary.IncludeInvariantCulture="false"
+        lex:ResxLocalizationProvider.DefaultAssembly="NetaSabaPortal"
+        lex:ResxLocalizationProvider.DefaultDictionary="Strings"
+        
         mc:Ignorable="d"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         
@@ -38,7 +44,7 @@
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="🔧" Foreground="Gray" />
-                            <TextBlock Text="Location Settings" />
+                            <TextBlock Text="{lex:Loc _TabSettings_Caption}" />
                         </StackPanel>
                     </TabItem.Header>
                     <Grid Margin="10">
@@ -53,50 +59,56 @@
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
-                            <ColumnDefinition Width="90"/>
-                            <ColumnDefinition Width="90"/>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="120"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Row="0" Grid.Column="0" Margin="1,6,1,1"  Orientation="Horizontal">
                             <Image Visibility="{Binding IsSteamPathValid, Converter={StaticResource BoolVisConverter}, ConverterParameter=Normal}" Height="15" Width="15" Source="{StaticResource imgRoundChecked}" Margin="2" VerticalAlignment="Top"/>
                             <Image Visibility="{Binding IsSteamPathValid, Converter={StaticResource BoolVisConverter}, ConverterParameter=Inverted}" Height="15" Width="15" Source="{StaticResource imgRoundCancel}" Margin="2" VerticalAlignment="Top"/>
 
-                            <TextBlock Text="Path to " />
-                            <TextBlock FontWeight="Bold" Text="steam.exe:" />
+                            <TextBlock Text="{lex:Loc TabSettings_SteamPathLabel_0}" />
+                            <TextBlock FontWeight="Bold" Text="{lex:Loc TabSettings_SteamPathLabel_1}" />
+                            <TextBlock Text="{lex:Loc TabSettings_SteamPathLabel_2}" />
                         </StackPanel>
                         <TextBox Grid.Row="1" Grid.Column="0" Margin="5,1" Text="{Binding SteamPath}" Foreground="{Binding IsSteamPathValid, Converter={StaticResource BooleanToGreenRedColorConverter}}" />
-                        <Button Grid.Row="1" Grid.Column="1" Margin="5,1" Command="{Binding BrowseCommand}" CommandParameter="steam">Browse</Button>
-                        <Button Grid.Row="1" Grid.Column="2" Margin="5,1" Style="{DynamicResource MaterialDesignFlatButton}" Command="{Binding AutoCommand}" CommandParameter="steam">Auto</Button>
+                        <Button Grid.Row="1" Grid.Column="1" Margin="5,1" Command="{Binding BrowseCommand}" CommandParameter="steam" Content="{lex:Loc _ButtonBrowse_Caption}"/>
+                        <Button Grid.Row="1" Grid.Column="2" Margin="5,1" Style="{DynamicResource MaterialDesignFlatButton}" Command="{Binding AutoCommand}" CommandParameter="steam" Content="{lex:Loc _ButtonAuto_Caption}"/>
                         <!--CS2-->
                         <StackPanel Grid.Row="2" Grid.Column="0" Margin="1,6,1,1"  Orientation="Horizontal">
                             <Image Visibility="{Binding IsCS2PathValid, Converter={StaticResource BoolVisConverter}, ConverterParameter=Normal}" Height="15" Width="15" Source="{StaticResource imgRoundChecked}" Margin="2" VerticalAlignment="Top"/>
                             <Image Visibility="{Binding IsCS2PathValid, Converter={StaticResource BoolVisConverter}, ConverterParameter=Inverted}" Height="15" Width="15" Source="{StaticResource imgRoundCancel}" Margin="2" VerticalAlignment="Top"/>
-                            <TextBlock Text="Path to " />
-                            <TextBlock FontWeight="Bold" Text="cs2.exe" />
-                            <TextBlock Text=" (You can also select " />
-                            <TextBlock FontWeight="Bold" Text="csgo.exe" />
-                            <TextBlock Text=")" />
+                            <TextBlock Text="{lex:Loc TabSettings_Cs2PathLabel_0}" />
+                            <TextBlock FontWeight="Bold" Text="{lex:Loc TabSettings_Cs2PathLabel_1}" />
+                            <TextBlock Text="{lex:Loc TabSettings_Cs2PathLabel_2}" />
+                            <TextBlock FontWeight="Bold" Text="{lex:Loc TabSettings_Cs2PathLabel_3}" />
+                            <TextBlock Text="{lex:Loc TabSettings_Cs2PathLabel_4}" />
                         </StackPanel>
                         <TextBox Grid.Row="3" Grid.Column="0" Margin="5,1" Text="{Binding CS2Path}" Foreground="{Binding IsCS2PathValid, Converter={StaticResource BooleanToGreenRedColorConverter}}" />
-                        <Button Grid.Row="3" Grid.Column="1" Margin="5,1" Command="{Binding BrowseCommand}" CommandParameter="cs2">Browse</Button>
-                        <Button Grid.Row="3" Grid.Column="2" Margin="5,1" Style="{DynamicResource MaterialDesignFlatButton}" Command="{Binding AutoCommand}" CommandParameter="cs2">Auto</Button>
+                        <Button Grid.Row="3" Grid.Column="1" Margin="5,1" Command="{Binding BrowseCommand}" CommandParameter="cs2" Content="{lex:Loc _ButtonBrowse_Caption}"/>
+                        <Button Grid.Row="3" Grid.Column="2" Margin="5,1" Style="{DynamicResource MaterialDesignFlatButton}" Command="{Binding AutoCommand}" CommandParameter="cs2" Content="{lex:Loc _ButtonAuto_Caption}"/>
                         <!--CS2Workshop-->
                         <StackPanel Grid.Row="4" Grid.Column="0" Margin="1,6,1,1"  Orientation="Horizontal">
                             <Image Visibility="{Binding IsCS2AcfPathValid, Converter={StaticResource BoolVisConverter}, ConverterParameter=Normal}" Height="15" Width="15" Source="{StaticResource imgRoundChecked}" Margin="2" VerticalAlignment="Top"/>
                             <Image Visibility="{Binding IsCS2AcfPathValid, Converter={StaticResource BoolVisConverter}, ConverterParameter=Inverted}" Height="15" Width="15" Source="{StaticResource imgRoundCancel}" Margin="2" VerticalAlignment="Top"/>
-                            <TextBlock Text="Path to " />
-                            <TextBlock FontWeight="Bold" Text="appmanifest_730.acf" />
-                            <TextBlock Text=" (CS2 Workshop File)" />
+                            <TextBlock Text="{lex:Loc TabSettings_Cs2AcfPathLabel_0}" />
+                            <TextBlock FontWeight="Bold" Text="{lex:Loc TabSettings_Cs2AcfPathLabel_1}" />
+                            <TextBlock Text="{lex:Loc TabSettings_Cs2AcfPathLabel_2}" />
                         </StackPanel>
                         <TextBox Grid.Row="5" Grid.Column="0" Margin="5,1" Text="{Binding CS2AcfPath}" Foreground="{Binding IsCS2AcfPathValid, Converter={StaticResource BooleanToGreenRedColorConverter}}" />
-                        <Button Grid.Row="5" Grid.Column="1" Margin="5,1" Command="{Binding BrowseCommand}" CommandParameter="cs2acf">Browse</Button>
-                        <Button Grid.Row="5" Grid.Column="2" Margin="5,1" Style="{DynamicResource MaterialDesignFlatButton}" Command="{Binding AutoCommand}" CommandParameter="cs2acf">Auto</Button>
+                        <Button Grid.Row="5" Grid.Column="1" Margin="5,1" Command="{Binding BrowseCommand}" CommandParameter="cs2acf" Content="{lex:Loc _ButtonBrowse_Caption}"/>
+                        <Button Grid.Row="5" Grid.Column="2" Margin="5,1" Style="{DynamicResource MaterialDesignFlatButton}" Command="{Binding AutoCommand}" CommandParameter="cs2acf" Content="{lex:Loc _ButtonAuto_Caption}"/>
+                        <ComboBox Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2"
+                            ItemsSource="{Binding Source={x:Static lex:LocalizeDictionary.Instance}, Path=MergedAvailableCultures}"
+                                  SelectedItem="{Binding Source={x:Static lex:LocalizeDictionary.Instance}, Path=Culture}"
+                                  DisplayMemberPath="NativeName"
+                                  Margin="2"/>
                     </Grid>
                 </TabItem>
                 <TabItem>
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="🧸" Foreground="Orange" />
-                            <TextBlock Text="Extract" />
+                            <TextBlock Text="{lex:Loc _TabExtract_Caption}" />
                         </StackPanel>
                     </TabItem.Header>
                     <Grid Margin="10">
@@ -143,7 +155,7 @@
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="🍥" Foreground="Pink" />
-                            <TextBlock Text="About" />
+                            <TextBlock Text="{lex:Loc _TabAbout_Caption}" />
                         </StackPanel>
                     </TabItem.Header>
                     <Grid>

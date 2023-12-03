@@ -21,6 +21,7 @@ using static NetaSabaPortal.Options.EntitiesOptions;
 using System.Collections.ObjectModel;
 using NetaSabaPortal.Models;
 using MaterialDesignThemes.Wpf;
+using WPFLocalizeExtension.Engine;
 
 namespace NetaSabaPortal.ViewModels
 {
@@ -56,6 +57,7 @@ namespace NetaSabaPortal.ViewModels
             SteamPath = _dirOptions.Value.Steam;
 
             EntitiesDefinitions = new ObservableCollection<EntityDefinition>(_entOptions.Value.Definitions);
+
             
         }
         public string SteamPath { get => _steamPath; set => SetProperty(ref _steamPath, value); }

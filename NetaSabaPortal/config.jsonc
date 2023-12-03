@@ -4,8 +4,7 @@
     "cs2": "D:\\Libraries\\GameFiles\\SteamLib\\steamapps\\common\\Counter-Strike Global Offensive\\game\\bin\\win64\\cs2.exe",
     "cs2acf": "D:\\Libraries\\GameFiles\\SteamLib\\steamapps\\workshop\\appworkshop_730.acf"
   },
-  "advanced": {
-    "isDisabledAutoDelete": false,
-    "isPermanentDeleteNoRecycleBin": false
+  "ui": {
+    "language": "zh-tw"
   }
 }
