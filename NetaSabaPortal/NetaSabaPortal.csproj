@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <None Remove="Resources\Images\animated\padoru\padoru-smooth.gif" />
+    <None Remove="Resources\Images\purplecat.png" />
     <None Remove="Resources\Images\roundCancel.png" />
     <None Remove="Resources\Images\roundChecked.png" />
   </ItemGroup>
@@ -40,6 +41,7 @@
 
   <ItemGroup>
     <Resource Include="Resources\Images\animated\padoru\padoru-smooth.gif" />
+    <Resource Include="Resources\Images\purplecat.png" />
     <Resource Include="Resources\Images\roundCancel.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>

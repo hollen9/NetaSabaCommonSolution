@@ -22,6 +22,7 @@
             <BitmapImage x:Key="imgRoundChecked" UriSource="Resources/Images/roundChecked.png"/>
             <BitmapImage x:Key="imgRoundCancel" UriSource="Resources/Images/roundCancel.png"/>
             <BitmapImage x:Key="imgAniPadoruSmooth" UriSource="Resources/Images/animated/padoru/padoru-smooth.gif"/>
+            <BitmapImage x:Key="imgAkCat" UriSource="Resources/Images/purplecat.png"/>
         </ResourceDictionary>
         
 
