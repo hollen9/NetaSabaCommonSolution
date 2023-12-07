@@ -16,6 +16,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Controls;
 using System.Windows.Markup;
 using static NetaSabaPortal.Options.EntitiesOptions;
 using System.Collections.ObjectModel;
@@ -570,6 +571,36 @@ namespace NetaSabaPortal.ViewModels
             //        }
             //    });
             //});
+        });
+
+        public ICommand DelWatchItemCmd => new RelayCommand<object>((x) => 
+        {
+            // Type test = x.GetType();
+
+            System.Collections.IList x_ilist = (System.Collections.IList)x;
+            var items = x_ilist.Cast<WatcherItem>();
+            int cnt = WatcherItems.Count();
+            if (cnt <= 0)
+            {
+                return;
+            }
+            foreach (var item in items)
+            {
+                _watcherOptions.Value.List.Remove(item);
+                // WatcherItems.Remove(item);
+            }
+            _watcherOptions.Update(_watcherOptions.Value, false);
+            WatcherItems = new ObservableCollection<WatcherItem>(_watcherOptions.Value.List);
+
+            return;
+        }, x => 
+        {
+            //if (x is not List<WatcherItem> items || items.Count <= 0)
+            //{
+            //    return false;
+            //}
+
+            return true;
         });
 
         public ICommand ModifyWatchItemCmd => new RelayCommand<WatcherItem>((wItem) => 

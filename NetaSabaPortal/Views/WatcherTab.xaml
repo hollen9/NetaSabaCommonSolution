@@ -41,6 +41,7 @@
                 </StackPanel>
             </Button>
             <Button Margin="5,1" MinWidth="110"
+                    CommandParameter="{Binding ElementName=lvWatcherItems, Path=SelectedItems}"
                     Command="{Binding DelWatchItemCmd}">
                 <StackPanel Orientation="Horizontal">
                     <materialDesign:PackIcon Kind="Delete" Foreground="#FFF" Height="25" Width="50" Margin="-20,0,-12,0"/>
@@ -51,7 +52,7 @@
         <DockPanel Grid.Row="1" Visibility="{Binding IsWatcherEditDialogShown, Converter={StaticResource BoolVisConverter}, ConverterParameter=Normal}">
             <vdialogs:EditWatcherItemDialog/>
         </DockPanel>
-        <ListView Name="lvWatcherItems" Grid.Row="1" Grid.Column="1" Margin="5" ItemsSource="{Binding WatcherItems}" DisplayMemberPath="DisplayName" SelectedItem="{Binding SelectedWatcherItem}">
+        <ListView x:Name="lvWatcherItems" Grid.Row="1" Grid.Column="1" Margin="5" ItemsSource="{Binding WatcherItems}" DisplayMemberPath="DisplayName" SelectedItem="{Binding SelectedWatcherItem}">
             <ListView.ItemContainerStyle>
                 <Style TargetType="{x:Type ListViewItem}">
                     <EventSetter Event="MouseDoubleClick" Handler="ListViewItem_MouseDoubleClick"/>
