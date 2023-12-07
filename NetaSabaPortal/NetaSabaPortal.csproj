@@ -6,7 +6,7 @@
 				<Nullable>enable</Nullable>
 				<ImplicitUsings>enable</ImplicitUsings>
 				<UseWPF>true</UseWPF>
-				<ApplicationIcon>Resources\Images\guncat.ico</ApplicationIcon>
+				<ApplicationIcon>Resources\Images\purplecat_crophead.ico</ApplicationIcon>
 		</PropertyGroup>
 
 		<!--<ItemGroup>
@@ -16,13 +16,16 @@
 
 		<ItemGroup>
 				<None Remove="Resources\Images\animated\padoru\padoru-smooth.gif" />
+				<None Remove="Resources\Images\discord_icon_clyde_black_RGB.svg" />
+				<None Remove="Resources\Images\icon_discord_25_black.png" />
+				<None Remove="Resources\Images\icon_discord_25_gray.png" />
 				<None Remove="Resources\Images\purplecat.png" />
 				<None Remove="Resources\Images\roundCancel.png" />
 				<None Remove="Resources\Images\roundChecked.png" />
 		</ItemGroup>
 
 		<ItemGroup>
-				<Content Include="Resources\Images\guncat.ico" />
+				<Content Include="Resources\Images\purplecat_crophead.ico" />
 		</ItemGroup>
 
 		<ItemGroup>
@@ -43,7 +46,6 @@
 
 		<ItemGroup>
 				<ProjectReference Include="..\Nogic.WritableOptions\Nogic.WritableOptions.csproj" />
-				<ProjectReference Include="..\QueryMasterLegacy\QueryMasterLegacy.csproj" />
 				<ProjectReference Include="..\QueryMaster\QueryMaster.csproj" />
 				<ProjectReference Include="..\SteamQueryNet\SteamQueryNet.csproj" />
 				<ProjectReference Include="..\ValvePak\ValvePak.csproj" />
@@ -51,6 +53,12 @@
 
 		<ItemGroup>
 				<Resource Include="Resources\Images\animated\padoru\padoru-smooth.gif" />
+				<Resource Include="Resources\Images\icon_discord_25_black.png">
+				  <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+				</Resource>
+				<Resource Include="Resources\Images\icon_discord_25_gray.png">
+				  <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+				</Resource>
 				<Resource Include="Resources\Images\purplecat.png" />
 				<Resource Include="Resources\Images\roundCancel.png">
 						<CopyToOutputDirectory>Never</CopyToOutputDirectory>
@@ -91,6 +99,12 @@
 						<SubType>Designer</SubType>
 						<DependentUpon>Strings.resx</DependentUpon>
 				</EmbeddedResource>
+		</ItemGroup>
+
+		<ItemGroup>
+		  <Resource Include="Resources\Images\discord_icon_clyde_black_RGB.svg">
+		    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		  </Resource>
 		</ItemGroup>
 
 		<ItemGroup>

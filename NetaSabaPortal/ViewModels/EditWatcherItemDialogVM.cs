@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 using MaterialDesignThemes.Wpf;
 using NetaSabaPortal.Models;
 using NetaSabaPortal.Options;
-using Newtonsoft.Json.Linq;
 using Nogic.WritableOptions;
 using System;
 using System.Collections.Generic;
@@ -95,8 +94,8 @@ namespace NetaSabaPortal.ViewModels
             get => _searchName;
             set => SetProperty(ref _searchName, value);
         }
-        private int _searchPort;
-        public int SearchPort
+        private int? _searchPort;
+        public int? SearchPort
         {
             get => _searchPort;
             set => SetProperty(ref _searchPort, value);
@@ -200,6 +199,72 @@ namespace NetaSabaPortal.ViewModels
             get => _isNotifyWhenMapChanged;
             set => SetProperty(ref _isNotifyWhenMapChanged, value);
         }
+
+        private string _isNotifyViaDiscordWebhook;
+
+        public string IsNotifyViaDiscordWebhook
+        {
+            get => _isNotifyViaDiscordWebhook;
+            set => SetProperty(ref _isNotifyViaDiscordWebhook, value);
+        }
+
+        private string _notifyDiscordWebhookUrl;
+
+        public string NotifyDiscordWebhookUrl
+        {
+            get => _notifyDiscordWebhookUrl;
+            set => SetProperty(ref _notifyDiscordWebhookUrl, value);
+        }
+
+        private bool _isNotifyViaWindowsNotification;
+
+        public bool IsNotifyViaWindowsNotification
+        {
+            get => _isNotifyViaWindowsNotification;
+            set => SetProperty(ref _isNotifyViaWindowsNotification, value);
+        }
+
+        private bool _isNotifyPlaySound;
+
+        public bool IsNotifyPlaySound
+        {
+            get => _isNotifyPlaySound;
+            set => SetProperty(ref _isNotifyPlaySound, value);
+        }
+
+        private string _notifySoundPath;
+
+        public string NotifySoundPath
+        {
+            get => _notifySoundPath;
+            set => SetProperty(ref _notifySoundPath, value);
+        }
+
+        private int? _notifySoundLoop;
+
+        public int? NotifySoundLoop
+        {
+            get => _notifySoundLoop;
+            set => SetProperty(ref _notifySoundLoop, value);
+        }
+
+        private float? _notifySoundVolume;
+
+        public float? NotifySoundVolume
+        {
+            get => _notifySoundVolume;
+            set => SetProperty(ref _notifySoundVolume, value);
+        }
+
+        private bool _isNotifyPlaySoundLoop;
+
+        public bool IsNotifyPlaySoundLoop
+        {
+            get => _isNotifyPlaySoundLoop;
+            set => SetProperty(ref _isNotifyPlaySoundLoop, value);
+        }
+
+
         private string _validateMessage;
 
         public delegate void ShownChangedHandler(object sender);
@@ -223,22 +288,34 @@ namespace NetaSabaPortal.ViewModels
             set => SetProperty(ref _validateMessage, value);
         }
 
-        internal void SetWatcherItem(WatcherItem watcherItem)
+        internal IWatcherItem SetWatcherItem(WatcherItem watcherItem, IWatcherItem dest = null)
         {
-            Id = watcherItem.Id;
-            DisplayName = watcherItem.DisplayName;
-            SearchName = watcherItem.SearchName;
-            SearchPort = watcherItem.SearchPort;
-            SearchRegion = watcherItem.SearchRegion;
-            SearchTag = watcherItem.SearchTag;
-            IsEnabled = watcherItem.IsEnabled;
-            Host = watcherItem.Host;
-            Password = watcherItem.Password;
-            IsJoinWhenHostAvailable = watcherItem.IsJoinWhenHostAvailable;
-            IsJoinWhenSlotAvailable = watcherItem.IsJoinWhenSlotAvailable;
-            IsNotifyWhenHostAvailable = watcherItem.IsNotifyWhenHostAvailable;
-            IsNotifyWhenSlotAvailable = watcherItem.IsNotifyWhenSlotAvailable;
-            IsNotifyWhenMapChanged = watcherItem.IsNotifyWhenMapChanged;
+            if (dest == null)
+            {
+                dest = this;
+            }
+            dest.Id = watcherItem.Id;
+            dest.DisplayName = watcherItem.DisplayName;
+            dest.SearchName = watcherItem.SearchName;
+            dest.SearchPort = watcherItem.SearchPort;
+            dest.SearchRegion = watcherItem.SearchRegion;
+            dest.SearchTag = watcherItem.SearchTag;
+            dest.IsEnabled = watcherItem.IsEnabled;
+            dest.Host = watcherItem.Host;
+            dest.Password = watcherItem.Password;
+            dest.IsJoinWhenHostAvailable = watcherItem.IsJoinWhenHostAvailable;
+            dest.IsJoinWhenSlotAvailable = watcherItem.IsJoinWhenSlotAvailable;
+            dest.IsNotifyWhenHostAvailable = watcherItem.IsNotifyWhenHostAvailable;
+            dest.IsNotifyWhenSlotAvailable = watcherItem.IsNotifyWhenSlotAvailable;
+            dest.IsNotifyWhenMapChanged = watcherItem.IsNotifyWhenMapChanged;
+            dest.IsNotifyViaDiscordWebhook = watcherItem.IsNotifyViaDiscordWebhook;
+            dest.NotifyDiscordWebhookUrl = watcherItem.NotifyDiscordWebhookUrl;
+            dest.IsNotifyViaWindowsNotification = watcherItem.IsNotifyViaWindowsNotification;
+            dest.IsNotifyPlaySound = watcherItem.IsNotifyPlaySound;
+            dest.NotifySoundPath = watcherItem.NotifySoundPath;
+            dest.NotifySoundLoop = watcherItem.NotifySoundLoop;
+            dest.NotifySoundVolume = watcherItem.NotifySoundVolume;
+            return dest;
         }
         internal WatcherItem ProduceWatcherItem()
         {
@@ -257,7 +334,14 @@ namespace NetaSabaPortal.ViewModels
                 IsJoinWhenSlotAvailable = IsJoinWhenSlotAvailable,
                 IsNotifyWhenHostAvailable = IsNotifyWhenHostAvailable,
                 IsNotifyWhenSlotAvailable = IsNotifyWhenSlotAvailable,
-                IsNotifyWhenMapChanged = IsNotifyWhenMapChanged
+                IsNotifyWhenMapChanged = IsNotifyWhenMapChanged,
+                IsNotifyViaDiscordWebhook = IsNotifyViaDiscordWebhook,
+                NotifyDiscordWebhookUrl = NotifyDiscordWebhookUrl,
+                IsNotifyViaWindowsNotification = IsNotifyViaWindowsNotification,
+                IsNotifyPlaySound = IsNotifyPlaySound,
+                NotifySoundPath = NotifySoundPath,
+                NotifySoundLoop = NotifySoundLoop,
+                NotifySoundVolume = NotifySoundVolume,
             };
             return result;
         }
@@ -281,16 +365,8 @@ namespace NetaSabaPortal.ViewModels
                 }
                 watcherItem = ProduceWatcherItem();
                 Validate(watcherItem);
-                match.DisplayName = watcherItem.DisplayName;
-                match.SearchName = watcherItem.SearchName;
-                match.IsEnabled = watcherItem.IsEnabled;
-                match.Host = watcherItem.Host;
-                match.Password = watcherItem.Password;
-                match.IsJoinWhenHostAvailable = watcherItem.IsJoinWhenHostAvailable;
-                match.IsJoinWhenSlotAvailable = watcherItem.IsJoinWhenSlotAvailable;
-                match.IsNotifyWhenHostAvailable = watcherItem.IsNotifyWhenHostAvailable;
-                match.IsNotifyWhenSlotAvailable = watcherItem.IsNotifyWhenSlotAvailable;
-                match.IsNotifyWhenMapChanged = watcherItem.IsNotifyWhenMapChanged;
+
+                match = SetWatcherItem(watcherItem, match) as WatcherItem;
                 _watcherOptions.Update(_watcherOptions.Value);
             }
             ValidateMessage = string.Empty;

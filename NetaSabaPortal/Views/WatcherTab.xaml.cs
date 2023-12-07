@@ -43,5 +43,6 @@ namespace NetaSabaPortal.Views
             }
             vm.ModifyWatchItemCmd.Execute(wItem);
         }
+
     }
 }

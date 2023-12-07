@@ -14,12 +14,33 @@ namespace NetaSabaPortal.Views.Converters
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             SolidColorBrush colorBrush;
-            switch ((bool)value)
+
+            if (value is string str)
+            {
+                if (value.ToString() == "True")
+                {
+                    colorBrush = new SolidColorBrush(Colors.Green);
+                    return colorBrush;
+                }
+                else if (value.ToString() == "False")
+                {
+                    colorBrush = new SolidColorBrush(Colors.DarkRed);
+                    return colorBrush;
+                }
+                else
+                {
+                    colorBrush = new SolidColorBrush(Colors.DarkRed);
+                    return colorBrush;
+                }
+            }
+
+            switch ((bool?)value)
             {
                 case true:
                     colorBrush = new SolidColorBrush(Colors.Green);
                     //colorBrush = new SolidColorBrush(Colors.LightGreen);
                     return colorBrush;
+                case null:
                 case false:
                     colorBrush = new SolidColorBrush(Colors.DarkRed);
                     //colorBrush = new SolidColorBrush(Colors.LightSalmon);

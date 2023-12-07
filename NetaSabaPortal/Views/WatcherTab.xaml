@@ -14,8 +14,10 @@
              lex:LocalizeDictionary.DesignCulture="zh-tw"
              xmlns:gif="https://github.com/XamlAnimatedGif/XamlAnimatedGif"
              
+             
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" d:Background="White">
+             d:DesignHeight="450" d:DesignWidth="2300" d:Background="White" x:Name="watcherTab"
+             >
     <UserControl.Resources>
         <converter:BooleanToGreyOrRedColorConverter x:Key="BooleanToGreenRedColorConverter"/>
         <converter:InvertableBooleanToVisibilityConverter x:Key="BoolVisConverter"/>
@@ -25,13 +27,44 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+        <DockPanel Grid.ColumnSpan="2" d:Visibility="Collapsed" Visibility="{Binding IsWatcherEditConfirmDialogShown, Converter={StaticResource BoolVisConverter}, ConverterParameter=Normal}">
+
+            <Grid Height="{Binding Path=ActualHeight, ElementName=watcherTab}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="4*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Are you sure to delete the selected item(s)?" VerticalAlignment="Bottom" HorizontalAlignment="Center" FontSize="20" Margin="10"/>
+                <StackPanel Grid.Row="1" Grid.Column="1" Width="200">
+                    <Button Margin="5,10" MinWidth="110" Background="Red" BorderBrush="Red"
+                            Command="{Binding WatcherConfirmOkCmd}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Check" Height="25" Width="50" Margin="-20,0,-10,0"/>
+                            <TextBlock Text="Confirm" FontSize="20"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Margin="5,10" MinWidth="110" Style="{DynamicResource MaterialDesignRaisedAccentButton}"
+                            Command="{Binding WatcherConfirmCancelCmd}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Cancel" Height="25" Width="50" Margin="-20,0,-10,0"/>
+                            <TextBlock Text="Cancel" FontSize="20"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+            </Grid>
+        </DockPanel>
+        <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="5"
                     Orientation="Horizontal">
             <Button Margin="5,1" MinWidth="110" Style="{DynamicResource MaterialDesignRaisedDarkButton}"
                     Command="{Binding AddWatchItemCmd}">
@@ -48,22 +81,24 @@
                     <TextBlock Text="Delete" FontSize="20"/>
                 </StackPanel>
             </Button>
+            <materialDesign:PackIcon Kind="Power" Height="30" Width="30" Margin="0,2,0,0"/>
+            <ToggleButton Margin="5,0" IsChecked="{Binding IsWatcherEnabled}"/>
+            <materialDesign:PackIcon Kind="WrenchClock" Height="30" Width="30" Margin="25,0,5,0"/>
+            <TextBox MinWidth="70" Margin="0,0,10,0" FontSize="18" Text="{Binding WatcherInterval}" d:Text="36400"/>
         </StackPanel>
-        <DockPanel Grid.Row="1" Visibility="{Binding IsWatcherEditDialogShown, Converter={StaticResource BoolVisConverter}, ConverterParameter=Normal}">
+        <DockPanel Grid.Row="2" Visibility="{Binding IsWatcherEditDialogShown, Converter={StaticResource BoolVisConverter}, ConverterParameter=Normal}">
             <vdialogs:EditWatcherItemDialog/>
         </DockPanel>
-        <ListView x:Name="lvWatcherItems" Grid.Row="1" Grid.Column="1" Margin="5" ItemsSource="{Binding WatcherItems}" DisplayMemberPath="DisplayName" SelectedItem="{Binding SelectedWatcherItem}">
+        <ListView x:Name="lvWatcherItems" Grid.Row="2" Grid.Column="1" Margin="5" ItemsSource="{Binding WatcherItems}" DisplayMemberPath="DisplayName" SelectedItem="{Binding SelectedWatcherItem}">
             <ListView.ItemContainerStyle>
-                <Style TargetType="{x:Type ListViewItem}">
+                <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource MaterialDesignGridViewItem}">
                     <EventSetter Event="MouseDoubleClick" Handler="ListViewItem_MouseDoubleClick"/>
                 </Style>
             </ListView.ItemContainerStyle>
             <ListView.View>
                 <GridView AllowsColumnReorder="True" ColumnHeaderToolTip="Info" >
                     <GridViewColumn Width="36">
-                        <GridViewColumn.Header>
-                            <materialDesign:PackIcon Kind="Alarm" Height="25" Width="25" Margin="-20,0"/>
-                        </GridViewColumn.Header>
+                        <materialDesign:PackIcon Kind="Alarm" Height="25" Width="25" Margin="-20,0"/>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <materialDesign:PackIcon
@@ -72,14 +107,147 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding DisplayName}" Header="Display Name"/>
-                    <GridViewColumn DisplayMemberBinding="{Binding Host}" Header="Host"/>
-                    <GridViewColumn DisplayMemberBinding="{Binding SearchName}" Header="Search Name"/>
-                    <GridViewColumn DisplayMemberBinding="{Binding IsJoinWhenHostAvailable}" Header="Join? Host"/>
-                    <GridViewColumn DisplayMemberBinding="{Binding IsJoinWhenSlotAvailable}" Header="Join? Slot"/>
-                    <GridViewColumn DisplayMemberBinding="{Binding IsNotifyWhenHostAvailable}" Header="Notify? Host"/>
-                    <GridViewColumn DisplayMemberBinding="{Binding IsNotifyWhenSlotAvailable}" Header="Notify? Slot"/>
-                    <GridViewColumn DisplayMemberBinding="{Binding IsNotifyWhenMapChanged}" Header="Notify? MapChanged"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding DisplayName}">
+                        <materialDesign:PackIcon Kind="FileOutline" Height="25" Width="25" Margin="0"/>
+                    </GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Host}">
+                        <materialDesign:PackIcon Kind="LinkVariant" Height="25" Width="25" Margin="0"/>
+                    </GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding SearchRegion}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Globe" Height="25" Width="25" Margin="0"/>
+                            <materialDesign:PackIcon Kind="Magnify" Height="25" Width="25" Margin="-4,0,0,0"/>
+                        </StackPanel>
+                    </GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding SearchName}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Abc" Height="25" Width="25" Margin="0"/>
+                            <materialDesign:PackIcon Kind="Magnify" Height="25" Width="25" Margin="-4,0,0,0"/>
+                        </StackPanel>
+                    </GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding SearchPort}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Firewall" Height="25" Width="25" Margin="0"/>
+                            <materialDesign:PackIcon Kind="Magnify" Height="25" Width="25" Margin="-4,0,0,0"/>
+                        </StackPanel>
+                    </GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding SearchTag}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="TagOutline" Height="25" Width="25" Margin="0"/>
+                            <materialDesign:PackIcon Kind="Magnify" Height="25" Width="25" Margin="-4,0,0,0"/>
+                        </StackPanel>
+                    </GridViewColumn>
+                    <GridViewColumn>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Walk" Height="25" Width="25" Margin="0"/>
+                            <materialDesign:PackIcon Kind="HouseAutomation" Height="25" Width="25" Margin="-4,0,0,0"/>
+                        </StackPanel>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <materialDesign:PackIcon Kind="{Binding IsJoinWhenHostAvailable, Converter={StaticResource BoolMdIconConverter}}"
+                                                         Foreground="{Binding IsJoinWhenHostAvailable, Converter={StaticResource Bool_GreenOrRedConverter}}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Walk" Height="25" Width="25" Margin="0"/>
+                            <materialDesign:PackIcon Kind="LoveSeat" Height="25" Width="25" Margin="-4,0,0,0"/>
+                        </StackPanel>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <materialDesign:PackIcon Kind="{Binding IsJoinWhenSlotAvailable, Converter={StaticResource BoolMdIconConverter}}"
+                                                         Foreground="{Binding IsJoinWhenSlotAvailable, Converter={StaticResource Bool_GreenOrRedConverter}}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="HouseAutomation" Height="25" Width="25" Margin="0"/>
+                            <materialDesign:PackIcon Kind="ChatAlert" Height="25" Width="25" Margin="-4,0,0,0"/>
+                        </StackPanel>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <materialDesign:PackIcon Kind="{Binding IsNotifyWhenHostAvailable, Converter={StaticResource BoolMdIconConverter}}"
+                                                         Foreground="{Binding IsNotifyWhenHostAvailable, Converter={StaticResource Bool_GreenOrRedConverter}}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="LoveSeat" Height="25" Width="25" Margin="0"/>
+                            <materialDesign:PackIcon Kind="ChatAlert" Height="25" Width="25" Margin="-2,0,0,0"/>
+                        </StackPanel>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <materialDesign:PackIcon Kind="{Binding IsNotifyWhenSlotAvailable, Converter={StaticResource BoolMdIconConverter}}"
+                                                         Foreground="{Binding IsNotifyWhenSlotAvailable, Converter={StaticResource Bool_GreenOrRedConverter}}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="MapMarker" Height="25" Width="25" Margin="0"/>
+                            <materialDesign:PackIcon Kind="ChatAlert" Height="25" Width="25" Margin="-5,0,0,0"/>
+                        </StackPanel>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <materialDesign:PackIcon Kind="{Binding IsNotifyWhenMapChanged, Converter={StaticResource BoolMdIconConverter}}"
+                                                         Foreground="{Binding IsNotifyWhenMapChanged, Converter={StaticResource Bool_GreenOrRedConverter}}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn>
+                        <StackPanel Orientation="Horizontal">
+                            
+                            <!--svgc:SvgCanvas x:Name="svgcDiscord" Width="25" Height="25"/>-->
+                            <Image Height="25" Width="25">
+                                <Image.Style>
+                                    <Style TargetType="{x:Type Image}">
+                                        <Setter Property="Source" Value="{StaticResource imgIconMiniDiscordGray}"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Source" Value="{StaticResource imgIconMiniDiscordBlack}"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Image.Style>
+                            </Image>
+                            <materialDesign:PackIcon Kind="ChatAlert" Height="25" Width="25" Margin="0,0,0,0"/>
+                        </StackPanel>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <materialDesign:PackIcon Kind="{Binding IsNotifyViaDiscordWebhook, Converter={StaticResource BoolMdIconConverter}}"
+                                                         Foreground="{Binding IsNotifyViaDiscordWebhook, Converter={StaticResource Bool_GreenOrRedConverter}}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="MicrosoftWindows" Height="25" Width="25" Margin="0"/>
+                            <materialDesign:PackIcon Kind="ChatAlert" Height="25" Width="25" Margin="-4,0,0,0"/>
+                        </StackPanel>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <materialDesign:PackIcon Kind="{Binding IsNotifyViaWindowsNotification, Converter={StaticResource BoolMdIconConverter}}"
+                                                         Foreground="{Binding IsNotifyViaWindowsNotification, Converter={StaticResource Bool_GreenOrRedConverter}}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn>
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Loudspeaker" Height="25" Width="25" Margin="0"/>
+                            <materialDesign:PackIcon Kind="ChatAlert" Height="25" Width="25" Margin="-3,0,0,0"/>
+                        </StackPanel>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <DockPanel>
+                                    <materialDesign:PackIcon Kind="{Binding IsNotifyPlaySound, Converter={StaticResource BoolMdIconConverter}}" HorizontalAlignment="Center"
+                                    Foreground="{Binding IsNotifyPlaySound, Converter={StaticResource Bool_GreenOrRedConverter}}"/>
+                                </DockPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>
@@ -87,7 +255,9 @@
                            Grid.Row="1" Grid.Column="1"
                            
                            AutoGenerateProperties="False">
-            --><!--SelectedObject="{Binding ElementName=propgridSv, Path=SelectedItem}"--><!--
+            -->
+        <!--SelectedObject="{Binding ElementName=propgridSv, Path=SelectedItem}"-->
+        <!--
             <xctk:PropertyGrid.PropertyDefinitions>
                 <xctk:PropertyDefinition TargetProperties="isEnabled" />
             </xctk:PropertyGrid.PropertyDefinitions>

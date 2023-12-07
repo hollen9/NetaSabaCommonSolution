@@ -12,7 +12,7 @@ public interface IWatcherItem
     Guid Id { get; set; }
     string DisplayName { get; set; }
     string SearchName { get; set; }
-    int SearchPort { get; set; }
+    int? SearchPort { get; set; }
     QueryMaster.MasterServer.Region SearchRegion { get; set; }
     string SearchTag { get; set; }
     bool IsEnabled { get; set; }
@@ -23,7 +23,14 @@ public interface IWatcherItem
     bool IsNotifyWhenHostAvailable { get; set; }
     bool IsNotifyWhenSlotAvailable { get; set; }
     bool IsNotifyWhenMapChanged { get; set; }
-    
+    string IsNotifyViaDiscordWebhook { get; set; }
+    string NotifyDiscordWebhookUrl { get; set; }
+    bool IsNotifyViaWindowsNotification { get; set; }
+    bool IsNotifyPlaySound { get; set; }
+    string NotifySoundPath { get; set; }
+    int? NotifySoundLoop { get; set; }
+    float? NotifySoundVolume { get; set; }
+
 }
 
 /// <summary>
@@ -43,7 +50,7 @@ public class WatcherItem : ObservableObject, IWatcherItem
     public Guid Id { get; set; } = Guid.NewGuid();
     public string DisplayName { get; set; }
     public string SearchName { get; set; }
-    public int SearchPort { get; set; }
+    public int? SearchPort { get; set; }
     public QueryMaster.MasterServer.Region SearchRegion { get; set; }
     public string SearchTag { get; set; }
     public bool IsEnabled { get; set; }
@@ -54,4 +61,12 @@ public class WatcherItem : ObservableObject, IWatcherItem
     public bool IsNotifyWhenHostAvailable { get; set; }
     public bool IsNotifyWhenSlotAvailable { get; set; }
     public bool IsNotifyWhenMapChanged { get; set; }
+    public string IsNotifyViaDiscordWebhook { get; set; }
+    public string NotifyDiscordWebhookUrl { get; set; }
+    public bool IsNotifyViaWindowsNotification { get; set; }
+    public bool IsNotifyPlaySound { get; set; }
+    public string NotifySoundPath { get; set; }
+    public int? NotifySoundLoop { get; set; }
+    public float? NotifySoundVolume { get; set; }
+
 }

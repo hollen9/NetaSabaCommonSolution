@@ -503,6 +503,30 @@ namespace NetaSabaPortal.ViewModels
         #region Watcher
         // private bool _isWatcherEditDialogShown;
 
+        private Action _actionToBeConfirmed;
+        public Action ActionToBeConfirmed
+        {
+            get => _actionToBeConfirmed;
+            set => SetProperty(ref _actionToBeConfirmed, value);
+        }
+        private bool _isWatcherEditConfirmDialogShown;
+
+        public bool IsWatcherEditConfirmDialogShown
+        {
+            get => _isWatcherEditConfirmDialogShown;
+            set => SetProperty(ref _isWatcherEditConfirmDialogShown, value);
+        }
+        public ICommand WatcherConfirmCancelCmd => new RelayCommand(() =>
+        {
+            ActionToBeConfirmed = null;
+            IsWatcherEditConfirmDialogShown = false;
+        });
+        public ICommand WatcherConfirmOkCmd => new RelayCommand(() =>
+        {
+            ActionToBeConfirmed?.Invoke();
+            IsWatcherEditConfirmDialogShown = false;
+        });
+
         public bool IsWatcherEditDialogShown
         {
             get => _editWatcherItemDialogVM.IsShown;
@@ -557,6 +581,7 @@ namespace NetaSabaPortal.ViewModels
             }
             dVm.SetWatcherItem(new WatcherItem() { IsEnabled = true });
             dVm.IsModifyMode = false;
+            dVm.SelectedSearchRegionIndex = 4;
             IsWatcherEditDialogShown = true;
 
             //Dispatcher.CurrentDispatcher.Invoke(() =>
@@ -584,13 +609,20 @@ namespace NetaSabaPortal.ViewModels
             {
                 return;
             }
-            foreach (var item in items)
+
+            // Confirm
+            
+            ActionToBeConfirmed = () =>
             {
-                _watcherOptions.Value.List.Remove(item);
-                // WatcherItems.Remove(item);
-            }
-            _watcherOptions.Update(_watcherOptions.Value, false);
-            WatcherItems = new ObservableCollection<WatcherItem>(_watcherOptions.Value.List);
+                foreach (var item in items)
+                {
+                    _watcherOptions.Value.List.Remove(item);
+                    // WatcherItems.Remove(item);
+                }
+                _watcherOptions.Update(_watcherOptions.Value, false);
+                WatcherItems = new ObservableCollection<WatcherItem>(_watcherOptions.Value.List);
+            };
+            IsWatcherEditConfirmDialogShown = true;
 
             return;
         }, x => 
@@ -728,6 +760,7 @@ namespace NetaSabaPortal.ViewModels
             #region Watcher
             else if (e.PropertyName == "IsWatcherEnabled")
             {
+                _watcherOptions.Value.IsEnabled = IsWatcherEnabled;
                 if (IsWatcherEnabled)
                 {
                     _dispatcherTimer.Start();
@@ -736,10 +769,13 @@ namespace NetaSabaPortal.ViewModels
                 {
                     _dispatcherTimer.Stop();
                 }
+                _watcherOptions.Update(_watcherOptions.Value, false);
             }
             else if (e.PropertyName == "WatcherInterval")
             {
+                _watcherOptions.Value.Interval = WatcherInterval;
                 _dispatcherTimer.Interval = TimeSpan.FromSeconds(WatcherInterval);
+                _watcherOptions.Update(_watcherOptions.Value, false);
             }
             #endregion
             base.OnPropertyChanged(e);

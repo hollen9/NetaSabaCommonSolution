@@ -24,6 +24,8 @@
             <BitmapImage x:Key="imgRoundCancel" UriSource="Resources/Images/roundCancel.png"/>
             <BitmapImage x:Key="imgAniPadoruSmooth" UriSource="Resources/Images/animated/padoru/padoru-smooth.gif"/>
             <BitmapImage x:Key="imgAkCat" UriSource="Resources/Images/purplecat.png"/>
+            <BitmapImage x:Key="imgIconMiniDiscordGray" UriSource="Resources/Images/icon_discord_25_gray.png"/>
+            <BitmapImage x:Key="imgIconMiniDiscordBlack" UriSource="Resources/Images/icon_discord_25_black.png"/>
         </ResourceDictionary>
         
 

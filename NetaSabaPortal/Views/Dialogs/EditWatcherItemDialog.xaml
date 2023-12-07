@@ -13,7 +13,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <Grid Margin="10,20,10,5">
+            <Grid Margin="10,10,10,10">
                 <Grid.RowDefinitions>
                     <RowDefinition MinHeight="30"/>
                     <RowDefinition MinHeight="30"/>
@@ -32,53 +32,81 @@
                     <RowDefinition MinHeight="30"/>
                     <RowDefinition MinHeight="30"/>
                     <RowDefinition MinHeight="30"/>
-                    <RowDefinition Height="Auto"/>
-
+                    <RowDefinition MinHeight="30"/>
+                    <RowDefinition MinHeight="30"/>
+                    <RowDefinition MinHeight="30"/>
+                    <RowDefinition MinHeight="30"/>
+                    <RowDefinition MinHeight="30"/>
+                    <RowDefinition MinHeight="30"/>
+                    <RowDefinition MinHeight="30"/>
+                    <RowDefinition MinHeight="30"/>
+                    <RowDefinition MinHeight="30"/>
+                    <RowDefinition MinHeight="40"/>
+                    
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="5"/>
-                    <ColumnDefinition MinWidth="150"/>
+                    <ColumnDefinition MinWidth="240"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Row="0" Grid.Column="0" Text="Enabled" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                <ToggleButton Grid.Row="0" Grid.Column="2" IsChecked="{Binding IsEnabled}" Style="{DynamicResource MaterialDesignSwitchToggleButton}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="1" Grid.Column="0" Text="DisplayName" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                <TextBox Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Text="{Binding DisplayName}" VerticalAlignment="Center" TextWrapping="WrapWithOverflow"/>
-                <TextBlock Grid.Row="2" Grid.Column="0" Text="Host" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                <TextBox Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2" Text="{Binding Host}" VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="3" Grid.Column="0" Text="Password" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                <TextBox Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2" Text="{Binding Password}" VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Text="If host is not reachable, search for... (optional)" FontStyle="Italic" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="5" Grid.Column="0" Text="SearchRegion" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="{Binding Id}" d:Text="123" VerticalAlignment="Center" Foreground="#B9A"/>
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Enabled" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <ToggleButton Grid.Row="1" Grid.Column="2" IsChecked="{Binding IsEnabled}" Style="{DynamicResource MaterialDesignSwitchToggleButton}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="DisplayName" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2" Text="{Binding DisplayName}" VerticalAlignment="Center" TextWrapping="WrapWithOverflow"/>
+                <TextBlock Grid.Row="3" Grid.Column="0" Text="Host" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2" Text="{Binding Host}" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="4" Grid.Column="0" Text="Password" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="2" Text="{Binding Password}" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" Text="If host is not reachable, search for... (optional)" FontStyle="Italic" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="6" Grid.Column="0" Text="SearchRegion" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                 <!--<TextBox Grid.Row="5" Grid.Column="2" Grid.ColumnSpan="2"  Text="{Binding SearchRegion}" VerticalAlignment="Center"/>-->
-                <ComboBox Grid.Row="5" Grid.Column="2" Grid.ColumnSpan="2" IsHitTestVisible="True" ItemsSource="{Binding RegionItems}" DisplayMemberPath="DisplayName" VerticalAlignment="Center" SelectedIndex="{Binding SelectedSearchRegionIndex}" />
-                <TextBlock Grid.Row="6" Grid.Column="0" Text="SearchName" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                <TextBox Grid.Row="6" Grid.Column="2" Grid.ColumnSpan="2" Text="{Binding SearchName}" VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="7" Grid.Column="0" Text="SearchPort" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                <TextBox Grid.Row="7" Grid.Column="2" Grid.ColumnSpan="2" Text="{Binding SearchPort}" VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="8" Grid.Column="0" Text="SearchTag" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                <TextBox Grid.Row="8" Grid.Column="2" Grid.ColumnSpan="2" Text="{Binding SearchTag}" VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="3" Text="Attempt to join when..." FontStyle="Italic" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="10" Grid.Column="0" Text="server become available" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                <ToggleButton Grid.Row="10" Grid.Column="2" IsChecked="{Binding IsJoinWhenHostAvailable}" Style="{DynamicResource MaterialDesignSwitchToggleButton}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="11" Grid.Column="0" Text="there is slot available" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                <ToggleButton Grid.Row="11" Grid.Column="2" IsChecked="{Binding IsJoinWhenSlotAvailable}" Style="{DynamicResource MaterialDesignSwitchToggleButton}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="12" Grid.Column="0" Grid.ColumnSpan="3" Text="Notify me when..." FontStyle="Italic" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="13" Grid.Column="0" Text="host is available" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                <ToggleButton Grid.Row="13" Grid.Column="2" IsChecked="{Binding IsNotifyWhenHostAvailable}" Style="{DynamicResource MaterialDesignSwitchToggleButton}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="14" Grid.Column="0" Text="there is slot available" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                <ToggleButton Grid.Row="14" Grid.Column="2" IsChecked="{Binding IsNotifyWhenSlotAvailable}" Style="{DynamicResource MaterialDesignSwitchToggleButton}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="15" Grid.Column="0" Text="map is changed" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                <ToggleButton Grid.Row="15" Grid.Column="2" IsChecked="{Binding IsNotifyWhenMapChanged}" Style="{DynamicResource MaterialDesignSwitchToggleButton}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                <TextBlock Grid.Row="17" Grid.Column="0" Text="{Binding Id}" VerticalAlignment="Bottom" Foreground="#EEE"/>
+                <ComboBox Grid.Row="6" Grid.Column="2" Grid.ColumnSpan="2" IsHitTestVisible="True" ItemsSource="{Binding RegionItems}" DisplayMemberPath="DisplayName" VerticalAlignment="Center" SelectedIndex="{Binding SelectedSearchRegionIndex}" />
+                <TextBlock Grid.Row="7" Grid.Column="0" Text="SearchName" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="7" Grid.Column="2" Grid.ColumnSpan="2" Text="{Binding SearchName}" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="8" Grid.Column="0" Text="SearchPort" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="8" Grid.Column="2" Grid.ColumnSpan="2" Text="{Binding SearchPort}" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="9" Grid.Column="0" Text="SearchTag" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="9" Grid.Column="2" Grid.ColumnSpan="2" Text="{Binding SearchTag}" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="3" Text="Notify me when..." FontStyle="Italic" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="11" Grid.Column="0" Text="host is available" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <ToggleButton Grid.Row="11" Grid.Column="2" IsChecked="{Binding IsNotifyWhenHostAvailable}" Style="{DynamicResource MaterialDesignSwitchToggleButton}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="12" Grid.Column="0" Text="there is slot available" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <ToggleButton Grid.Row="12" Grid.Column="2" IsChecked="{Binding IsNotifyWhenSlotAvailable}" Style="{DynamicResource MaterialDesignSwitchToggleButton}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="13" Grid.Column="0" Text="map is changed" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <ToggleButton Grid.Row="13" Grid.Column="2" IsChecked="{Binding IsNotifyWhenMapChanged}" Style="{DynamicResource MaterialDesignSwitchToggleButton}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="14" Grid.Column="0" Grid.ColumnSpan="3" Text="Notify by..." FontStyle="Italic" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="15" Grid.Column="0" Text="Pushing Windows Notification" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <ToggleButton Grid.Row="15" Grid.Column="2" IsChecked="{Binding IsNotifyViaWindowsNotification}" Style="{DynamicResource MaterialDesignSwitchToggleButton}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="16" Grid.Column="0" Text="Playing sound" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <ToggleButton Grid.Row="16" Grid.Column="2" IsChecked="{Binding IsNotifyPlaySound}" Style="{DynamicResource MaterialDesignSwitchToggleButton}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="17" Grid.Column="0" Text="Sound path" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="17" Grid.Column="2" Grid.ColumnSpan="2" Text="{Binding NotifySoundPath}" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="18" Grid.Column="0" Text="Loop Times" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="18" Grid.Column="2" Grid.ColumnSpan="2" Text="{Binding NotifySoundLoop}" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="19" Grid.Column="0" Text="Volume modifier" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="19" Grid.Column="2" Grid.ColumnSpan="2" Text="{Binding NotifySoundVolume}" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="20" Grid.Column="0" Text="Sending Discord" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <ToggleButton Grid.Row="20" Grid.Column="2" IsChecked="{Binding IsNotifyViaDiscordWebhook}" Style="{DynamicResource MaterialDesignSwitchToggleButton}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="21" Grid.Column="0" Text="WebhookUrl" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="21" Grid.Column="2" Grid.ColumnSpan="2" Text="{Binding NotifySoundVolume}" VerticalAlignment="Center"/>
 
-                <TextBlock Grid.Row="16" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,10,0,0"
-                    Foreground="Crimson" d:Text="Validation Message here..." Text="{Binding ValidateMessage}" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                <TextBlock Grid.Row="22" Grid.Column="0" Grid.ColumnSpan="3" Text="Attempt to join when..." FontStyle="Italic" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="23" Grid.Column="0" Text="server become available" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <ToggleButton Grid.Row="23" Grid.Column="2" IsChecked="{Binding IsJoinWhenHostAvailable}" Style="{DynamicResource MaterialDesignSwitchToggleButton}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="24" Grid.Column="0" Text="there is slot available" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <ToggleButton Grid.Row="24" Grid.Column="2" IsChecked="{Binding IsJoinWhenSlotAvailable}" Style="{DynamicResource MaterialDesignSwitchToggleButton}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+
+
+
+
             </Grid>
         </ScrollViewer>
-        <DockPanel LastChildFill="False" VerticalAlignment="Bottom" Margin="0,0,20,10">
-            <StackPanel DockPanel.Dock="Right">
+        <DockPanel LastChildFill="False" VerticalAlignment="Bottom" Margin="20,0,20,10">
+            <TextBlock Margin="0" DockPanel.Dock="Bottom"
+            Foreground="Crimson" d:Text="Validation Message here..." Text="{Binding ValidateMessage}" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            <StackPanel DockPanel.Dock="Right" Margin="0,0,0,-10">
                 <Button Margin="0,4" 
         Style="{DynamicResource MaterialDesignFloatingActionAccentButton}" Command="{Binding CloseCommand}" HorizontalAlignment="Right" VerticalAlignment="Center">
                     <materialDesign:PackIcon Kind="ArrowBack" Foreground="#FFF" Height="25" Width="50"/>
@@ -87,6 +115,7 @@
         Style="{DynamicResource MaterialDesignFloatingActionButton}" Command="{Binding SaveCommand}" HorizontalAlignment="Right" VerticalAlignment="Center">
                     <materialDesign:PackIcon Kind="Bookmark" Foreground="#FFF" Height="25" Width="50"/>
                 </Button>
+                
             </StackPanel>
         </DockPanel>
     </Grid>
