@@ -24,21 +24,27 @@
         TextElement.FontSize="14"
         FontFamily="{materialDesign:MaterialDesignFont}"
         
-        Title="NetaSaba Portal" Height="450" Width="800" Loaded="Window_Loaded"
+        Title="NetaSaba Portal" Height="650" Width="1200" Loaded="Window_Loaded"
         
         >
     <!--<Window.DataContext>
         <viewModels:MainWindowVM x:Name="vm"/>
     </Window.DataContext>-->
     <Window.Resources>
-        <converter:BooleanToGreenRedColorConverter x:Key="BooleanToGreenRedColorConverter"/>
+        <converter:BooleanToGreyOrRedColorConverter x:Key="BooleanToGreenRedColorConverter"/>
         <converter:InvertableBooleanToVisibilityConverter x:Key="BoolVisConverter"/>
     </Window.Resources>
-    <materialDesign:DialogHost SnackbarMessageQueue="{Binding ElementName=snackbarMain, Path=MessageQueue}">
+    <materialDesign:DialogHost
+        Identifier="mdMainWindowDialogHost" CloseOnClickAway="True"
+        SnackbarMessageQueue="{Binding ElementName=snackbarMain, Path=MessageQueue}"
+        >
+        <!--<materialDesign:DialogHost.DialogContent>
+            123456789
+        </materialDesign:DialogHost.DialogContent>-->
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition/>
-                <RowDefinition Height="75"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <TabControl Margin="6" Grid.Row="0">
                 <TabItem>
@@ -59,7 +65,23 @@
                     </TabItem.Header>
                     <views:UnarchiveTab x:Name="tabUnarchive"/>
                 </TabItem>
-                <!--About Page-->
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="👀" Foreground="#111111" />
+                            <TextBlock Text="{lex:Loc _TabWatcher_Caption}" />
+                        </StackPanel>
+                    </TabItem.Header>
+                    <views:WatcherTab/>
+                </TabItem>
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🐝" Foreground="Black" />
+                            <TextBlock Text="{lex:Loc _TabCreator_Caption}" />
+                        </StackPanel>
+                    </TabItem.Header>
+                </TabItem>
                 <TabItem>
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
@@ -71,7 +93,6 @@
                 </TabItem>
             </TabControl>
             <materialDesign:Snackbar Grid.Row="2" Margin="0,0,0,5" x:Name="snackbarMain" MessageQueue="{Binding BarMessageQueue}"/>
-
         </Grid>
     </materialDesign:DialogHost>
 

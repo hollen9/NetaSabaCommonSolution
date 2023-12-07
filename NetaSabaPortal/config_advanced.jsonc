@@ -1,6 +1,14 @@
+// ADVANCE SETTINGS FILE
+// DO NOT CHANGE THE CONTENT OF THIS FILE,
+// UNLESS YOU KNOW WHAT YOU ARE DOING!!
 {
   "advanced": {
     "isDisabledAutoDelete": false,
+    // ==== isPermanentDeleteNoRecycleBin ======================
+    // DO NOT ENABLE IT BY SETTING TO 'true',
+    // UNLESS YOU ARE WILLING TO TAKE THE RISK OF LOSSING FILE!!
+    // DO IT AT YOUR OWN RISK!!
+    // =========================================================
     "isPermanentDeleteNoRecycleBin": false,
     "langs": ["en-us", "ja-jp", "ko-kr", "zh-tw", "zh-cn"]
   }

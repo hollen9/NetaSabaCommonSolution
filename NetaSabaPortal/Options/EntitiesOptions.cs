@@ -9,7 +9,7 @@ namespace NetaSabaPortal.Options
 {
     public class EntitiesOptions
     {
-        public const string DefaultFileName = "config_entities.jsonc";
+        public const string DefaultFileName = "config_entities.json";
         public List<EntityDefinition> Definitions { get; set; }
     }
 }

@@ -131,12 +131,45 @@
     <value>自動検出</value>
   </data>
   <data name="_ButtonExtract_Caption" xml:space="preserve">
-    <value>解凍</value>
+    <value>展開</value>
   </data>
   <data name="TabSettings_Cs2PathLabel_0" xml:space="preserve">
     <value> </value>
   </data>
   <data name="_ProgressLabel" xml:space="preserve">
     <value>進捗</value>
+  </data>
+  <data name="_TabWatcher_Caption" xml:space="preserve">
+    <value>ウォッチャー</value>
+  </data>
+  <data name="_TabCreator_Caption" xml:space="preserve">
+    <value>クリエイター向け</value>
+  </data>
+  <data name="_RegionItems_0" xml:space="preserve">
+    <value>アメリカ東海岸</value>
+  </data>
+  <data name="_RegionItems_1" xml:space="preserve">
+    <value>アメリカ西海岸</value>
+  </data>
+  <data name="_RegionItems_2" xml:space="preserve">
+    <value>南米</value>
+  </data>
+  <data name="_RegionItems_3" xml:space="preserve">
+    <value>ヨーロッパ</value>
+  </data>
+  <data name="_RegionItems_4" xml:space="preserve">
+    <value>アジア</value>
+  </data>
+  <data name="_RegionItems_5" xml:space="preserve">
+    <value>オーストラリア</value>
+  </data>
+  <data name="_RegionItems_6" xml:space="preserve">
+    <value>中東</value>
+  </data>
+  <data name="_RegionItems_7" xml:space="preserve">
+    <value>アフリカ</value>
+  </data>
+  <data name="_RegionItems_255" xml:space="preserve">
+    <value>その他の地域</value>
   </data>
 </root>

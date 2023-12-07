@@ -17,6 +17,7 @@
                 <!--<materialDesign:BundledTheme BaseTheme="Dark" PrimaryColor="Purple" SecondaryColor="Pink" />-->
                 <materialDesign:BundledTheme BaseTheme="Light" PrimaryColor="Purple" SecondaryColor="Pink" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                
                 <!--<ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Dark.xaml" />-->
             </ResourceDictionary.MergedDictionaries>
             <BitmapImage x:Key="imgRoundChecked" UriSource="Resources/Images/roundChecked.png"/>

@@ -1,0 +1,10 @@
+{
+  "path": {
+    "steam": "C:\\Program Files (x86)\\",
+    "cs2": "D:\\Libraries\\GameFiles\\SteamLib\\steamapps\\common\\Counter-Strike Global Offensive\\game\\bin\\win64\\cs2.exe",
+    "cs2acf": "D:\\Libraries\\GameFiles\\"
+  },
+  "ui": {
+    "language": "en-Us"
+  }
+}

@@ -161,4 +161,37 @@
   <data name="ExtractingTab_Msg_WorkStarted" xml:space="preserve">
     <value>Extracting...</value>
   </data>
+  <data name="_TabWatcher_Caption" xml:space="preserve">
+    <value>Watcher</value>
+  </data>
+  <data name="_TabCreator_Caption" xml:space="preserve">
+    <value>CreatorTool</value>
+  </data>
+  <data name="_RegionItems_0" xml:space="preserve">
+    <value>US East Coast</value>
+  </data>
+  <data name="_RegionItems_1" xml:space="preserve">
+    <value>US West Coast</value>
+  </data>
+  <data name="_RegionItems_2" xml:space="preserve">
+    <value>South America</value>
+  </data>
+  <data name="_RegionItems_3" xml:space="preserve">
+    <value>Europe</value>
+  </data>
+  <data name="_RegionItems_4" xml:space="preserve">
+    <value>Asia</value>
+  </data>
+  <data name="_RegionItems_5" xml:space="preserve">
+    <value>Australia</value>
+  </data>
+  <data name="_RegionItems_6" xml:space="preserve">
+    <value>Middle East</value>
+  </data>
+  <data name="_RegionItems_7" xml:space="preserve">
+    <value>Africa</value>
+  </data>
+  <data name="_RegionItems_255" xml:space="preserve">
+    <value>Rest of the world</value>
+  </data>
 </root>

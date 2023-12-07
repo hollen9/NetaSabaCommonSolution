@@ -9,7 +9,7 @@ namespace NetaSabaPortal.Options
 {
     public class UiOptions
     {
-        public const string DefaultFileName = "config_ui.jsonc";
+        public const string DefaultFileName = "config_ui.json";
         public string Language { get; set; }
     }
 }

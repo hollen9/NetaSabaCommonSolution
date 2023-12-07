@@ -1,0 +1,95 @@
+﻿<UserControl x:Class="NetaSabaPortal.Views.WatcherTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NetaSabaPortal.Views"
+             xmlns:converter="clr-namespace:NetaSabaPortal.Views.Converters"
+             xmlns:behaviors="clr-namespace:NetaSabaPortal.Views.Behaviors"
+             xmlns:vdialogs="clr-namespace:NetaSabaPortal.Views.Dialogs"
+             
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             
+             xmlns:lex="http://wpflocalizeextension.codeplex.com"
+             lex:LocalizeDictionary.DesignCulture="zh-tw"
+             xmlns:gif="https://github.com/XamlAnimatedGif/XamlAnimatedGif"
+             
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" d:Background="White">
+    <UserControl.Resources>
+        <converter:BooleanToGreyOrRedColorConverter x:Key="BooleanToGreenRedColorConverter"/>
+        <converter:InvertableBooleanToVisibilityConverter x:Key="BoolVisConverter"/>
+        <converter:BooleanToMdPackIconKindConverter x:Key="BoolMdIconConverter"/>
+        <converter:BooleanToGreenOrRedColorConverter x:Key="Bool_GreenOrRedConverter"/>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+                    Orientation="Horizontal">
+            <Button Margin="5,1" MinWidth="110" Style="{DynamicResource MaterialDesignRaisedDarkButton}"
+                    Command="{Binding AddWatchItemCmd}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="AddAlert" Foreground="#FFF" Height="25" Width="50" Margin="-20,0,-10,0"/>
+                    <TextBlock Text="Add" FontSize="20"/>
+                </StackPanel>
+            </Button>
+            <Button Margin="5,1" MinWidth="110"
+                    Command="{Binding DelWatchItemCmd}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Delete" Foreground="#FFF" Height="25" Width="50" Margin="-20,0,-12,0"/>
+                    <TextBlock Text="Delete" FontSize="20"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+        <DockPanel Grid.Row="1" Visibility="{Binding IsWatcherEditDialogShown, Converter={StaticResource BoolVisConverter}, ConverterParameter=Normal}">
+            <vdialogs:EditWatcherItemDialog/>
+        </DockPanel>
+        <ListView Name="lvWatcherItems" Grid.Row="1" Grid.Column="1" Margin="5" ItemsSource="{Binding WatcherItems}" DisplayMemberPath="DisplayName" SelectedItem="{Binding SelectedWatcherItem}">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListViewItem}">
+                    <EventSetter Event="MouseDoubleClick" Handler="ListViewItem_MouseDoubleClick"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.View>
+                <GridView AllowsColumnReorder="True" ColumnHeaderToolTip="Info" >
+                    <GridViewColumn Width="36">
+                        <GridViewColumn.Header>
+                            <materialDesign:PackIcon Kind="Alarm" Height="25" Width="25" Margin="-20,0"/>
+                        </GridViewColumn.Header>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <materialDesign:PackIcon
+                                    Kind="{Binding IsEnabled, Converter={StaticResource BoolMdIconConverter}}"
+                                    Foreground="{Binding IsEnabled, Converter={StaticResource Bool_GreenOrRedConverter}}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding DisplayName}" Header="Display Name"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Host}" Header="Host"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding SearchName}" Header="Search Name"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding IsJoinWhenHostAvailable}" Header="Join? Host"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding IsJoinWhenSlotAvailable}" Header="Join? Slot"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding IsNotifyWhenHostAvailable}" Header="Notify? Host"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding IsNotifyWhenSlotAvailable}" Header="Notify? Slot"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding IsNotifyWhenMapChanged}" Header="Notify? MapChanged"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <!--<xctk:PropertyGrid x:Name="propgridSv" Margin="5"
+                           Grid.Row="1" Grid.Column="1"
+                           
+                           AutoGenerateProperties="False">
+            --><!--SelectedObject="{Binding ElementName=propgridSv, Path=SelectedItem}"--><!--
+            <xctk:PropertyGrid.PropertyDefinitions>
+                <xctk:PropertyDefinition TargetProperties="isEnabled" />
+            </xctk:PropertyGrid.PropertyDefinitions>
+        </xctk:PropertyGrid>-->
+    </Grid>
+</UserControl>

@@ -14,6 +14,8 @@ using System.Xaml;
 using WPFLocalizeExtension.Engine;
 using WPFLocalizeExtension.Providers;
 using Microsoft.VisualBasic.FileIO;
+using System.Management;
+using System.Collections.ObjectModel;
 
 
 
@@ -26,6 +28,14 @@ namespace NetaSabaPortal
     {
         public App()
         {
+            //LocalizeDictionary.Instance.PropertyChanged += (sender, e) =>
+            //{
+            //    if (e.PropertyName == "Culture")
+            //    {
+            //        App.Current.
+            //    }
+            //};
+
             Services = ConfigureServices();
             this.InitializeComponent();
         }
@@ -50,49 +60,91 @@ namespace NetaSabaPortal
             bool isFileExists_Path = File.Exists(Path.Combine(currentDir, PathOptions.DefaultFileName));
             bool isFileExists_Advanced = File.Exists(Path.Combine(currentDir, AdvancedOptions.DefaultFileName));
             bool isFileExists_Entities = File.Exists(Path.Combine(currentDir, EntitiesOptions.DefaultFileName));
+            bool isFileExists_Watcher = File.Exists(Path.Combine(currentDir, WatcherOptions.DefaultFileName));
 
-            string baseCfgFilename = "config.jsonc";
+            string baseCfgFilename = "config.json";
 
             var configurationBuilder = new ConfigurationBuilder()
             .SetBasePath(currentDir)
             .AddJsonFile(baseCfgFilename)
+            // Add options files
             .AddJsonFile(PathOptions.DefaultFileName, true)
             .AddJsonFile(EntitiesOptions.DefaultFileName, true)
             .AddJsonFile(AdvancedOptions.DefaultFileName, true)
             .AddJsonFile(UiOptions.DefaultFileName, true)
+            .AddJsonFile(WatcherOptions.DefaultFileName, true)
             ;
 
             var cfg = configurationBuilder.Build();
 
-            var svcs = new ServiceCollection();
+            var services = new ServiceCollection();
 
             // services.AddOptions<PathOptions>().Configure(x => configuration.Bind("path", x));
-            svcs.ConfigureWritable<PathOptions>(cfg.GetSection("path"), isFileExists_Path ? PathOptions.DefaultFileName : baseCfgFilename);
-            svcs.ConfigureWritable<AdvancedOptions>(cfg.GetSection("advanced"), isFileExists_Advanced ? AdvancedOptions.DefaultFileName : baseCfgFilename);
-            svcs.ConfigureWritable<EntitiesOptions>(cfg.GetSection("entities"), isFileExists_Entities ? EntitiesOptions.DefaultFileName : baseCfgFilename);
-            svcs.ConfigureWritable<UiOptions>(cfg.GetSection("ui"), isFileExists_Entities ? UiOptions.DefaultFileName : baseCfgFilename);
-            
-            svcs.AddSingleton<MainWindowVM>();
-            svcs.AddSingleton<MainWindow>();
+            services.ConfigureWritable<PathOptions>(cfg.GetSection("path"), isFileExists_Path ? PathOptions.DefaultFileName : baseCfgFilename);            
+            services.ConfigureWritable<EntitiesOptions>(cfg.GetSection("entities"), isFileExists_Entities ? EntitiesOptions.DefaultFileName : baseCfgFilename);
+            services.ConfigureWritable<UiOptions>(cfg.GetSection("ui"), isFileExists_Entities ? UiOptions.DefaultFileName : baseCfgFilename);
+            services.ConfigureWritable<WatcherOptions>(cfg.GetSection("watcher"), isFileExists_Watcher ? WatcherOptions.DefaultFileName : baseCfgFilename);
+            //services.ConfigureWritable<AdvancedOptions>(cfg.GetSection("advanced"), isFileExists_Advanced ? AdvancedOptions.DefaultFileName : baseCfgFilename);
+            services.AddOptions<AdvancedOptions>().Configure(x => cfg.Bind("advanced", x));
 
-            return svcs.BuildServiceProvider();
+            services.AddSingleton<MainWindowVM>();
+            services.AddSingleton<EditWatcherItemDialogVM>();
+            services.AddSingleton<MainWindow>();
+
+            return services.BuildServiceProvider();
         }
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             var svcs = Services.CreateScope().ServiceProvider;
-            var advOpts = svcs.GetRequiredService<IWritableOptions<AdvancedOptions>>();
+            var advOpts = svcs.GetRequiredService<IOptions<AdvancedOptions>>();
             var uiOpts = svcs.GetRequiredService<IWritableOptions<UiOptions>>();
 
 
             // Select advOpts.Value.Langs to be the list of languages to be used. new List<System.Globalization.CultureInfo>() { ... }
             var culList = new List<System.Globalization.CultureInfo>();
-            advOpts.Value.Langs.ForEach(x => culList.Add(System.Globalization.CultureInfo.GetCultureInfo(x)));
+            //var rlp = MainResxLocalizationProvider.Instance;
+            var rlp = LocalizeDictionary.Instance.DefaultProvider as ResxLocalizationProvider;
+            advOpts.Value.Langs.ForEach(x =>
+            {
+                var cul = System.Globalization.CultureInfo.GetCultureInfo(x);
+                culList.Add(cul);
+                // rlp.AvailableCultures.Add(cul);
+            });
+            rlp.SearchCultures = culList;
+            LocalizeDictionary.Instance.DefaultProvider = rlp;
+
+
+            //rlp.AvailableCultures.Clear();
+            
 
             // Somehow LocalizeDictionary is just not able to find zh-tw and zh-cn on its own,
             // so we have to add them manually, not just because of speed.
-            (LocalizeDictionary.Instance.DefaultProvider as ResxLocalizationProvider).SearchCultures = culList;
-            
+
+            //rlp.SearchCultures = culList;
+            //string assembName = "NetaSabaPortal";// System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
+            //string baseLocName = "Strings";
+
+
+            //rlp.UpdateCultureList(assembName, baseLocName);
+            //foreach (var cul in culList)
+            //{
+            //    if (cul.Name == "zh-Hant-TW")
+            //    {
+            //        rlp.UpdateCultureList(assembName, $"{baseLocName}.zh-TW");
+            //        continue;
+            //    }
+            //    if (cul.Name == "zh-Hans-CN")
+            //    {
+            //        rlp.UpdateCultureList(assembName, $"{baseLocName}.zh-CN");
+            //        continue;
+            //    }
+
+            //    rlp.UpdateCultureList(assembName, $"{baseLocName}.{cul.Name}");
+            //}
+
+
+
             if (!string.IsNullOrEmpty(uiOpts?.Value?.Language))
             {
                 LocalizeDictionary.Instance.Culture = System.Globalization.CultureInfo.GetCultureInfo(uiOpts.Value.Language);

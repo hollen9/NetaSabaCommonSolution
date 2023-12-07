@@ -1,5 +1,6 @@
 using System;
 using System.Buffers;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -31,11 +32,11 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
     /// <inheritdoc cref="JsonWritableOptions(string, string, IOptionsMonitor{TOptions}, IConfiguration?)" path="/param[@name='configuration']"/>
     /// </summary>
     private readonly IConfiguration? _configuration;
-
+    
     private static readonly JsonWriterOptions _jsonWriterOptions = new()
     {
         Indented = true,
-        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping        
     };
 
     /// <summary>
@@ -119,8 +120,26 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
                     stream.Position = 0;
                 }
 
-                var reader = new Utf8JsonReader(utf8Json.Length > 0 ? utf8Json : "{}"u8);
+                //var readerComment = new Utf8JsonReader(utf8Json.Length > 0 ? utf8Json : "{}"u8,
+                //    new JsonReaderOptions() { CommentHandling = JsonCommentHandling.Allow, AllowTrailingCommas = true });
+                
+                //var cmtList = new List<Tuple<int,string>>(); //lineNum, comment
+                //int lineNum = 0;
+                //while (readerComment.Read())
+                //{
+                //    lineNum++;
+                //    if (readerComment.TokenType == JsonTokenType.Comment)
+                //    {
+                //        string cmt = readerComment.GetComment();
+                //        cmtList.Add(Tuple.Create<int,string>(lineNum, cmt));
+                //        continue;
+                //    }
+                //}
+
+                var reader = new Utf8JsonReader(utf8Json.Length > 0 ? utf8Json : "{}"u8, 
+                    new JsonReaderOptions() { CommentHandling = JsonCommentHandling.Skip, AllowTrailingCommas = true });
                 var currentJson = JsonElement.ParseValue(ref reader);
+                
                 var writer = new Utf8JsonWriter(stream, _jsonWriterOptions);
 
                 writer.WriteStartObject(); // {
@@ -137,6 +156,7 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
                     serializedOptionsValue.WriteTo(writer);
                     isWritten = true;
                 }
+
                 if (!isWritten)
                 {
                     writer.WritePropertyName(_section);

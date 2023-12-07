@@ -97,11 +97,29 @@ namespace NetaSabaPortal.Resources.Locales {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to US East Cost.
+        /// </summary>
+        internal static string _Region_0 {
+            get {
+                return ResourceManager.GetString("_Region_0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Info.
         /// </summary>
         internal static string _TabAbout_Caption {
             get {
                 return ResourceManager.GetString("_TabAbout_Caption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CreatorTool.
+        /// </summary>
+        internal static string _TabCreator_Caption {
+            get {
+                return ResourceManager.GetString("_TabCreator_Caption", resourceCulture);
             }
         }
         
@@ -120,6 +138,15 @@ namespace NetaSabaPortal.Resources.Locales {
         internal static string _TabSettings_Caption {
             get {
                 return ResourceManager.GetString("_TabSettings_Caption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Watcher.
+        /// </summary>
+        internal static string _TabWatcher_Caption {
+            get {
+                return ResourceManager.GetString("_TabWatcher_Caption", resourceCulture);
             }
         }
         

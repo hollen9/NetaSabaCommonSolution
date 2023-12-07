@@ -28,6 +28,11 @@ namespace NetaSabaPortal.Views
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
+            if (DataContext == null)
+            {
+                return;
+            }
+
             MainWindowVM vm = (ViewModels.MainWindowVM) DataContext;
             int selectedIdx = 0;
             for (int i = vm.EntitiesDefinitions.Count - 1; i >= 0; i--)

@@ -1,0 +1,24 @@
+{
+  "watcher": {
+    "isEnabled": true,
+    "interval": 1000,
+    "list": [
+      {
+        "id": "F6715CD3-D3F5-4AC1-9964-BF4C0B992281",
+        "displayName": "Test01",
+        "searchName": "【G9】連跳│Bhop│!rtv #8",
+        "searchPort": 27121,
+        "searchRegion": "Rest_of_the_world",
+        "searchTag": "",
+        "isEnabled": true,
+        "host": "",
+        "password": "",
+        "isJoinWhenHostAvailable": true,
+        "isJoinWhenSlotAvailable": true,
+        "isNotifyWhenHostAvailable": true,
+        "isNotifyWhenSlotAvailable": true,
+        "isNotifyWhenMapChanged": true
+      }
+    ]
+  }
+}

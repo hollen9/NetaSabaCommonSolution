@@ -109,11 +109,11 @@
   <data name="_TabAbout_Caption" xml:space="preserve">
     <value>資訊</value>
   </data>
-  <data name="TabSettings_SteamPathLabel_2" xml:space="preserve">
-    <value> 的路徑</value>
-  </data>
   <data name="TabSettings_SteamPathLabel_0" xml:space="preserve">
     <value> </value>
+  </data>
+  <data name="TabSettings_SteamPathLabel_2" xml:space="preserve">
+    <value> 的路徑</value>
   </data>
   <data name="TabSettings_Cs2PathLabel_2" xml:space="preserve">
     <value> 的路徑（您也可以選擇 </value>
@@ -131,12 +131,45 @@
     <value>自動偵測</value>
   </data>
   <data name="_ButtonExtract_Caption" xml:space="preserve">
-    <value>解壓縮</value>
+    <value>展開</value>
   </data>
   <data name="TabSettings_Cs2PathLabel_0" xml:space="preserve">
     <value> </value>
   </data>
   <data name="_ProgressLabel" xml:space="preserve">
     <value>進度</value>
+  </data>
+  <data name="_TabWatcher_Caption" xml:space="preserve">
+    <value>探測</value>
+  </data>
+  <data name="_TabCreator_Caption" xml:space="preserve">
+    <value>創作者向</value>
+  </data>
+  <data name="_RegionItems_0" xml:space="preserve">
+    <value>美國東岸</value>
+  </data>
+  <data name="_RegionItems_1" xml:space="preserve">
+    <value>美國西岸</value>
+  </data>
+  <data name="_RegionItems_2" xml:space="preserve">
+    <value>南美洲</value>
+  </data>
+  <data name="_RegionItems_3" xml:space="preserve">
+    <value>歐洲</value>
+  </data>
+  <data name="_RegionItems_4" xml:space="preserve">
+    <value>亞洲</value>
+  </data>
+  <data name="_RegionItems_5" xml:space="preserve">
+    <value>澳洲</value>
+  </data>
+  <data name="_RegionItems_6" xml:space="preserve">
+    <value>中東</value>
+  </data>
+  <data name="_RegionItems_7" xml:space="preserve">
+    <value>非洲</value>
+  </data>
+  <data name="_RegionItems_255" xml:space="preserve">
+    <value>世界其他地域</value>
   </data>
 </root>

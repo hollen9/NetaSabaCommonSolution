@@ -14,7 +14,7 @@
              d:DesignHeight="450" d:DesignWidth="800" d:Background="White"
              Loaded="UserControl_Loaded">
     <UserControl.Resources>
-        <converter:BooleanToGreenRedColorConverter x:Key="BooleanToGreenRedColorConverter"/>
+        <converter:BooleanToGreyOrRedColorConverter x:Key="BooleanToGreenRedColorConverter"/>
         <converter:InvertableBooleanToVisibilityConverter x:Key="BoolVisConverter"/>
     </UserControl.Resources>
     <Grid Margin="10">
