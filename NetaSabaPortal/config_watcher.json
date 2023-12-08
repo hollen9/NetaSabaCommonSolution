@@ -1,7 +1,7 @@
 {
   "watcher": {
     "IsEnabled": true,
-    "Interval": 1000,
+    "Interval": 10,
     "List": [
       {
         "Id": "f6715cd3-d3f5-4ac1-9964-bf4c0b992281",

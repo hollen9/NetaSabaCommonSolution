@@ -29,6 +29,7 @@ using System.Net;
 using QueryMaster.MasterServer;
 using NetaSabaPortal.Helpers;
 using System.Text.RegularExpressions;
+using XamlAnimatedGif;
 
 namespace NetaSabaPortal.ViewModels
 {
@@ -39,12 +40,14 @@ namespace NetaSabaPortal.ViewModels
         public IWritableOptions<WatcherOptions> _watcherOptions;
         public IWritableOptions<UiOptions> _uiOptions;
         public EditWatcherItemDialogVM _editWatcherItemDialogVM;
+        public IWritableOptions<DataOptions> _dataOptions;
 
         public MainWindowVM(
             IWritableOptions<PathOptions> dirOptions,
             IWritableOptions<EntitiesOptions> entOptions,
             IWritableOptions<WatcherOptions> watcherOptions,
             IWritableOptions<UiOptions> uiOptions,
+            IWritableOptions<DataOptions> dataOptions,
             EditWatcherItemDialogVM editWatcherItemDialogVM
             )
         {
@@ -59,6 +62,7 @@ namespace NetaSabaPortal.ViewModels
             _entOptions = entOptions;
             _watcherOptions = watcherOptions;
             _uiOptions = uiOptions;
+            _dataOptions = dataOptions;
 
             // Orders matter, as each path variable changed event will trigger AutoSetupPath
             CS2AcfPath = _dirOptions.Value.Cs2acf;
@@ -75,7 +79,7 @@ namespace NetaSabaPortal.ViewModels
                 DispatcherPriority.Background, HandleWatcherCheck, App.Current.Dispatcher);
             WatcherInterval = _watcherOptions.Value.Interval;
             IsWatcherEnabled = _watcherOptions.Value.IsEnabled;
-            _serverResponses = new Dictionary<string, OpenGSQ.Protocols.Source.IResponse>();
+            //_serverResponses = new Dictionary<string, OpenGSQ.Protocols.Source.IResponse>();
 
             _editWatcherItemDialogVM = editWatcherItemDialogVM;
             _editWatcherItemDialogVM.ShownChanged += (s) => 
@@ -98,54 +102,107 @@ namespace NetaSabaPortal.ViewModels
             LocalizeDictionary.Instance.Culture = SelectedCulture;
         }
 
+        private const string WatcherGifUri_Idle = "pack://application:,,,/Resources/Images/animated/miku_sleep/miku_sleep_loop01.gif";
+        private const string WatcherGifUri_Wakeup = "pack://application:,,,/Resources/Images/animated/miku_sleep/miku_sleep_wake.gif";
+        private const string WatcherGifUri_Doing = "pack://application:,,,/Resources/Images/animated/miku_sleep/miku_sleep_awake_loop.gif";
+
+        public void HandleWatcherGif_AniCompleted(DependencyObject d, AnimationCompletedEventArgs e)
+        {
+            if (WatcherLoadingGif == WatcherGifUri_Wakeup)
+            {
+                WatcherLoadingGif = WatcherGifUri_Doing;
+            }
+            //{
+                
+            //}
+            //if (e.Source is Image img)
+            //{
+            //    if (img.Source.ToString() == WatcherGifUri_Wakeup)
+            //    {
+            //        img.Source = new Uri(WatcherGifUri_Doing);
+            //    }
+            //    else if (img.Source.ToString() == WatcherGifUri_Doing)
+            //    {
+            //        img.Source = new Uri(WatcherGifUri_Idle);
+            //    }
+            //}
+        }
+
         private void HandleWatcherCheck(object? sender, EventArgs e)
         {
             var cts = new CancellationTokenSource();
-            //Application.Current.Dispatcher.Invoke(async () =>
-            //{
-                
-            //    // Console.WriteLine(info.Name);
-            //});
+           
+            WatcherLoadingGif = WatcherGifUri_Wakeup;
+
             Task.Run(async () => 
             {
                 try
                 {
-
-                    // var qq = await GameQueryExtension.CreateServerQueryInstanceAsync("103.219.30.229:27205");
-                    // var info = await qq.GetServerInfoAsync(cts.Token);
                     foreach (var wItem in _watcherOptions.Value.List)
                     {
                         if (!wItem.IsEnabled)
                         {
                             continue;
                         }
-                        var sv = QueryMaster.MasterServer.MasterQuery.GetServerInstance(QueryMaster.MasterServer.MasterQuery.SourceServerEndPoint);
-                        sv.GetAddresses(QueryMaster.MasterServer.Region.Asia, batchInfo =>
+
+                        if (!string.IsNullOrEmpty(wItem.Host))
                         {
-                            string ffff = wItem.SearchName;
-                            string ddd = ffff;
-                        },
-                         new IpFilter() { AppId = QueryMaster.Game.CounterStrike_Global_Offensive, HostName = wItem.SearchName, IsDedicated = true }, -1,
-                         (ex) =>
-                         {
-                             if (ex != null)
-                             {
-                                 //callback(null, ex, false);
-                                 return;
-                             }
+                            var sq = await GameQueryExtension.CreateServerQueryInstanceAsync(wItem.Host);
+                            var info = await sq.GetServerInfoAsync(cts.Token);
 
-                         });
+                            if (!_dataOptions.Value.GameServerRecords.TryGetValue(wItem.Id, out var gsr))
+                            {
+                                gsr = new GameServerRecord();
+                                gsr.Heartbeats = new();
+                                gsr.infoItems = new();
+                            }
+                            gsr.Heartbeats.Add(DateTime.Now);
+                            gsr.infoItems.Add(info);
+                        }
+
                     }
+                    _dataOptions.Update(_dataOptions.Value, false);
 
-                        
+                    // var qq = await GameQueryExtension.CreateServerQueryInstanceAsync("103.219.30.229:27205");
+                    // var info = await qq.GetServerInfoAsync(cts.Token);
+
+                    //foreach (var wItem in _watcherOptions.Value.List)
+                    //{
+                    //    if (!wItem.IsEnabled)
+                    //    {
+                    //        continue;
+                    //    }
+                    //    var sv = QueryMaster.MasterServer.MasterQuery.GetServerInstance(QueryMaster.MasterServer.MasterQuery.SourceServerEndPoint);
+                    //    sv.GetAddresses(QueryMaster.MasterServer.Region.Asia, batchInfo =>
+                    //    {
+                    //        string ffff = wItem.SearchName;
+                    //        string ddd = ffff;
+                    //    },
+                    //     new IpFilter() { AppId = QueryMaster.Game.CounterStrike_Global_Offensive, HostName = wItem.SearchName, IsDedicated = true }, -1,
+                    //     (ex) =>
+                    //     {
+                    //         if (ex != null)
+                    //         {
+                    //             //callback(null, ex, false);
+                    //             return;
+                    //         }
+
+                    //     });
+                    //}
+
+
                 }
                 catch (Exception ex)
                 {
 
                 }
+            }).ContinueWith(x => 
+            {
+                Task.Delay(2000).Wait();
+                WatcherLoadingGif = WatcherGifUri_Idle;
             });
 
-            Task.Delay(-1).GetAwaiter().GetResult();
+            //Task.Delay(-1).GetAwaiter().GetResult();
         }
 
         private System.Globalization.CultureInfo _selectedCulture;
@@ -503,6 +560,14 @@ namespace NetaSabaPortal.ViewModels
         #region Watcher
         // private bool _isWatcherEditDialogShown;
 
+        private string _watcherLoadingGif = WatcherGifUri_Idle;
+
+        public string WatcherLoadingGif
+        {
+            get => _watcherLoadingGif;
+            set => SetProperty(ref _watcherLoadingGif, value);
+        }
+
         private Action _actionToBeConfirmed;
         public Action ActionToBeConfirmed
         {
@@ -539,8 +604,7 @@ namespace NetaSabaPortal.ViewModels
         }
 
         private DispatcherTimer _dispatcherTimer;
-        private Dictionary<string, OpenGSQ.Protocols.Source.IResponse> _serverResponses;
-
+        
         private bool _isWatcherEnabled;
         public bool IsWatcherEnabled
         {

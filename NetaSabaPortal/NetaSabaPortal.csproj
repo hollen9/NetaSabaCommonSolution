@@ -15,6 +15,9 @@
 		</ItemGroup>-->
 
 		<ItemGroup>
+				<None Remove="Resources\Images\animated\miku_sleep\miku_sleep_awake_loop.gif" />
+				<None Remove="Resources\Images\animated\miku_sleep\miku_sleep_loop01.gif" />
+				<None Remove="Resources\Images\animated\miku_sleep\miku_sleep_wake.gif" />
 				<None Remove="Resources\Images\animated\padoru\padoru-smooth.gif" />
 				<None Remove="Resources\Images\discord_icon_clyde_black_RGB.svg" />
 				<None Remove="Resources\Images\icon_discord_25_black.png" />
@@ -52,6 +55,9 @@
 		</ItemGroup>
 
 		<ItemGroup>
+				<Resource Include="Resources\Images\animated\miku_sleep\miku_sleep_awake_loop.gif" />
+				<Resource Include="Resources\Images\animated\miku_sleep\miku_sleep_loop01.gif" />
+				<Resource Include="Resources\Images\animated\miku_sleep\miku_sleep_wake.gif" />
 				<Resource Include="Resources\Images\animated\padoru\padoru-smooth.gif" />
 				<Resource Include="Resources\Images\icon_discord_25_black.png">
 				  <CopyToOutputDirectory>Never</CopyToOutputDirectory>

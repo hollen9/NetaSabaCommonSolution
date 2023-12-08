@@ -29,6 +29,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -262,5 +263,17 @@
                 <xctk:PropertyDefinition TargetProperties="isEnabled" />
             </xctk:PropertyGrid.PropertyDefinitions>
         </xctk:PropertyGrid>-->
+        <DockPanel Grid.Row="2" LastChildFill="False" Grid.ColumnSpan="2">
+            <Image Width="100" Height="80" Margin="0,0,30,30" 
+                   DockPanel.Dock="Bottom" HorizontalAlignment="Right"
+                   Grid.Row="1"
+                   gif:AnimationBehavior.AnimationCompleted="LoadingGif_AnimationCompleted"
+                   gif:AnimationBehavior.AnimationStarted="Image_AnimationStarted"
+                   Visibility="{Binding IsWatcherEnabled, Converter={StaticResource BoolVisConverter}, ConverterParameter=Normal}"
+                   gif:AnimationBehavior.SourceUri="{Binding WatcherLoadingGif}"
+                   gif:AnimationBehavior.SourceStream="{Binding fff}"
+                   gif:AnimationBehavior.CacheFramesInMemory="True"
+                   />
+        </DockPanel>
     </Grid>
 </UserControl>

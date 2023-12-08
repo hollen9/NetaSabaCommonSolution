@@ -4,16 +4,18 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:NetaSabaPortal.Views"
+             xmlns:gif="https://github.com/XamlAnimatedGif/XamlAnimatedGif"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:Background="White">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Row="0" Grid.Column="0" Margin="10">
             <TextBlock Text="NetaSaba Portal" FontSize="24" FontWeight="Bold"/>
@@ -24,6 +26,39 @@
                 <Run Text="https://hollen.tech"/>
             </Hyperlink>
             </TextBlock>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition MinWidth="90"/>
+                    <ColumnDefinition MinWidth="150"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="0" Text="Credits" FontSize="20" Margin="0,20,0,5"/>
+                <TextBlock Grid.Row="1" Grid.Column="0"><Hyperlink NavigateUri="https://www.pixiv.net/users/492048" RequestNavigate="Hyperlink_RequestNavigate"><Run Text="sb"/></Hyperlink></TextBlock>
+                <TextBlock Grid.Row="1" Grid.Column="1">やすみく.gif</TextBlock>
+                <TextBlock Grid.Row="1" Grid.Column="2"><Hyperlink NavigateUri="https://www.pixiv.net/artworks/44334314" RequestNavigate="Hyperlink_RequestNavigate"><Run Text="https://www.pixiv.net/artworks/44334314"/></Hyperlink></TextBlock>
+                <TextBlock Grid.Row="2" ><Hyperlink NavigateUri="https://tenor.com/users/ayalolis" RequestNavigate="Hyperlink_RequestNavigate"><Run Text="Ayalolis"/></Hyperlink></TextBlock>
+                <TextBlock Grid.Row="2" Grid.Column="1">padoru_smooth.gif</TextBlock>
+                <TextBlock Grid.Row="2" Grid.Column="2"><Hyperlink NavigateUri="https://tenor.com/view/padoru-smooth-gif-13996847954518449927" RequestNavigate="Hyperlink_RequestNavigate"><Run Text="https://tenor.com/view/padoru-smooth-gif-13996847954518449927"/></Hyperlink></TextBlock>
+            </Grid>
+        </StackPanel>
+        <StackPanel Grid.Row="1" VerticalAlignment="Top" Orientation="Horizontal">
+            <TextBlock>safsfsfsf</TextBlock>
+            <!--<Image Width="100" Height="100"
+                   gif:AnimationBehavior.SourceUri="pack://application:,,,/Resources/Images/animated/miku_wakeup/miku_sleep_wake.gif"
+                   gif:AnimationBehavior.RepeatBehavior="Forever"
+                   />-->
+            <!--<Image Width="100" Height="100"
+                   gif:AnimationBehavior.SourceUri="pack://application:,,,/Resources/Images/animated/miku_wakeup/miku_sleep_awake_loop.gif"
+                   />-->
+            
+            <Image HorizontalAlignment="Right" Grid.Row="1" gif:AnimationBehavior.SourceUri="pack://application:,,,/Resources/Images/animated/miku_sleep/miku_sleep_loop01.gif"/>
+            <Image HorizontalAlignment="Right" Grid.Row="1" gif:AnimationBehavior.SourceUri="pack://application:,,,/Resources/Images/animated/padoru/padoru-smooth.gif"/>
+            <Image HorizontalAlignment="Right" Grid.Row="1" gif:AnimationBehavior.SourceUri="pack://application:,,,/Resources/Images/animated/padoru/padoru-smooth.gif"/>
         </StackPanel>
         <Image Margin="0,0,50,0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Column="1" Grid.Row="1" Source="{StaticResource imgAkCat}"/>
     </Grid>

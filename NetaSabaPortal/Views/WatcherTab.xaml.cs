@@ -44,5 +44,18 @@ namespace NetaSabaPortal.Views
             vm.ModifyWatchItemCmd.Execute(wItem);
         }
 
+        private void LoadingGif_AnimationCompleted(DependencyObject d, XamlAnimatedGif.AnimationCompletedEventArgs e)
+        {
+            if (DataContext is not MainWindowVM vm)
+            {
+                return;
+            }
+            vm.HandleWatcherGif_AniCompleted(d, e);
+        }
+
+        private void Image_AnimationStarted(DependencyObject d, XamlAnimatedGif.AnimationStartedEventArgs e)
+        {
+
+        }
     }
 }

@@ -87,6 +87,23 @@ namespace NetaSabaPortal
             //services.ConfigureWritable<AdvancedOptions>(cfg.GetSection("advanced"), isFileExists_Advanced ? AdvancedOptions.DefaultFileName : baseCfgFilename);
             services.AddOptions<AdvancedOptions>().Configure(x => cfg.Bind("advanced", x));
 
+            string savedataPath = Path.GetFullPath(Path.Combine(currentDir, DataOptions.DefaultFileName));
+            if (File.Exists(Path.GetFullPath(Path.Combine(DataOptions.DefaultFileName))) != true)
+            {
+                using (var fs = File.Create(savedataPath))
+                {
+                    var obj = new 
+                    {
+                        data = new DataOptions()
+                    };
+                    string text = System.Text.Json.JsonSerializer.Serialize(obj);
+                    fs.Write(System.Text.Encoding.UTF8.GetBytes(text));
+                    fs.Close();
+                }
+            }
+
+            services.ConfigureWritable<DataOptions>(cfg.GetSection("data"), DataOptions.DefaultFileName);
+
             services.AddSingleton<MainWindowVM>();
             services.AddSingleton<EditWatcherItemDialogVM>();
             services.AddSingleton<MainWindow>();
