@@ -37,6 +37,11 @@ public class WatcherOptions
 
     public bool IsEnabled { get; set; }
     public int Interval { get; set; }
+
+    public int NotifyCooldown { get; set; }
+    public int AutoJoinCooldown { get; set; }
+    public bool IsTurnOffTimerAfterJoin { get; set; }
+
     public List<WatcherItem> List { get => _list; set => _list = value; }
     public WatcherOptions() { }
     public WatcherOptions(bool isEnabled, int interval, List<WatcherItem> list)

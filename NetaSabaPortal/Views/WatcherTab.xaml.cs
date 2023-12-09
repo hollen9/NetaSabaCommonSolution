@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using NetaSabaPortal.Models;
+using NetaSabaPortal.Options;
 using NetaSabaPortal.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -56,9 +57,9 @@ namespace NetaSabaPortal.Views
             timer.Interval = TimeSpan.FromTicks(40000 * 60);
             timer.Tick += (s,e) => 
             {
-                if (_current_zone == 0 && timer.Interval.Seconds != 20000 * 60)
+                if (_current_zone == 0 && timer.Interval.Seconds != 20000 * 60 / 2)
                 {
-                    timer.Interval = TimeSpan.FromTicks(20000 * 60);
+                    timer.Interval = TimeSpan.FromTicks(20000 * 60 / 2);
                 }
                 else if (_current_zone == 1 && timer.Interval.Seconds != 40000 * 60)
                 {

@@ -31,6 +31,8 @@ using NetaSabaPortal.Helpers;
 using System.Text.RegularExpressions;
 using XamlAnimatedGif;
 using NetaSabaPortal.Repositories;
+using NetaSabaPortal.Models.Sql;
+using Microsoft.Toolkit.Uwp.Notifications;
 
 namespace NetaSabaPortal.ViewModels
 {
@@ -83,6 +85,9 @@ namespace NetaSabaPortal.ViewModels
                 DispatcherPriority.Background, HandleWatcherCheck, App.Current.Dispatcher);
             WatcherInterval = _watcherOptions.Value.Interval;
             IsWatcherEnabled = _watcherOptions.Value.IsEnabled;
+            WatcherNotifyCooldown = _watcherOptions.Value.NotifyCooldown;
+            WatcherAutoJoinCooldown = _watcherOptions.Value.AutoJoinCooldown;
+            IsTurnOffWatcherTimerAfterJoin = _watcherOptions.Value.IsTurnOffTimerAfterJoin;
             //_serverResponses = new Dictionary<string, OpenGSQ.Protocols.Source.IResponse>();
 
             _editWatcherItemDialogVM = editWatcherItemDialogVM;
@@ -106,18 +111,11 @@ namespace NetaSabaPortal.ViewModels
             LocalizeDictionary.Instance.Culture = SelectedCulture;
         }
 
-        private const string WatcherGifUri_Idle = "pack://application:,,,/Resources/Images/animated/miku_sleep/miku_sleep_loop01.gif";
-        private const string WatcherGifUri_Wakeup = "pack://application:,,,/Resources/Images/animated/miku_sleep/miku_sleep_wake.gif";
-        private const string WatcherGifUri_Doing = "pack://application:,,,/Resources/Images/animated/miku_sleep/miku_sleep_awake_loop.gif";
-
-        public void HandleWatcherGif_AniCompleted(DependencyObject d, AnimationCompletedEventArgs e)
-        {
-            if (WatcherLoadingGif == WatcherGifUri_Wakeup)
-            {
-                WatcherLoadingGif = WatcherGifUri_Doing;
-            }
-        }
-
+        private Dictionary<Guid, DateTime> _watcherLastNotify = new Dictionary<Guid, DateTime>();
+        private Dictionary<Guid, DateTime> _watcherLastAutoJoin = new Dictionary<Guid, DateTime>();
+        //private System.Media.SoundPlayer _watcherNotifySoundPlayer = new System.Media.SoundPlayer();
+        NAudio.Wave.IWavePlayer _watcherNotifySoundPlayer = new NAudio.Wave.WaveOut();
+        // private Dictionary<Guid, int> _watcherNotifySoundPlayer_played_times = new Dictionary<Guid, int>();
         private void HandleWatcherCheck(object? sender, EventArgs e)
         {
             var cts = new CancellationTokenSource();
@@ -141,18 +139,101 @@ namespace NetaSabaPortal.ViewModels
                             var sq = await GameQueryExtension.CreateServerQueryInstanceAsync(wItem.Host);
                             var info = await sq.GetServerInfoAsync(cts.Token);
 
-                            if (!_dataOptions.Value.GameServerRecords.TryGetValue(wItem.Id, out var gsr))
+                            var newInfoItem = new ServerStat()
                             {
-                                gsr = new GameServerRecord();
-                                gsr.Heartbeats = new();
-                                gsr.infoItems = new();
-                            }
-                            if (info != null)
+                                DemandingWatcherId = wItem.Id,
+                                Map = info.Map,
+                                MaxPlayers = info.MaxPlayers,
+                                Players = info.Players,
+                                Timestamp = DateTime.Now
+                            };
+
+                            await _watcherRepository.UpsertServerStatAsync(newInfoItem);
+                            if (!_watcherLastNotify.TryGetValue(wItem.Id, out var lastNotify)) 
                             {
-                                gsr.Heartbeats.Add(DateTime.Now);
-                                gsr.infoItems.Add(info);
+                                lastNotify = DateTime.MinValue;
                             }
-                            _dataOptions.Value.GameServerRecords.TryAdd(wItem.Id, gsr);
+                            if (!_watcherLastAutoJoin.TryGetValue(wItem.Id, out var lastAutoJoin)) 
+                            {
+                                lastAutoJoin = DateTime.MinValue;
+                            }
+                            if (newInfoItem.Timestamp - lastNotify > TimeSpan.FromSeconds(WatcherNotifyCooldown))
+                            {
+                                _watcherLastNotify[wItem.Id] = newInfoItem.Timestamp; // Upsert
+
+                                if (wItem.IsNotifyWhenHostAvailable)
+                                {
+                                    if (wItem.IsNotifyViaWindowsNotification)
+                                    {
+                                        new ToastContentBuilder()
+                                            //.AddArgument("action", "viewConversation")
+                                            //.AddArgument("conversationId", 9813)
+                                            .AddCustomTimeStamp(newInfoItem.Timestamp)
+                                            .AddText($"{wItem.DisplayName}")
+                                            .AddText("The server is online now!")
+                                            .Show();
+                                    }
+                                    if (wItem.IsNotifyPlaySound)
+                                    {
+                                        if (string.IsNullOrEmpty(wItem.NotifySoundPath) ||
+                                            !File.Exists(wItem.NotifySoundPath))
+                                        {
+                                            System.Media.SystemSounds.Beep.Play();
+                                        }
+                                        else
+                                        {
+                                            Application.Current.Dispatcher.Invoke(() => 
+                                            {
+                                                //if (!_watcherNotifySoundPlayer_played_times.TryGetValue(wItem.Id, out int playedTimes))
+                                                //{
+                                                //    playedTimes = 0;
+                                                //}
+
+                                                var afr = new Extensions.NAudio.LoopAudioFileReader(wItem.NotifySoundPath, wItem.NotifySoundLoop ?? 0);
+                                                
+                                                _watcherNotifySoundPlayer.Init(afr);
+                                                //_watcherNotifySoundPlayer.PlaybackStopped += (s, e) =>
+                                                //{
+                                                //    if (wItem.NotifySoundLoop.HasValue)
+                                                //    {
+                                                //        if (wItem.NotifySoundLoop < 0 ||
+                                                //        (wItem.NotifySoundLoop != 0 &&
+                                                //        playedTimes < wItem.NotifySoundLoop))
+                                                //        {
+                                                //            playedTimes++;
+                                                //            Application.Current.Dispatcher.Invoke(() =>
+                                                //            {
+                                                //                _watcherNotifySoundPlayer.Stop();
+                                                //                _watcherNotifySoundPlayer.Play();
+                                                //            });
+                                                //            return;
+                                                //        }
+                                                //    }
+                                                //};
+                                                _watcherNotifySoundPlayer.Stop();
+                                                _watcherNotifySoundPlayer.Volume = wItem.NotifySoundVolume ?? 1.0f;
+                                                _watcherNotifySoundPlayer.Play();
+                                            });
+                                            
+                                            // = new System.Media.SoundPlayer(wItem.NotifySoundPath);
+                                            //player.Play();
+                                        }
+                                    }
+                                }
+                            }
+
+                            //if (!_dataOptions.Value.GameServerRecords.TryGetValue(wItem.Id, out var gsr))
+                            //{
+                            //    gsr = new GameServerRecord();
+                            //    gsr.Heartbeats = new();
+                            //    gsr.infoItems = new();
+                            //}
+                            //if (info != null)
+                            //{
+                            //    gsr.Heartbeats.Add(DateTime.Now);
+                            //    gsr.infoItems.Add(info);
+                            //}
+                            //_dataOptions.Value.GameServerRecords.TryAdd(wItem.Id, gsr);
                         }
 
                     }
@@ -564,14 +645,7 @@ namespace NetaSabaPortal.ViewModels
             Stop
         }
         public event EventHandler<WatcherTimerHandlerType> WatcherTimerHandlerStateChanged;
-        private string _watcherLoadingGif = WatcherGifUri_Idle;
-
-        public string WatcherLoadingGif
-        {
-            get => _watcherLoadingGif;
-            set => SetProperty(ref _watcherLoadingGif, value);
-        }
-
+        
         private Action _actionToBeConfirmed;
         public Action ActionToBeConfirmed
         {
@@ -594,6 +668,13 @@ namespace NetaSabaPortal.ViewModels
         {
             ActionToBeConfirmed?.Invoke();
             IsWatcherEditConfirmDialogShown = false;
+        });
+        public ICommand WatcherStopSound => new RelayCommand(() => 
+        {
+            Application.Current.Dispatcher.Invoke(() => 
+            {
+                _watcherNotifySoundPlayer.Stop();
+            });
         });
 
         public bool IsWatcherEditDialogShown
@@ -622,6 +703,28 @@ namespace NetaSabaPortal.ViewModels
             get => _watcherInterval;
             set => SetProperty(ref _watcherInterval, value);
         }
+        private int _watcherNotifyCooldown;
+
+        public int WatcherNotifyCooldown
+        {
+            get => _watcherNotifyCooldown;
+            set => SetProperty(ref _watcherNotifyCooldown, value);
+        }
+        private int _watcherAutoJoinCooldown;
+
+        public int WatcherAutoJoinCooldown
+        {
+            get => _watcherAutoJoinCooldown;
+            set => SetProperty(ref _watcherAutoJoinCooldown, value);
+        }
+        private bool _isTurnOffWatcherTimerAfterJoin;
+
+        public bool IsTurnOffWatcherTimerAfterJoin
+        {
+            get => _isTurnOffWatcherTimerAfterJoin;
+            set => SetProperty(ref _isTurnOffWatcherTimerAfterJoin, value);
+        }
+
 
 
         private ObservableCollection<WatcherItem> _watcherItems;
@@ -826,7 +929,7 @@ namespace NetaSabaPortal.ViewModels
             }
             #endregion
             #region Watcher
-            else if (e.PropertyName == "IsWatcherEnabled")
+            else if (e.PropertyName == nameof(IsWatcherEnabled))
             {
                 _watcherOptions.Value.IsEnabled = IsWatcherEnabled;
                 if (IsWatcherEnabled)
@@ -839,7 +942,22 @@ namespace NetaSabaPortal.ViewModels
                 }
                 _watcherOptions.Update(_watcherOptions.Value, false);
             }
-            else if (e.PropertyName == "WatcherInterval")
+            else if (e.PropertyName == nameof(WatcherNotifyCooldown))
+            {
+                _watcherOptions.Value.NotifyCooldown = WatcherNotifyCooldown;
+                _watcherOptions.Update(_watcherOptions.Value, false);
+            }
+            else if (e.PropertyName == nameof(WatcherAutoJoinCooldown))
+            {
+                _watcherOptions.Value.AutoJoinCooldown = WatcherAutoJoinCooldown;
+                _watcherOptions.Update(_watcherOptions.Value, false);
+            }
+            else if (e.PropertyName == nameof(IsTurnOffWatcherTimerAfterJoin))
+            {
+                _watcherOptions.Value.IsTurnOffTimerAfterJoin = IsTurnOffWatcherTimerAfterJoin;
+                _watcherOptions.Update(_watcherOptions.Value, false);
+            }
+            else if (e.PropertyName == nameof(WatcherInterval))
             {
                 _watcherOptions.Value.Interval = WatcherInterval;
                 _dispatcherTimer.Interval = TimeSpan.FromSeconds(WatcherInterval);
