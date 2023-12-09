@@ -23,7 +23,7 @@ public interface IWatcherItem
     bool IsNotifyWhenHostAvailable { get; set; }
     bool IsNotifyWhenSlotAvailable { get; set; }
     bool IsNotifyWhenMapChanged { get; set; }
-    string IsNotifyViaDiscordWebhook { get; set; }
+    bool IsNotifyViaDiscordWebhook { get; set; }
     string NotifyDiscordWebhookUrl { get; set; }
     bool IsNotifyViaWindowsNotification { get; set; }
     bool IsNotifyPlaySound { get; set; }
@@ -61,7 +61,7 @@ public class WatcherItem : ObservableObject, IWatcherItem
     public bool IsNotifyWhenHostAvailable { get; set; }
     public bool IsNotifyWhenSlotAvailable { get; set; }
     public bool IsNotifyWhenMapChanged { get; set; }
-    public string IsNotifyViaDiscordWebhook { get; set; }
+    public bool IsNotifyViaDiscordWebhook { get; set; }
     public string NotifyDiscordWebhookUrl { get; set; }
     public bool IsNotifyViaWindowsNotification { get; set; }
     public bool IsNotifyPlaySound { get; set; }

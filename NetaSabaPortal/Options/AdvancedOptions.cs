@@ -13,5 +13,6 @@ namespace NetaSabaPortal.Options
         public List<string> Langs { get; set; }
         public bool IsPermanentDeleteNoRecycleBin { get; set; }
         public bool IsDisabledAutoDelete { get; set; }
+        public string? ConnectionString { get; set; }
     }
 }

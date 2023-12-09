@@ -15,6 +15,7 @@
 		</ItemGroup>-->
 
 		<ItemGroup>
+				<None Remove="Resources\Images\animated\miku_sleep\miku_sleep.sprite.gif" />
 				<None Remove="Resources\Images\animated\miku_sleep\miku_sleep_awake_loop.gif" />
 				<None Remove="Resources\Images\animated\miku_sleep\miku_sleep_loop01.gif" />
 				<None Remove="Resources\Images\animated\miku_sleep\miku_sleep_wake.gif" />
@@ -33,8 +34,10 @@
 
 		<ItemGroup>
 				<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+				<PackageReference Include="Dapper.Rainbow" Version="2.0.78" />
 				<PackageReference Include="MaterialDesignExtensions" Version="4.0.0-a02" />
 				<PackageReference Include="MaterialDesignThemes" Version="5.0.0-ci465" />
+				<PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.0" />
 				<PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
 				<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.0" />
 				<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
@@ -55,6 +58,7 @@
 		</ItemGroup>
 
 		<ItemGroup>
+				<Resource Include="Resources\Images\animated\miku_sleep\miku_sleep.sprite.gif" />
 				<Resource Include="Resources\Images\animated\miku_sleep\miku_sleep_awake_loop.gif" />
 				<Resource Include="Resources\Images\animated\miku_sleep\miku_sleep_loop01.gif" />
 				<Resource Include="Resources\Images\animated\miku_sleep\miku_sleep_wake.gif" />

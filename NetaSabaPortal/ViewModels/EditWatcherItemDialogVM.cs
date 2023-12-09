@@ -200,9 +200,9 @@ namespace NetaSabaPortal.ViewModels
             set => SetProperty(ref _isNotifyWhenMapChanged, value);
         }
 
-        private string _isNotifyViaDiscordWebhook;
+        private bool _isNotifyViaDiscordWebhook;
 
-        public string IsNotifyViaDiscordWebhook
+        public bool IsNotifyViaDiscordWebhook
         {
             get => _isNotifyViaDiscordWebhook;
             set => SetProperty(ref _isNotifyViaDiscordWebhook, value);

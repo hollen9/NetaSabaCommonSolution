@@ -10,6 +10,7 @@
     // DO IT AT YOUR OWN RISK!!
     // =========================================================
     "isPermanentDeleteNoRecycleBin": false,
-    "langs": ["en-us", "ja-jp", "ko-kr", "zh-tw", "zh-cn"]
+    "langs": [ "en-us", "ja-jp", "ko-kr", "zh-tw", "zh-cn" ],
+    "connectionString": "Data Source=savedata.sqlite;"
   }
 }

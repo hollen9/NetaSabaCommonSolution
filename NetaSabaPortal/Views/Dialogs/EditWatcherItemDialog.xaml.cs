@@ -25,7 +25,7 @@ namespace NetaSabaPortal.Views.Dialogs
         
         public EditWatcherItemDialog()
         {
-            var services = App.Current.Services;
+            var services = App.Current.Svc;
             var viewmodel = services.GetService<NetaSabaPortal.ViewModels.EditWatcherItemDialogVM>();
             DataContext = viewmodel;
 

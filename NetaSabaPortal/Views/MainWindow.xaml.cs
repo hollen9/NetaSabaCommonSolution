@@ -22,7 +22,7 @@ namespace NetaSabaPortal.Views
         public MainWindow()
         {
             InitializeComponent();
-            var services = App.Current.Services;
+            var services = App.Current.Svc;
             var viewmodel = services.GetService<NetaSabaPortal.ViewModels.MainWindowVM>();
             DataContext = viewmodel;
         }

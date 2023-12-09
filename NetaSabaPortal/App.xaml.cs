@@ -16,6 +16,7 @@ using WPFLocalizeExtension.Providers;
 using Microsoft.VisualBasic.FileIO;
 using System.Management;
 using System.Collections.ObjectModel;
+using NetaSabaPortal.Repositories;
 
 
 
@@ -36,7 +37,7 @@ namespace NetaSabaPortal
             //    }
             //};
 
-            Services = ConfigureServices();
+            Svc = ConfigureServices();
             this.InitializeComponent();
         }
 
@@ -48,7 +49,7 @@ namespace NetaSabaPortal
         /// <summary>
         /// Gets the <see cref="IServiceProvider"/> instance to resolve application services.
         /// </summary>
-        public IServiceProvider Services { get; }
+        public IServiceProvider Svc { get; }
 
         /// <summary>
         /// Configures the services for the application.
@@ -86,7 +87,7 @@ namespace NetaSabaPortal
             services.ConfigureWritable<WatcherOptions>(cfg.GetSection("watcher"), isFileExists_Watcher ? WatcherOptions.DefaultFileName : baseCfgFilename);
             //services.ConfigureWritable<AdvancedOptions>(cfg.GetSection("advanced"), isFileExists_Advanced ? AdvancedOptions.DefaultFileName : baseCfgFilename);
             services.AddOptions<AdvancedOptions>().Configure(x => cfg.Bind("advanced", x));
-
+            
             string savedataPath = Path.GetFullPath(Path.Combine(currentDir, DataOptions.DefaultFileName));
             if (File.Exists(Path.GetFullPath(Path.Combine(DataOptions.DefaultFileName))) != true)
             {
@@ -102,6 +103,9 @@ namespace NetaSabaPortal
                 }
             }
 
+            services.AddSingleton<Services.IConnectionProvider, Services.SqliteConnectionProvider>();
+            services.AddScoped<Repositories.WatcherRepository>();
+
             services.ConfigureWritable<DataOptions>(cfg.GetSection("data"), DataOptions.DefaultFileName);
 
             services.AddSingleton<MainWindowVM>();
@@ -113,7 +117,7 @@ namespace NetaSabaPortal
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            var svcs = Services.CreateScope().ServiceProvider;
+            var svcs = Svc.CreateScope().ServiceProvider;
             var advOpts = svcs.GetRequiredService<IOptions<AdvancedOptions>>();
             var uiOpts = svcs.GetRequiredService<IWritableOptions<UiOptions>>();
 
@@ -167,7 +171,7 @@ namespace NetaSabaPortal
                 LocalizeDictionary.Instance.Culture = System.Globalization.CultureInfo.GetCultureInfo(uiOpts.Value.Language);
             }
             
-            var mainWindow = Services.GetRequiredService<MainWindow>();
+            var mainWindow = Svc.GetRequiredService<MainWindow>();
             mainWindow.Show();
         }
     }

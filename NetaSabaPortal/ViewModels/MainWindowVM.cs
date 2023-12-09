@@ -30,6 +30,7 @@ using QueryMaster.MasterServer;
 using NetaSabaPortal.Helpers;
 using System.Text.RegularExpressions;
 using XamlAnimatedGif;
+using NetaSabaPortal.Repositories;
 
 namespace NetaSabaPortal.ViewModels
 {
@@ -41,6 +42,7 @@ namespace NetaSabaPortal.ViewModels
         public IWritableOptions<UiOptions> _uiOptions;
         public EditWatcherItemDialogVM _editWatcherItemDialogVM;
         public IWritableOptions<DataOptions> _dataOptions;
+        public Repositories.WatcherRepository _watcherRepository;
 
         public MainWindowVM(
             IWritableOptions<PathOptions> dirOptions,
@@ -48,7 +50,8 @@ namespace NetaSabaPortal.ViewModels
             IWritableOptions<WatcherOptions> watcherOptions,
             IWritableOptions<UiOptions> uiOptions,
             IWritableOptions<DataOptions> dataOptions,
-            EditWatcherItemDialogVM editWatcherItemDialogVM
+            EditWatcherItemDialogVM editWatcherItemDialogVM,
+            Repositories.WatcherRepository watcherRepository
             )
         {
             // This has to be called before any path variable changed event.
@@ -63,6 +66,7 @@ namespace NetaSabaPortal.ViewModels
             _watcherOptions = watcherOptions;
             _uiOptions = uiOptions;
             _dataOptions = dataOptions;
+            _watcherRepository = watcherRepository;
 
             // Orders matter, as each path variable changed event will trigger AutoSetupPath
             CS2AcfPath = _dirOptions.Value.Cs2acf;
@@ -112,27 +116,14 @@ namespace NetaSabaPortal.ViewModels
             {
                 WatcherLoadingGif = WatcherGifUri_Doing;
             }
-            //{
-                
-            //}
-            //if (e.Source is Image img)
-            //{
-            //    if (img.Source.ToString() == WatcherGifUri_Wakeup)
-            //    {
-            //        img.Source = new Uri(WatcherGifUri_Doing);
-            //    }
-            //    else if (img.Source.ToString() == WatcherGifUri_Doing)
-            //    {
-            //        img.Source = new Uri(WatcherGifUri_Idle);
-            //    }
-            //}
         }
 
         private void HandleWatcherCheck(object? sender, EventArgs e)
         {
             var cts = new CancellationTokenSource();
-           
-            WatcherLoadingGif = WatcherGifUri_Wakeup;
+
+            // WatcherLoadingGif = WatcherGifUri_Wakeup;
+            WatcherTimerHandlerStateChanged?.Invoke(this, WatcherTimerHandlerType.Start);
 
             Task.Run(async () => 
             {
@@ -156,8 +147,12 @@ namespace NetaSabaPortal.ViewModels
                                 gsr.Heartbeats = new();
                                 gsr.infoItems = new();
                             }
-                            gsr.Heartbeats.Add(DateTime.Now);
-                            gsr.infoItems.Add(info);
+                            if (info != null)
+                            {
+                                gsr.Heartbeats.Add(DateTime.Now);
+                                gsr.infoItems.Add(info);
+                            }
+                            _dataOptions.Value.GameServerRecords.TryAdd(wItem.Id, gsr);
                         }
 
                     }
@@ -196,11 +191,14 @@ namespace NetaSabaPortal.ViewModels
                 {
 
                 }
-            }).ContinueWith(x => 
-            {
-                Task.Delay(2000).Wait();
-                WatcherLoadingGif = WatcherGifUri_Idle;
-            });
+                WatcherTimerHandlerStateChanged?.Invoke(this, WatcherTimerHandlerType.Stop);
+            })
+            //.ContinueWith(x => 
+            //{
+            //    Task.Delay(2000).Wait();
+            //    WatcherLoadingGif = WatcherGifUri_Idle;
+            //})
+            ;
 
             //Task.Delay(-1).GetAwaiter().GetResult();
         }
@@ -559,7 +557,13 @@ namespace NetaSabaPortal.ViewModels
 
         #region Watcher
         // private bool _isWatcherEditDialogShown;
-
+        public enum WatcherTimerHandlerType
+        {
+            None,
+            Start,
+            Stop
+        }
+        public event EventHandler<WatcherTimerHandlerType> WatcherTimerHandlerStateChanged;
         private string _watcherLoadingGif = WatcherGifUri_Idle;
 
         public string WatcherLoadingGif
