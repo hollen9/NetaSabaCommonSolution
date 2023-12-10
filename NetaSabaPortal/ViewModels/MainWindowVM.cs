@@ -129,18 +129,70 @@ namespace NetaSabaPortal.ViewModels
             {
                 try
                 {
-                    foreach (var wItem in _watcherOptions.Value.List)
+
+
+                    for (int i = 0; i < _watcherOptions.Value.List.Count; i++)
                     {
+                        var wItem = _watcherOptions.Value.List[i];
+                        int wItem_index = i;
                         if (!wItem.IsEnabled)
                         {
                             continue;
                         }
 
-                        if (!string.IsNullOrEmpty(wItem.Host))
+                        string host = wItem.Host;
+                        SteamQueryNet.Models.ServerInfo qInfo = null;
+
+                        if (!string.IsNullOrEmpty(wItem.SearchName))
                         {
-                            var sq = await GameQueryExtension.CreateServerQueryInstanceAsync(wItem.Host);
-                            var info = await sq.GetServerInfoAsync(cts.Token);
-                            if (info == null)
+                            // Try to use existing host first. If cannot reach it, then search for the host.
+                            if (!string.IsNullOrEmpty(host))
+                            {
+                                var sq = await GameQueryExtension.CreateServerQueryInstanceAsync(host);
+                                qInfo = await sq.GetServerInfoAsync(cts.Token);
+                            }
+                            // If still cannot reach the host, then search for the host.
+                            if (qInfo == null)
+                            {
+                                // Attempt to search for the host
+                                var ipFilter = new IpFilter()
+                                {
+                                    AppId = QueryMaster.Game.CounterStrike_Global_Offensive,
+                                    HostName = wItem.SearchName,
+                                    IsDedicated = true
+                                };
+                                if (wItem.SearchTag != null && wItem.SearchTag.Trim() != string.Empty)
+                                {
+                                    ipFilter.Tags = wItem.SearchTag;
+                                }
+
+                                var sv = QueryMaster.MasterServer.MasterQuery.GetServerInstance(QueryMaster.MasterServer.MasterQuery.SourceServerEndPoint);
+                                sv.GetAddresses(wItem.SearchRegion, batchInfo =>
+                                {
+                                    var listOfIps = batchInfo.ReceivedEndpoints.Where(x => x.Port == wItem.SearchPort).ToList();
+                                    if (listOfIps.Count > 0)
+                                    {
+                                        host = listOfIps.First().ToString();
+                                        _watcherOptions.Value.List[wItem_index].Host = host; // Save it back
+                                        WatcherItems = new ObservableCollection<WatcherItem>(_watcherOptions.Value.List);
+                                        _watcherOptions.Update(_watcherOptions.Value, false);
+                                    }
+                                }, ipFilter, batchCount: -1, err =>
+                                {
+
+                                });
+                            }
+                        }
+
+                        if (!string.IsNullOrEmpty(host))
+                        {
+                            if (qInfo == null)
+                            {
+                                var sq = await GameQueryExtension.CreateServerQueryInstanceAsync(host);    
+                                qInfo = await sq.GetServerInfoAsync(cts.Token);
+                            }
+                            // If still cannot reach the host, then skip this watcher item.
+                            if (qInfo == null)
                             {
                                 continue;
                             }
@@ -148,9 +200,9 @@ namespace NetaSabaPortal.ViewModels
                             {
                                 SessionId = App.Current.SessionId,
                                 DemandingWatcherId = wItem.Id,
-                                Map = info.Map,
-                                MaxPlayers = info.MaxPlayers,
-                                Players = info.Players,
+                                Map = qInfo.Map,
+                                MaxPlayers = qInfo.MaxPlayers,
+                                Players = qInfo.Players,
                                 Timestamp = DateTime.Now
                             };
                             var lastInfoItem = await _watcherRepository.GetLatestServerStatAsync(wItem.Id, App.Current.SessionId);
@@ -231,13 +283,13 @@ namespace NetaSabaPortal.ViewModels
                                     }
                                 }
                             }
-                            
+
                             // Player Slot Availability - Notify
                             if (newInfoItem.Timestamp - lastPlayerSlotNotify > TimeSpan.FromSeconds(WatcherNotifyCooldown))
                             {
                                 if (wItem.IsNotifyWhenSlotAvailable)
                                 {
-                                    if ( (lastInfoItem == null || (lastInfoItem.Players >= lastInfoItem.MaxPlayers)) && newInfoItem.Players < newInfoItem.MaxPlayers)
+                                    if ((lastInfoItem == null || (lastInfoItem.Players >= lastInfoItem.MaxPlayers)) && newInfoItem.Players < newInfoItem.MaxPlayers)
                                     {
                                         _watcherLastPlayerSlotNotify[wItem.Id] = newInfoItem.Timestamp; // Upsert
 
@@ -265,7 +317,7 @@ namespace NetaSabaPortal.ViewModels
                             if (wItem.IsJoinWhenSlotAvailable && lastInfoItem != null && newInfoItem.Timestamp - lastAutoJoin > TimeSpan.FromSeconds(WatcherNotifyCooldown))
                             {
                                 _watcherLastAutoJoin[wItem.Id] = newInfoItem.Timestamp; // Upsert
-                                JoinGame(wItem.Host);
+                                JoinGame(host);
                             }
 
                             _dataOptions.Update(_dataOptions.Value, false);
@@ -319,7 +371,11 @@ namespace NetaSabaPortal.ViewModels
 
         private void JoinGame(string host)
         {
-            throw new NotImplementedException();
+#if DEBUG
+            Windows.System.Launcher.LaunchUriAsync(new Uri($"steam://advertise/730"));
+            return;
+#endif
+            Windows.System.Launcher.LaunchUriAsync(new Uri($"steam://connect/{host}"));
         }
 
         private void HandleNotifyDiscordWebhook(WatcherItem wItem, string msg)

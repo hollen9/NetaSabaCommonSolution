@@ -69,11 +69,11 @@ namespace NetaSabaPortal
 
             string baseCfgFilename = "config.json";
 
-            bool isFileExists_Base = File.Exists(Path.Combine(configDir, baseCfgFilename));
-            bool isFileExists_Path = File.Exists(Path.Combine(configDir, PathOptions.DefaultFileName));
-            bool isFileExists_Advanced = File.Exists(Path.Combine(configDir, AdvancedOptions.DefaultFileName));
-            bool isFileExists_Entities = File.Exists(Path.Combine(configDir, EntitiesOptions.DefaultFileName));
-            bool isFileExists_Watcher = File.Exists(Path.Combine(configDir, WatcherOptions.DefaultFileName));
+            bool isFileExists_Base = File.Exists(GetFullCombinedPath(configDir, baseCfgFilename));
+            bool isFileExists_Path = File.Exists(GetFullCombinedPath(configDir, PathOptions.DefaultFileName));
+            bool isFileExists_Advanced = File.Exists(GetFullCombinedPath(configDir, AdvancedOptions.DefaultFileName));
+            bool isFileExists_Entities = File.Exists(GetFullCombinedPath(configDir, EntitiesOptions.DefaultFileName));
+            bool isFileExists_Watcher = File.Exists(GetFullCombinedPath(configDir, WatcherOptions.DefaultFileName));
 
             if (isStoreInAppData)
             {
@@ -101,10 +101,10 @@ namespace NetaSabaPortal
             var services = new ServiceCollection();
 
             // services.AddOptions<PathOptions>().Configure(x => configuration.Bind("path", x));
-            services.ConfigureWritable<PathOptions>(cfg.GetSection("path"), isFileExists_Path ? PathOptions.DefaultFileName : baseCfgFilename);            
-            services.ConfigureWritable<EntitiesOptions>(cfg.GetSection("entities"), isFileExists_Entities ? EntitiesOptions.DefaultFileName : baseCfgFilename);
-            services.ConfigureWritable<UiOptions>(cfg.GetSection("ui"), isFileExists_Entities ? UiOptions.DefaultFileName : baseCfgFilename);
-            services.ConfigureWritable<WatcherOptions>(cfg.GetSection("watcher"), isFileExists_Watcher ? WatcherOptions.DefaultFileName : baseCfgFilename);
+            services.ConfigureWritable<PathOptions>(cfg.GetSection("path"), GetFullCombinedPath(configDir, isFileExists_Path ? PathOptions.DefaultFileName : baseCfgFilename));
+            services.ConfigureWritable<EntitiesOptions>(cfg.GetSection("entities"), GetFullCombinedPath(configDir, isFileExists_Entities ? EntitiesOptions.DefaultFileName : baseCfgFilename));
+            services.ConfigureWritable<UiOptions>(cfg.GetSection("ui"), GetFullCombinedPath(configDir, isFileExists_Entities ? UiOptions.DefaultFileName : baseCfgFilename));
+            services.ConfigureWritable<WatcherOptions>(cfg.GetSection("watcher"), GetFullCombinedPath(configDir, isFileExists_Watcher ? WatcherOptions.DefaultFileName : baseCfgFilename));
             //services.ConfigureWritable<AdvancedOptions>(cfg.GetSection("advanced"), isFileExists_Advanced ? AdvancedOptions.DefaultFileName : baseCfgFilename);
             services.AddOptions<AdvancedOptions>().Configure(x => cfg.Bind("advanced", x));
             
@@ -142,6 +142,11 @@ namespace NetaSabaPortal
             //services.AddSingleton<Dapperer.IDappererSettings, Extensions.DappererSettings>();
 
             return services.BuildServiceProvider();
+        }
+
+        private static string GetFullCombinedPath(params string[] arrPath)
+        {
+            return Path.GetFullPath(Path.Combine(arrPath));
         }
 
         private static void InitConfigIfNotExists(string fileName)
@@ -183,12 +188,14 @@ namespace NetaSabaPortal
                 culList.Add(cul);
                 // rlp.AvailableCultures.Add(cul);
             });
+            
             rlp.SearchCultures = culList;
+            rlp.UpdateCultureList("NetaSabaPortal", "Strings");
             LocalizeDictionary.Instance.DefaultProvider = rlp;
 
             //var dappererSettings = svcs.GetRequiredService<Dapperer.IDappererSettings>();
             //dappererSettings = new Extensions.DappererSettings() { ConnectionString = advOpts.Value.ConnectionString };
-            var test = svcs.GetRequiredService<WatcherRepository>();
+            
 
             //rlp.AvailableCultures.Clear();
 
@@ -223,6 +230,10 @@ namespace NetaSabaPortal
             if (!string.IsNullOrEmpty(uiOpts?.Value?.Language))
             {
                 LocalizeDictionary.Instance.Culture = System.Globalization.CultureInfo.GetCultureInfo(uiOpts.Value.Language);
+            }
+            else
+            {
+                LocalizeDictionary.Instance.Culture = System.Globalization.CultureInfo.CurrentUICulture;
             }
             
             var mainWindow = Svc.GetRequiredService<MainWindow>();
