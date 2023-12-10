@@ -151,7 +151,7 @@ namespace NetaSabaPortal.ViewModels
                                 Players = info.Players,
                                 Timestamp = DateTime.Now
                             };
-                            var lastInfoItem = _watcherRepository.GetLatestServerStatAsync(wItem.Id, App.Current.SessionId);
+                            var lastInfoItem = await _watcherRepository.GetLatestServerStatAsync(wItem.Id, App.Current.SessionId);
 
                             await _watcherRepository.UpsertServerStatAsync(newInfoItem);
                             if (!_watcherLastNotify.TryGetValue(wItem.Id, out var lastNotify)) 

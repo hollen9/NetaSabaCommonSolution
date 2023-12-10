@@ -57,8 +57,10 @@ namespace NetaSabaPortal.Repositories
             using (var conn = _connProvider.Connect())
             {
                 // Select last item order by id where watcher = watcherId
-                var sql = "SELECT * FROM ServerStat WHERE DemandingWatcherId = @DemandingWatcherId AND SessionId = @SessionId ORDER BY Id DESC LIMIT 1";
-                var result = await conn.QuerySingleAsync<ServerStat>(sql, new { DemandingWatcherId = watcherId, SessionId = sessionId });
+                // var sql = "SELECT * FROM ServerStat WHERE DemandingWatcherId = @DemandingWatcherId AND SessionId = @SessionId ORDER BY Id DESC LIMIT 1";
+                // var result = await conn.QuerySingleAsync<ServerStat>(sql, new { DemandingWatcherId = watcherId, SessionId = sessionId });
+                conn.UseDapperAid(_queryBuilder);
+                var result = await conn.SelectFirstOrDefaultAsync<ServerStat>( x=> x.DemandingWatcherId == watcherId && x.SessionId == sessionId);
                 return result;
             }
         }

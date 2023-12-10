@@ -21,6 +21,7 @@ using NetaSabaPortal.Repositories;
 using WinRT;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using DapperAid;
+using Dapper;
 
 
 
@@ -118,6 +119,9 @@ namespace NetaSabaPortal
             services.AddSingleton<MainWindowVM>();
             services.AddSingleton<EditWatcherItemDialogVM>();
             services.AddSingleton<MainWindow>();
+            SqlMapper.AddTypeHandler(new Extensions.SqliteGuidTypeHandler());
+            SqlMapper.RemoveTypeMap(typeof(Guid));
+            SqlMapper.RemoveTypeMap(typeof(Guid?));
 
             //services.AddSingleton<Dapperer.IQueryBuilder, SqlQueryBuilder>();
             //services.AddSingleton<Dapperer.IDbFactory, Dapperer.DbFactories.SqlDbFactory>();
