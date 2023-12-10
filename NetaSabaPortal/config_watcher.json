@@ -1,8 +1,8 @@
 {
   "watcher": {
     "IsEnabled": true,
-    "Interval": 10,
-    "NotifyCooldown": 10,
+    "Interval": 30,
+    "NotifyCooldown": 30,
     "AutoJoinCooldown": 60,
     "IsTurnOffTimerAfterJoin": true,
     "List": [
@@ -39,15 +39,15 @@
         "IsEnabled": true,
         "Host": "45.125.47.230:27035",
         "Password": "",
-        "IsJoinWhenHostAvailable": true,
-        "IsJoinWhenSlotAvailable": true,
+        "IsJoinWhenHostAvailable": false,
+        "IsJoinWhenSlotAvailable": false,
         "IsNotifyWhenHostAvailable": true,
         "IsNotifyWhenSlotAvailable": true,
         "IsNotifyWhenMapChanged": true,
         "IsNotifyViaDiscordWebhook": true,
         "NotifyDiscordWebhookUrl": "https://discord.com/api/webhooks/1183163015617597491/MXtYyPheocdYyrC43IPy7q7-5ubZINSeZJzFXNnQgTmUKrWJR2G690GmTF_dOCux4_Fx",
         "IsNotifyViaWindowsNotification": true,
-        "IsNotifyPlaySound": true,
+        "IsNotifyPlaySound": false,
         "NotifySoundPath": "D:\\Libraries\\GameFiles\\SteamLib\\steamapps\\common\\Counter-Strike Global Offensive\\csgo\\sound\\n\\saysound\\deta.mp3",
         "NotifySoundLoop": null,
         "NotifySoundVolume": null

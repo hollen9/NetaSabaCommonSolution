@@ -233,14 +233,14 @@ namespace NetaSabaPortal.ViewModels
                             }
                             
                             // Player Slot Availability - Notify
-                            if (lastInfoItem != null && newInfoItem.Timestamp - lastPlayerSlotNotify > TimeSpan.FromSeconds(WatcherNotifyCooldown))
+                            if (newInfoItem.Timestamp - lastPlayerSlotNotify > TimeSpan.FromSeconds(WatcherNotifyCooldown))
                             {
-                                _watcherLastPlayerSlotNotify[wItem.Id] = newInfoItem.Timestamp; // Upsert
-
                                 if (wItem.IsNotifyWhenSlotAvailable)
                                 {
-                                    if (lastInfoItem == null || (lastInfoItem.Players >= lastInfoItem.MaxPlayers) && newInfoItem.Players < newInfoItem.Players)
+                                    if ( (lastInfoItem == null || (lastInfoItem.Players >= lastInfoItem.MaxPlayers)) && newInfoItem.Players < newInfoItem.MaxPlayers)
                                     {
+                                        _watcherLastPlayerSlotNotify[wItem.Id] = newInfoItem.Timestamp; // Upsert
+
                                         if (wItem.IsNotifyViaWindowsNotification)
                                         {
                                             new ToastContentBuilder()
