@@ -17,6 +17,8 @@ using Microsoft.VisualBasic.FileIO;
 using System.Management;
 using System.Collections.ObjectModel;
 using NetaSabaPortal.Repositories;
+// using Dapperer.QueryBuilders.MsSql;
+using WinRT;
 
 
 
@@ -36,7 +38,7 @@ namespace NetaSabaPortal
             //        App.Current.
             //    }
             //};
-
+            SessionId = Guid.NewGuid();
             Svc = ConfigureServices();
             this.InitializeComponent();
         }
@@ -50,6 +52,7 @@ namespace NetaSabaPortal
         /// Gets the <see cref="IServiceProvider"/> instance to resolve application services.
         /// </summary>
         public IServiceProvider Svc { get; }
+        public Guid SessionId { get; }
 
         /// <summary>
         /// Configures the services for the application.
@@ -106,11 +109,16 @@ namespace NetaSabaPortal
             services.AddSingleton<Services.IConnectionProvider, Services.SqliteConnectionProvider>();
             services.AddScoped<Repositories.WatcherRepository>();
 
+
             services.ConfigureWritable<DataOptions>(cfg.GetSection("data"), DataOptions.DefaultFileName);
 
             services.AddSingleton<MainWindowVM>();
             services.AddSingleton<EditWatcherItemDialogVM>();
             services.AddSingleton<MainWindow>();
+
+            //services.AddSingleton<Dapperer.IQueryBuilder, SqlQueryBuilder>();
+            //services.AddSingleton<Dapperer.IDbFactory, Dapperer.DbFactories.SqlDbFactory>();
+            //services.AddSingleton<Dapperer.IDappererSettings, Extensions.DappererSettings>();
 
             return services.BuildServiceProvider();
         }
@@ -120,7 +128,7 @@ namespace NetaSabaPortal
             var svcs = Svc.CreateScope().ServiceProvider;
             var advOpts = svcs.GetRequiredService<IOptions<AdvancedOptions>>();
             var uiOpts = svcs.GetRequiredService<IWritableOptions<UiOptions>>();
-
+            
 
             // Select advOpts.Value.Langs to be the list of languages to be used. new List<System.Globalization.CultureInfo>() { ... }
             var culList = new List<System.Globalization.CultureInfo>();
@@ -135,9 +143,12 @@ namespace NetaSabaPortal
             rlp.SearchCultures = culList;
             LocalizeDictionary.Instance.DefaultProvider = rlp;
 
+            //var dappererSettings = svcs.GetRequiredService<Dapperer.IDappererSettings>();
+            //dappererSettings = new Extensions.DappererSettings() { ConnectionString = advOpts.Value.ConnectionString };
+            var test = svcs.GetRequiredService<WatcherRepository>();
 
             //rlp.AvailableCultures.Clear();
-            
+
 
             // Somehow LocalizeDictionary is just not able to find zh-tw and zh-cn on its own,
             // so we have to add them manually, not just because of speed.

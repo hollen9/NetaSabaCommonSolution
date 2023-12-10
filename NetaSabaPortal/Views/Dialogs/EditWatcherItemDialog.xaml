@@ -90,7 +90,7 @@
                 <TextBlock Grid.Row="20" Grid.Column="0" Text="Sending Discord" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                 <ToggleButton Grid.Row="20" Grid.Column="2" IsChecked="{Binding IsNotifyViaDiscordWebhook}" Style="{DynamicResource MaterialDesignSwitchToggleButton}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                 <TextBlock Grid.Row="21" Grid.Column="0" Text="WebhookUrl" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                <TextBox Grid.Row="21" Grid.Column="2" Grid.ColumnSpan="2" Text="{Binding NotifySoundVolume}" VerticalAlignment="Center"/>
+                <TextBox Grid.Row="21" Grid.Column="2" Grid.ColumnSpan="2" Text="{Binding NotifyDiscordWebhookUrl}" VerticalAlignment="Center"/>
 
                 <TextBlock Grid.Row="22" Grid.Column="0" Grid.ColumnSpan="3" Text="Attempt to join when..." FontStyle="Italic" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                 <TextBlock Grid.Row="23" Grid.Column="0" Text="server become available" HorizontalAlignment="Right" VerticalAlignment="Center"/>

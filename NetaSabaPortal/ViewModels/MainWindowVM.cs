@@ -4,8 +4,7 @@ using Microsoft.Extensions.Options;
 using Nogic.WritableOptions;
 
 using NetaSabaPortal.Options;
-using SteamKit2.Internal;
-using SteamKit2;
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -24,15 +23,16 @@ using NetaSabaPortal.Models;
 using MaterialDesignThemes.Wpf;
 using WPFLocalizeExtension.Engine;
 using System.Windows.Threading;
-using static SteamKit2.GC.Dota.Internal.CMsgServerToGCCavernCrawlIsHeroActiveResponse;
 using System.Net;
 using QueryMaster.MasterServer;
 using NetaSabaPortal.Helpers;
 using System.Text.RegularExpressions;
 using XamlAnimatedGif;
 using NetaSabaPortal.Repositories;
-using NetaSabaPortal.Models.Sql;
+using NetaSabaPortal.Models.Entities;
 using Microsoft.Toolkit.Uwp.Notifications;
+using Discord.Webhook;
+using Discord;
 
 namespace NetaSabaPortal.ViewModels
 {
@@ -138,15 +138,20 @@ namespace NetaSabaPortal.ViewModels
                         {
                             var sq = await GameQueryExtension.CreateServerQueryInstanceAsync(wItem.Host);
                             var info = await sq.GetServerInfoAsync(cts.Token);
-
+                            if (info == null)
+                            {
+                                continue;
+                            }
                             var newInfoItem = new ServerStat()
                             {
+                                SessionId = App.Current.SessionId,
                                 DemandingWatcherId = wItem.Id,
                                 Map = info.Map,
                                 MaxPlayers = info.MaxPlayers,
                                 Players = info.Players,
                                 Timestamp = DateTime.Now
                             };
+                            var lastInfoItem = _watcherRepository.GetLatestServerStatAsync(wItem.Id, App.Current.SessionId);
 
                             await _watcherRepository.UpsertServerStatAsync(newInfoItem);
                             if (!_watcherLastNotify.TryGetValue(wItem.Id, out var lastNotify)) 
@@ -175,49 +180,11 @@ namespace NetaSabaPortal.ViewModels
                                     }
                                     if (wItem.IsNotifyPlaySound)
                                     {
-                                        if (string.IsNullOrEmpty(wItem.NotifySoundPath) ||
-                                            !File.Exists(wItem.NotifySoundPath))
-                                        {
-                                            System.Media.SystemSounds.Beep.Play();
-                                        }
-                                        else
-                                        {
-                                            Application.Current.Dispatcher.Invoke(() => 
-                                            {
-                                                //if (!_watcherNotifySoundPlayer_played_times.TryGetValue(wItem.Id, out int playedTimes))
-                                                //{
-                                                //    playedTimes = 0;
-                                                //}
-
-                                                var afr = new Extensions.NAudio.LoopAudioFileReader(wItem.NotifySoundPath, wItem.NotifySoundLoop ?? 0);
-                                                
-                                                _watcherNotifySoundPlayer.Init(afr);
-                                                //_watcherNotifySoundPlayer.PlaybackStopped += (s, e) =>
-                                                //{
-                                                //    if (wItem.NotifySoundLoop.HasValue)
-                                                //    {
-                                                //        if (wItem.NotifySoundLoop < 0 ||
-                                                //        (wItem.NotifySoundLoop != 0 &&
-                                                //        playedTimes < wItem.NotifySoundLoop))
-                                                //        {
-                                                //            playedTimes++;
-                                                //            Application.Current.Dispatcher.Invoke(() =>
-                                                //            {
-                                                //                _watcherNotifySoundPlayer.Stop();
-                                                //                _watcherNotifySoundPlayer.Play();
-                                                //            });
-                                                //            return;
-                                                //        }
-                                                //    }
-                                                //};
-                                                _watcherNotifySoundPlayer.Stop();
-                                                _watcherNotifySoundPlayer.Volume = wItem.NotifySoundVolume ?? 1.0f;
-                                                _watcherNotifySoundPlayer.Play();
-                                            });
-                                            
-                                            // = new System.Media.SoundPlayer(wItem.NotifySoundPath);
-                                            //player.Play();
-                                        }
+                                        HandleNotifySound(wItem);
+                                    }
+                                    if (wItem.IsNotifyViaDiscordWebhook)
+                                    {
+                                        HandleNotifyDiscordWebhook(wItem);
                                     }
                                 }
                             }
@@ -282,6 +249,67 @@ namespace NetaSabaPortal.ViewModels
             ;
 
             //Task.Delay(-1).GetAwaiter().GetResult();
+        }
+        private void HandleNotifyDiscordWebhook(WatcherItem wItem)
+        {
+            if (string.IsNullOrEmpty(wItem.NotifyDiscordWebhookUrl)) return;
+            Application.Current.Dispatcher.Invoke(async () =>
+            {
+                var webhook = new DiscordWebhookClient(wItem.NotifyDiscordWebhookUrl);
+                var embed = new EmbedBuilder();
+                embed.Title = $"{wItem.DisplayName}";
+                embed.Description = "The server is online now!";
+                embed.Timestamp = DateTime.Now;
+                embed.Color = Discord.Color.Green;
+
+                await webhook.SendMessageAsync(embeds: new Embed[] { embed.Build() });
+            });
+        }
+        private void HandleNotifySound(WatcherItem wItem)
+        {
+            if (string.IsNullOrEmpty(wItem.NotifySoundPath) ||
+                                            !File.Exists(wItem.NotifySoundPath))
+            {
+                System.Media.SystemSounds.Beep.Play();
+            }
+            else
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    //if (!_watcherNotifySoundPlayer_played_times.TryGetValue(wItem.Id, out int playedTimes))
+                    //{
+                    //    playedTimes = 0;
+                    //}
+
+                    var afr = new Extensions.NAudio.LoopAudioFileReader(wItem.NotifySoundPath, wItem.NotifySoundLoop ?? 0);
+
+                    _watcherNotifySoundPlayer.Init(afr);
+                    //_watcherNotifySoundPlayer.PlaybackStopped += (s, e) =>
+                    //{
+                    //    if (wItem.NotifySoundLoop.HasValue)
+                    //    {
+                    //        if (wItem.NotifySoundLoop < 0 ||
+                    //        (wItem.NotifySoundLoop != 0 &&
+                    //        playedTimes < wItem.NotifySoundLoop))
+                    //        {
+                    //            playedTimes++;
+                    //            Application.Current.Dispatcher.Invoke(() =>
+                    //            {
+                    //                _watcherNotifySoundPlayer.Stop();
+                    //                _watcherNotifySoundPlayer.Play();
+                    //            });
+                    //            return;
+                    //        }
+                    //    }
+                    //};
+                    _watcherNotifySoundPlayer.Stop();
+                    _watcherNotifySoundPlayer.Volume = wItem.NotifySoundVolume ?? 1.0f;
+                    _watcherNotifySoundPlayer.Play();
+                });
+
+                // = new System.Media.SoundPlayer(wItem.NotifySoundPath);
+                //player.Play();
+            }
         }
 
         private System.Globalization.CultureInfo _selectedCulture;
