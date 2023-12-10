@@ -12,6 +12,10 @@
     "isPermanentDeleteNoRecycleBin": false,
     "langs": [ "en-us", "ja-jp", "ko-kr", "zh-tw", "zh-cn" ],
     "connectionString": "Data Source={PROGRAM_ROOT}/savedata.sqlite;",
-    "isStoreInAppData": true
+    "isStoreInAppData": true,
+    "isForceInitEntities": true,
+    "entitiesUpdateEndpoints": [
+      "https://raw.githubusercontent.com/hollen9/NetaSabaCommonSolution/master/NetaSabaPortal/config_entities.json"
+    ]
   }
 }

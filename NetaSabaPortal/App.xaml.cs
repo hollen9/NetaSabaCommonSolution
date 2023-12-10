@@ -55,7 +55,10 @@ namespace NetaSabaPortal
             var preConfigurationBuilder = new ConfigurationBuilder();
             preConfigurationBuilder.SetBasePath(currentDir).AddJsonFile(AdvancedOptions.DefaultFileName);
             var preCfg = preConfigurationBuilder.Build();
-            bool isStoreInAppData = preCfg.GetSection("advanced").GetValue<bool>(nameof(AdvancedOptions.IsStoreInAppData));
+            var preCfgAdv = preCfg.GetSection("advanced");
+            bool isStoreInAppData = preCfgAdv.GetValue<bool>(nameof(AdvancedOptions.IsStoreInAppData));
+            bool isForceInitEntities = preCfgAdv.GetValue<bool>(nameof(AdvancedOptions.IsForceInitEntities));
+
 
             if (isStoreInAppData)
             {
@@ -79,7 +82,7 @@ namespace NetaSabaPortal
             {
                 InitConfigIfNotExists(baseCfgFilename);
                 InitConfigIfNotExists(PathOptions.DefaultFileName);
-                InitConfigIfNotExists(EntitiesOptions.DefaultFileName);
+                InitConfigIfNotExists(EntitiesOptions.DefaultFileName, isForceInitEntities);
                 InitConfigIfNotExists(AdvancedOptions.DefaultFileName);
                 InitConfigIfNotExists(UiOptions.DefaultFileName);
                 InitConfigIfNotExists(WatcherOptions.DefaultFileName);
@@ -149,7 +152,7 @@ namespace NetaSabaPortal
             return Path.GetFullPath(Path.Combine(arrPath));
         }
 
-        private static void InitConfigIfNotExists(string fileName)
+        private static void InitConfigIfNotExists(string fileName, bool forceInit = false)
         {
             
             string baseDir = AppDomain.CurrentDomain.BaseDirectory;
@@ -157,7 +160,7 @@ namespace NetaSabaPortal
             string localAppDataPath = Path.GetFullPath(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), App.ConfigParentFolder, App.AppIdentifier, fileName));
             string exePath = Path.GetFullPath(Path.Combine(baseDir, fileName));
 
-            if (!File.Exists(localAppDataPath))
+            if (forceInit || !File.Exists(localAppDataPath))
             {
                 // 如果在 AppData 中找不到，則複製一份
                 Directory.CreateDirectory(Path.GetDirectoryName(localAppDataPath));
@@ -165,7 +168,7 @@ namespace NetaSabaPortal
                 {
                     return;
                 }
-                File.Copy(exePath, localAppDataPath);
+                File.Copy(exePath, localAppDataPath, overwrite: true);
             }
 
             return;

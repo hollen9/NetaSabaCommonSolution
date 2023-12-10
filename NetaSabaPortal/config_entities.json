@@ -5,7 +5,13 @@
         "entityName": "KuromeKuro - DLC",
         "workshopId": "3101610901",
         "serverId": "kuromekuro",
-        "EntityDescription": "Test\rTest\rTest",
+        "EntityDescriptions": {
+          "en": "An essential package for playing on Kuromekuro CS2 Server.",
+          "ja-jp": "Kuromekuro CS2サーバーで遊ぶための必須パッケージです。",
+          "zh-cn": "在Kuromekuro CS2服务器上玩游戏的必备包。",
+          "zh-tw": "在Kuromekuro CS2伺服器上玩遊戲的必備包。",
+          "ko-kr": "Kuromekuro CS2 서버에서 플레이하기 위한 필수 패키지입니다."
+        },
         "copies": [
           "sounds/kurome"
         ],

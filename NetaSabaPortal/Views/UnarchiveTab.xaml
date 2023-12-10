@@ -16,6 +16,7 @@
     <UserControl.Resources>
         <converter:BooleanToGreyOrRedColorConverter x:Key="BooleanToGreenRedColorConverter"/>
         <converter:InvertableBooleanToVisibilityConverter x:Key="BoolVisConverter"/>
+        <converter:EntityDescriptionLocalizeConverter x:Key="EntDescriptionLocalizeConverter"/>
     </UserControl.Resources>
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -40,7 +41,7 @@
      Visibility="{Binding IsExtracting, Converter={StaticResource BoolVisConverter}, ConverterParameter=Inverted}" Content="{lex:Loc _ButtonExtract_Caption}"/>
         <Image Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Right" Grid.Row="1" gif:AnimationBehavior.SourceUri="pack://application:,,,/Resources/Images/animated/padoru/padoru-smooth.gif"
 Visibility="{Binding IsExtracting, Converter={StaticResource BoolVisConverter}, ConverterParameter=Normal}"/>
-        <TextBlock Grid.Row="1" FontSize="16" Text="{Binding SelectedEntity.EntityDescription}"/>
+        <TextBlock Grid.Row="1" FontSize="16" Text="{Binding SelectedEntity, Converter={StaticResource EntDescriptionLocalizeConverter}}"/>
         <StackPanel Grid.Row="2" Grid.ColumnSpan="3" Orientation="Vertical"
                  Visibility="{Binding IsExtracting, Converter={StaticResource BoolVisConverter}, ConverterParameter=Normal}">
             <Grid>

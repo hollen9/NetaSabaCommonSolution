@@ -33,6 +33,7 @@ using NetaSabaPortal.Models.Entities;
 using Microsoft.Toolkit.Uwp.Notifications;
 using Discord.Webhook;
 using Discord;
+using System.Globalization;
 
 namespace NetaSabaPortal.ViewModels
 {
@@ -107,8 +108,21 @@ namespace NetaSabaPortal.ViewModels
                 }
             };
 
+            LocalizeDictionary.Instance.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == "Culture")
+                {
+                    HandleUiLanguageChanged(LocalizeDictionary.Instance.Culture);
+                }
+            };
+
             SelectedCulture = System.Globalization.CultureInfo.GetCultureInfo(uiOptions.Value.Language);
             LocalizeDictionary.Instance.Culture = SelectedCulture;
+        }
+
+        private void HandleUiLanguageChanged(CultureInfo culture)
+        {
+            OnPropertyChanged(nameof(SelectedEntity));
         }
 
         private Dictionary<Guid, DateTime> _watcherLastHostNotify = new Dictionary<Guid, DateTime>();
@@ -376,6 +390,10 @@ namespace NetaSabaPortal.ViewModels
             return;
 #endif
             Windows.System.Launcher.LaunchUriAsync(new Uri($"steam://connect/{host}"));
+            if (IsTurnOffWatcherTimerAfterJoin)
+            {
+                IsWatcherEnabled = false;
+            }
         }
 
         private void HandleNotifyDiscordWebhook(WatcherItem wItem, string msg)

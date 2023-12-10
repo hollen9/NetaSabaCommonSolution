@@ -15,5 +15,7 @@ namespace NetaSabaPortal.Options
         public bool IsDisabledAutoDelete { get; set; }
         public string? ConnectionString { get; set; }
         public bool IsStoreInAppData { get; set; }
+        public bool IsForceInitEntities { get; set; }
+        public string[] EntitiesUpdateEndpoints { get; set; }
     }
 }
