@@ -14,5 +14,6 @@ namespace NetaSabaPortal.Options
         public bool IsPermanentDeleteNoRecycleBin { get; set; }
         public bool IsDisabledAutoDelete { get; set; }
         public string? ConnectionString { get; set; }
+        public bool IsStoreInAppData { get; set; }
     }
 }

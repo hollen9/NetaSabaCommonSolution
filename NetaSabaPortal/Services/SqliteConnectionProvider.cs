@@ -20,7 +20,20 @@ namespace NetaSabaPortal.Services
         public SqliteConnectionProvider(IOptions<AdvancedOptions> advOptions)
         {
             _advOptions = advOptions;
-            _connectionString = _advOptions.Value.ConnectionString;
+
+            string raw_str = _advOptions.Value.ConnectionString;
+            string temp_str;
+            string app_data_path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), App.ConfigParentFolder, App.AppIdentifier);
+            string program_root = _advOptions.Value.IsStoreInAppData ? app_data_path : AppDomain.CurrentDomain.BaseDirectory;
+
+            temp_str = raw_str.Replace("{PROGRAM_ROOT}", program_root);
+
+            if (!temp_str.StartsWith("Data Source="))
+            {
+                temp_str = $"Data Source={temp_str}";
+            }
+
+            _connectionString = temp_str;
 
             // SQLite3, which is the current supported version,
             // does not need you to create the file first, just open a connection to whatever path you want. 

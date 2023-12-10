@@ -22,6 +22,7 @@ using WinRT;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using DapperAid;
 using Dapper;
+using System.Text.Json;
 
 
 
@@ -34,45 +35,58 @@ namespace NetaSabaPortal
     {
         public App()
         {
-            //LocalizeDictionary.Instance.PropertyChanged += (sender, e) =>
-            //{
-            //    if (e.PropertyName == "Culture")
-            //    {
-            //        App.Current.
-            //    }
-            //};
             SessionId = Guid.NewGuid();
             Svc = ConfigureServices();
             this.InitializeComponent();
         }
 
-        /// <summary>
-        /// Gets the current <see cref="App"/> instance in use
-        /// </summary>
         public new static App Current => (App)Application.Current;
 
-        /// <summary>
-        /// Gets the <see cref="IServiceProvider"/> instance to resolve application services.
-        /// </summary>
         public IServiceProvider Svc { get; }
         public Guid SessionId { get; }
+        public const string AppIdentifier = "NetaSabaPortal";
+        public const string ConfigParentFolder = "Hollen.Tech";
 
-        /// <summary>
-        /// Configures the services for the application.
-        /// </summary>
         private static IServiceProvider ConfigureServices()
         {
             string currentDir = AppDomain.CurrentDomain.BaseDirectory;
+            string configDir;
 
-            bool isFileExists_Path = File.Exists(Path.Combine(currentDir, PathOptions.DefaultFileName));
-            bool isFileExists_Advanced = File.Exists(Path.Combine(currentDir, AdvancedOptions.DefaultFileName));
-            bool isFileExists_Entities = File.Exists(Path.Combine(currentDir, EntitiesOptions.DefaultFileName));
-            bool isFileExists_Watcher = File.Exists(Path.Combine(currentDir, WatcherOptions.DefaultFileName));
+            var preConfigurationBuilder = new ConfigurationBuilder();
+            preConfigurationBuilder.SetBasePath(currentDir).AddJsonFile(AdvancedOptions.DefaultFileName);
+            var preCfg = preConfigurationBuilder.Build();
+            bool isStoreInAppData = preCfg.GetSection("advanced").GetValue<bool>(nameof(AdvancedOptions.IsStoreInAppData));
+
+            if (isStoreInAppData)
+            {
+                configDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), App.ConfigParentFolder, App.AppIdentifier);
+            }
+            else
+            {
+                configDir = currentDir;
+            }
+
 
             string baseCfgFilename = "config.json";
 
+            bool isFileExists_Base = File.Exists(Path.Combine(configDir, baseCfgFilename));
+            bool isFileExists_Path = File.Exists(Path.Combine(configDir, PathOptions.DefaultFileName));
+            bool isFileExists_Advanced = File.Exists(Path.Combine(configDir, AdvancedOptions.DefaultFileName));
+            bool isFileExists_Entities = File.Exists(Path.Combine(configDir, EntitiesOptions.DefaultFileName));
+            bool isFileExists_Watcher = File.Exists(Path.Combine(configDir, WatcherOptions.DefaultFileName));
+
+            if (isStoreInAppData)
+            {
+                InitConfigIfNotExists(baseCfgFilename);
+                InitConfigIfNotExists(PathOptions.DefaultFileName);
+                InitConfigIfNotExists(EntitiesOptions.DefaultFileName);
+                InitConfigIfNotExists(AdvancedOptions.DefaultFileName);
+                InitConfigIfNotExists(UiOptions.DefaultFileName);
+                InitConfigIfNotExists(WatcherOptions.DefaultFileName);
+            }
+
             var configurationBuilder = new ConfigurationBuilder()
-            .SetBasePath(currentDir)
+            .SetBasePath(configDir)
             .AddJsonFile(baseCfgFilename)
             // Add options files
             .AddJsonFile(PathOptions.DefaultFileName, true)
@@ -94,7 +108,7 @@ namespace NetaSabaPortal
             //services.ConfigureWritable<AdvancedOptions>(cfg.GetSection("advanced"), isFileExists_Advanced ? AdvancedOptions.DefaultFileName : baseCfgFilename);
             services.AddOptions<AdvancedOptions>().Configure(x => cfg.Bind("advanced", x));
             
-            string savedataPath = Path.GetFullPath(Path.Combine(currentDir, DataOptions.DefaultFileName));
+            string savedataPath = Path.GetFullPath(Path.Combine(configDir, DataOptions.DefaultFileName));
             if (File.Exists(Path.GetFullPath(Path.Combine(DataOptions.DefaultFileName))) != true)
             {
                 using (var fs = File.Create(savedataPath))
@@ -128,6 +142,28 @@ namespace NetaSabaPortal
             //services.AddSingleton<Dapperer.IDappererSettings, Extensions.DappererSettings>();
 
             return services.BuildServiceProvider();
+        }
+
+        private static void InitConfigIfNotExists(string fileName)
+        {
+            
+            string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+
+            string localAppDataPath = Path.GetFullPath(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), App.ConfigParentFolder, App.AppIdentifier, fileName));
+            string exePath = Path.GetFullPath(Path.Combine(baseDir, fileName));
+
+            if (!File.Exists(localAppDataPath))
+            {
+                // 如果在 AppData 中找不到，則複製一份
+                Directory.CreateDirectory(Path.GetDirectoryName(localAppDataPath));
+                if (!File.Exists(exePath))
+                {
+                    return;
+                }
+                File.Copy(exePath, localAppDataPath);
+            }
+
+            return;
         }
 
         private void Application_Startup(object sender, StartupEventArgs e)
