@@ -36,6 +36,7 @@
 		<ItemGroup>
 				<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
 				<PackageReference Include="Dapper" Version="2.1.24" />
+				<PackageReference Include="DapperAid" Version="1.1.0" />
 				<PackageReference Include="Discord.Net.Webhook" Version="3.13.0" />
 				<PackageReference Include="MaterialDesignExtensions" Version="4.0.0-a02" />
 				<PackageReference Include="MaterialDesignThemes" Version="5.0.0-ci465" />

@@ -19,6 +19,8 @@ using System.Collections.ObjectModel;
 using NetaSabaPortal.Repositories;
 // using Dapperer.QueryBuilders.MsSql;
 using WinRT;
+using Windows.Devices.Bluetooth.GenericAttributeProfile;
+using DapperAid;
 
 
 
@@ -106,8 +108,9 @@ namespace NetaSabaPortal
                 }
             }
 
+            services.AddSingleton<DapperAid.QueryBuilder>(new QueryBuilder.SQLite());
             services.AddSingleton<Services.IConnectionProvider, Services.SqliteConnectionProvider>();
-            services.AddScoped<Repositories.WatcherRepository>();
+            services.AddSingleton<Repositories.WatcherRepository>();
 
 
             services.ConfigureWritable<DataOptions>(cfg.GetSection("data"), DataOptions.DefaultFileName);

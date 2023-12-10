@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 
 using Dapper;
 using System.Data;
+using DapperAid;
+using NetaSabaPortal.Extensions.DapperAidJp;
 //using Dapperer;
 
 namespace NetaSabaPortal.Repositories
@@ -17,12 +19,22 @@ namespace NetaSabaPortal.Repositories
     public class WatcherRepository
     {
         private readonly IConnectionProvider _connProvider;
+        private readonly QueryBuilder _queryBuilder;
         
-        public WatcherRepository(IConnectionProvider connProvider) : base()
+        public WatcherRepository(IConnectionProvider connProvider, QueryBuilder queryBuilderInstance)
         {
             _connProvider = connProvider;
+            _queryBuilder = queryBuilderInstance;
 
-            CheckAndCreateTables();
+            //string sql;
+            //sql = DapperAid.Ddl.DDLAttribute.GenerateCreateSQL<ServerStat>(queryBuilderInstance);
+            using (var conn = _connProvider.Connect()) 
+            {
+                // conn.UseDapperAid(_queryBuilder);
+                conn.CreateTableIfNotExists<ServerStat>(_queryBuilder).GetAwaiter().GetResult();
+            }
+            //..Execute(sql); UseDapperAid(_queryBuilder)
+            
         }
 
         private void CheckAndCreateTables()
