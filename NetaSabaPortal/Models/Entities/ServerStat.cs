@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace NetaSabaPortal.Models.Entities
 {
     [Table("ServerStats")]
-    [SelectSql(DefaultOtherClauses = "ORDER BY Id")]
+    [SelectSql(DefaultOtherClauses = "ORDER BY Id DESC")]
     public class ServerStat// : IIdentifier<long>
     {
         //[Column("Id", IsPrimary = true, AutoIncrement = true)]

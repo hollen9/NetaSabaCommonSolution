@@ -79,7 +79,7 @@ namespace NetaSabaPortal.ViewModels
             EntitiesDefinitions = new ObservableCollection<EntityDefinition>(_entOptions.Value.Definitions);
             WatcherItems = new ObservableCollection<WatcherItem>(_watcherOptions.Value.List);
 
-            
+
             _dispatcherTimer =
                 new DispatcherTimer(TimeSpan.FromSeconds(_watcherOptions.Value.Interval),
                 DispatcherPriority.Background, HandleWatcherCheck, App.Current.Dispatcher);
@@ -91,7 +91,7 @@ namespace NetaSabaPortal.ViewModels
             //_serverResponses = new Dictionary<string, OpenGSQ.Protocols.Source.IResponse>();
 
             _editWatcherItemDialogVM = editWatcherItemDialogVM;
-            _editWatcherItemDialogVM.ShownChanged += (s) => 
+            _editWatcherItemDialogVM.ShownChanged += (s) =>
             {
                 IsWatcherEditDialogShown = _editWatcherItemDialogVM.IsShown;
             };
@@ -111,7 +111,9 @@ namespace NetaSabaPortal.ViewModels
             LocalizeDictionary.Instance.Culture = SelectedCulture;
         }
 
-        private Dictionary<Guid, DateTime> _watcherLastNotify = new Dictionary<Guid, DateTime>();
+        private Dictionary<Guid, DateTime> _watcherLastHostNotify = new Dictionary<Guid, DateTime>();
+        private Dictionary<Guid, DateTime> _watcherLastMapChangedNotify = new Dictionary<Guid, DateTime>();
+        private Dictionary<Guid, DateTime> _watcherLastPlayerSlotNotify = new Dictionary<Guid, DateTime>();
         private Dictionary<Guid, DateTime> _watcherLastAutoJoin = new Dictionary<Guid, DateTime>();
         //private System.Media.SoundPlayer _watcherNotifySoundPlayer = new System.Media.SoundPlayer();
         NAudio.Wave.IWavePlayer _watcherNotifySoundPlayer = new NAudio.Wave.WaveOut();
@@ -123,7 +125,7 @@ namespace NetaSabaPortal.ViewModels
             // WatcherLoadingGif = WatcherGifUri_Wakeup;
             WatcherTimerHandlerStateChanged?.Invoke(this, WatcherTimerHandlerType.Start);
 
-            Task.Run(async () => 
+            Task.Run(async () =>
             {
                 try
                 {
@@ -154,17 +156,26 @@ namespace NetaSabaPortal.ViewModels
                             var lastInfoItem = await _watcherRepository.GetLatestServerStatAsync(wItem.Id, App.Current.SessionId);
 
                             await _watcherRepository.UpsertServerStatAsync(newInfoItem);
-                            if (!_watcherLastNotify.TryGetValue(wItem.Id, out var lastNotify)) 
+                            if (!_watcherLastHostNotify.TryGetValue(wItem.Id, out DateTime lastHostNotify))
                             {
-                                lastNotify = DateTime.MinValue;
+                                lastHostNotify = DateTime.MinValue;
                             }
-                            if (!_watcherLastAutoJoin.TryGetValue(wItem.Id, out var lastAutoJoin)) 
+                            if (!_watcherLastMapChangedNotify.TryGetValue(wItem.Id, out DateTime lastMapChangedNotify))
+                            {
+                                lastMapChangedNotify = DateTime.MinValue;
+                            }
+                            if (!_watcherLastPlayerSlotNotify.TryGetValue(wItem.Id, out DateTime lastPlayerSlotNotify))
+                            {
+                                lastPlayerSlotNotify = DateTime.MinValue;
+                            }
+                            if (!_watcherLastAutoJoin.TryGetValue(wItem.Id, out DateTime lastAutoJoin))
                             {
                                 lastAutoJoin = DateTime.MinValue;
                             }
-                            if (newInfoItem.Timestamp - lastNotify > TimeSpan.FromSeconds(WatcherNotifyCooldown))
+                            // Host Availability - Notify
+                            if (newInfoItem.Timestamp - lastHostNotify > TimeSpan.FromSeconds(WatcherNotifyCooldown))
                             {
-                                _watcherLastNotify[wItem.Id] = newInfoItem.Timestamp; // Upsert
+                                _watcherLastHostNotify[wItem.Id] = newInfoItem.Timestamp; // Upsert
 
                                 if (wItem.IsNotifyWhenHostAvailable)
                                 {
@@ -184,56 +195,111 @@ namespace NetaSabaPortal.ViewModels
                                     }
                                     if (wItem.IsNotifyViaDiscordWebhook)
                                     {
-                                        HandleNotifyDiscordWebhook(wItem);
+                                        HandleNotifyDiscordWebhook(wItem, "The server is online now!");
                                     }
                                 }
                             }
+                            // Host Availability - Auto Join
+                            if (wItem.IsJoinWhenHostAvailable && newInfoItem.Timestamp - lastAutoJoin > TimeSpan.FromSeconds(WatcherNotifyCooldown))
+                            {
+                                _watcherLastAutoJoin[wItem.Id] = newInfoItem.Timestamp; // Upsert
+                                JoinGame(wItem.Host);
+                            }
 
-                            //if (!_dataOptions.Value.GameServerRecords.TryGetValue(wItem.Id, out var gsr))
+                            // Map Changed - Notify
+                            if (lastInfoItem != null && lastInfoItem.Map != newInfoItem.Map && newInfoItem.Timestamp - lastMapChangedNotify > TimeSpan.FromSeconds(WatcherNotifyCooldown))
+                            {
+                                _watcherLastMapChangedNotify[wItem.Id] = newInfoItem.Timestamp; // Upsert
+
+                                if (wItem.IsNotifyWhenMapChanged)
+                                {
+                                    if (wItem.IsNotifyViaWindowsNotification)
+                                    {
+                                        new ToastContentBuilder()
+                                            .AddCustomTimeStamp(newInfoItem.Timestamp)
+                                            .AddText($"{wItem.DisplayName}")
+                                            .AddText($"Map changed to {newInfoItem.Map}")
+                                            .Show();
+                                    }
+                                    if (wItem.IsNotifyPlaySound)
+                                    {
+                                        HandleNotifySound(wItem);
+                                    }
+                                    if (wItem.IsNotifyViaDiscordWebhook)
+                                    {
+                                        HandleNotifyDiscordWebhook(wItem, $"Map changed to {newInfoItem.Map}");
+                                    }
+                                }
+                            }
+                            
+                            // Player Slot Availability - Notify
+                            if (lastInfoItem != null && newInfoItem.Timestamp - lastPlayerSlotNotify > TimeSpan.FromSeconds(WatcherNotifyCooldown))
+                            {
+                                _watcherLastPlayerSlotNotify[wItem.Id] = newInfoItem.Timestamp; // Upsert
+
+                                if (wItem.IsNotifyWhenSlotAvailable)
+                                {
+                                    if (lastInfoItem == null || (lastInfoItem.Players >= lastInfoItem.MaxPlayers) && newInfoItem.Players < newInfoItem.Players)
+                                    {
+                                        if (wItem.IsNotifyViaWindowsNotification)
+                                        {
+                                            new ToastContentBuilder()
+                                                .AddCustomTimeStamp(newInfoItem.Timestamp)
+                                                .AddText($"{wItem.DisplayName}")
+                                                .AddText($"Player slot changed to {newInfoItem.Players}/{newInfoItem.MaxPlayers}")
+                                                .Show();
+                                        }
+                                        if (wItem.IsNotifyPlaySound)
+                                        {
+                                            HandleNotifySound(wItem);
+                                        }
+                                        if (wItem.IsNotifyViaDiscordWebhook)
+                                        {
+                                            HandleNotifyDiscordWebhook(wItem, $"Player slot changed to {newInfoItem.Players}/{newInfoItem.MaxPlayers}");
+                                        }
+                                    }
+                                }
+
+                            }
+                            // Player Slot Availability - Auto Join
+                            if (wItem.IsJoinWhenSlotAvailable && lastInfoItem != null && newInfoItem.Timestamp - lastAutoJoin > TimeSpan.FromSeconds(WatcherNotifyCooldown))
+                            {
+                                _watcherLastAutoJoin[wItem.Id] = newInfoItem.Timestamp; // Upsert
+                                JoinGame(wItem.Host);
+                            }
+
+                            _dataOptions.Update(_dataOptions.Value, false);
+
+                            // var qq = await GameQueryExtension.CreateServerQueryInstanceAsync("103.219.30.229:27205");
+                            // var info = await qq.GetServerInfoAsync(cts.Token);
+
+                            //foreach (var wItem in _watcherOptions.Value.List)
                             //{
-                            //    gsr = new GameServerRecord();
-                            //    gsr.Heartbeats = new();
-                            //    gsr.infoItems = new();
+                            //    if (!wItem.IsEnabled)
+                            //    {
+                            //        continue;
+                            //    }
+                            //    var sv = QueryMaster.MasterServer.MasterQuery.GetServerInstance(QueryMaster.MasterServer.MasterQuery.SourceServerEndPoint);
+                            //    sv.GetAddresses(QueryMaster.MasterServer.Region.Asia, batchInfo =>
+                            //    {
+                            //        string ffff = wItem.SearchName;
+                            //        string ddd = ffff;
+                            //    },
+                            //     new IpFilter() { AppId = QueryMaster.Game.CounterStrike_Global_Offensive, HostName = wItem.SearchName, IsDedicated = true }, -1,
+                            //     (ex) =>
+                            //     {
+                            //         if (ex != null)
+                            //         {
+                            //             //callback(null, ex, false);
+                            //             return;
+                            //         }
+
+                            //     });
                             //}
-                            //if (info != null)
-                            //{
-                            //    gsr.Heartbeats.Add(DateTime.Now);
-                            //    gsr.infoItems.Add(info);
-                            //}
-                            //_dataOptions.Value.GameServerRecords.TryAdd(wItem.Id, gsr);
+
+
                         }
-
                     }
-                    _dataOptions.Update(_dataOptions.Value, false);
-
-                    // var qq = await GameQueryExtension.CreateServerQueryInstanceAsync("103.219.30.229:27205");
-                    // var info = await qq.GetServerInfoAsync(cts.Token);
-
-                    //foreach (var wItem in _watcherOptions.Value.List)
-                    //{
-                    //    if (!wItem.IsEnabled)
-                    //    {
-                    //        continue;
-                    //    }
-                    //    var sv = QueryMaster.MasterServer.MasterQuery.GetServerInstance(QueryMaster.MasterServer.MasterQuery.SourceServerEndPoint);
-                    //    sv.GetAddresses(QueryMaster.MasterServer.Region.Asia, batchInfo =>
-                    //    {
-                    //        string ffff = wItem.SearchName;
-                    //        string ddd = ffff;
-                    //    },
-                    //     new IpFilter() { AppId = QueryMaster.Game.CounterStrike_Global_Offensive, HostName = wItem.SearchName, IsDedicated = true }, -1,
-                    //     (ex) =>
-                    //     {
-                    //         if (ex != null)
-                    //         {
-                    //             //callback(null, ex, false);
-                    //             return;
-                    //         }
-
-                    //     });
-                    //}
-
-
                 }
                 catch (Exception ex)
                 {
@@ -250,7 +316,13 @@ namespace NetaSabaPortal.ViewModels
 
             //Task.Delay(-1).GetAwaiter().GetResult();
         }
-        private void HandleNotifyDiscordWebhook(WatcherItem wItem)
+
+        private void JoinGame(string host)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void HandleNotifyDiscordWebhook(WatcherItem wItem, string msg)
         {
             if (string.IsNullOrEmpty(wItem.NotifyDiscordWebhookUrl)) return;
             Application.Current.Dispatcher.Invoke(async () =>
@@ -258,7 +330,7 @@ namespace NetaSabaPortal.ViewModels
                 var webhook = new DiscordWebhookClient(wItem.NotifyDiscordWebhookUrl);
                 var embed = new EmbedBuilder();
                 embed.Title = $"{wItem.DisplayName}";
-                embed.Description = "The server is online now!";
+                embed.Description = msg;
                 embed.Timestamp = DateTime.Now;
                 embed.Color = Discord.Color.Green;
 
@@ -673,7 +745,7 @@ namespace NetaSabaPortal.ViewModels
             Stop
         }
         public event EventHandler<WatcherTimerHandlerType> WatcherTimerHandlerStateChanged;
-        
+
         private Action _actionToBeConfirmed;
         public Action ActionToBeConfirmed
         {
@@ -697,9 +769,9 @@ namespace NetaSabaPortal.ViewModels
             ActionToBeConfirmed?.Invoke();
             IsWatcherEditConfirmDialogShown = false;
         });
-        public ICommand WatcherStopSound => new RelayCommand(() => 
+        public ICommand WatcherStopSound => new RelayCommand(() =>
         {
-            Application.Current.Dispatcher.Invoke(() => 
+            Application.Current.Dispatcher.Invoke(() =>
             {
                 _watcherNotifySoundPlayer.Stop();
             });
@@ -708,7 +780,7 @@ namespace NetaSabaPortal.ViewModels
         public bool IsWatcherEditDialogShown
         {
             get => _editWatcherItemDialogVM.IsShown;
-            set 
+            set
             {
                 _editWatcherItemDialogVM.IsShown = value;
                 OnPropertyChanged("IsWatcherEditDialogShown");
@@ -717,7 +789,7 @@ namespace NetaSabaPortal.ViewModels
         }
 
         private DispatcherTimer _dispatcherTimer;
-        
+
         private bool _isWatcherEnabled;
         public bool IsWatcherEnabled
         {
@@ -797,7 +869,7 @@ namespace NetaSabaPortal.ViewModels
             //});
         });
 
-        public ICommand DelWatchItemCmd => new RelayCommand<object>((x) => 
+        public ICommand DelWatchItemCmd => new RelayCommand<object>((x) =>
         {
             // Type test = x.GetType();
 
@@ -810,7 +882,7 @@ namespace NetaSabaPortal.ViewModels
             }
 
             // Confirm
-            
+
             ActionToBeConfirmed = () =>
             {
                 foreach (var item in items)
@@ -824,7 +896,7 @@ namespace NetaSabaPortal.ViewModels
             IsWatcherEditConfirmDialogShown = true;
 
             return;
-        }, x => 
+        }, x =>
         {
             //if (x is not List<WatcherItem> items || items.Count <= 0)
             //{
@@ -834,13 +906,13 @@ namespace NetaSabaPortal.ViewModels
             return true;
         });
 
-        public ICommand ModifyWatchItemCmd => new RelayCommand<WatcherItem>((wItem) => 
+        public ICommand ModifyWatchItemCmd => new RelayCommand<WatcherItem>((wItem) =>
         {
             if (wItem == null)
             {
                 return;
             }
-            
+
             var dVm = _editWatcherItemDialogVM;
             if (dVm == null)
             {
@@ -995,6 +1067,6 @@ namespace NetaSabaPortal.ViewModels
             base.OnPropertyChanged(e);
         }
 
-        
+
     }
 }

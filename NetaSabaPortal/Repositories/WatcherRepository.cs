@@ -26,30 +26,22 @@ namespace NetaSabaPortal.Repositories
             _connProvider = connProvider;
             _queryBuilder = queryBuilderInstance;
 
-            //string sql;
-            //sql = DapperAid.Ddl.DDLAttribute.GenerateCreateSQL<ServerStat>(queryBuilderInstance);
-            using (var conn = _connProvider.Connect()) 
-            {
-                // conn.UseDapperAid(_queryBuilder);
-                conn.CreateTableIfNotExists<ServerStat>(_queryBuilder).GetAwaiter().GetResult();
-            }
-            //..Execute(sql); UseDapperAid(_queryBuilder)
-            
+            // 注意! AddSingleton であることを前提としているので、ここでテーブル作成を行う
+            CheckAndCreateTables();
         }
 
         private void CheckAndCreateTables()
         {
             using (var conn = _connProvider.Connect())
             {
-                //public long? Id { get; set; }
-                //public Guid DemandingWatcherId { get; set; }
-                //public DateTime Timestamp { get; set; }
-                //public string Map { get; set; }
-                //public byte MaxPlayers { get; set; }
-                //public byte Players { get; set; }
-                var sql = "CREATE TABLE IF NOT EXISTS ServerStats ( Id INTEGER PRIMARY KEY AUTOINCREMENT, DemandingWatcherId TEXT NOT NULL, SessionId TEXT NOT NULL, Timestamp TEXT NOT NULL, Map TEXT NULL, MaxPlayers INTEGER NOT NULL, Players INTEGER NOT NULL )";
-                conn.Execute(sql);
+                // conn.UseDapperAid(_queryBuilder);
+                conn.CreateTableIfNotExists<ServerStat>(_queryBuilder).GetAwaiter().GetResult();
             }
+            //using (var conn = _connProvider.Connect())
+            //{
+            //    var sql = "CREATE TABLE IF NOT EXISTS ServerStats ( Id INTEGER PRIMARY KEY AUTOINCREMENT, DemandingWatcherId TEXT NOT NULL, SessionId TEXT NOT NULL, Timestamp TEXT NOT NULL, Map TEXT NULL, MaxPlayers INTEGER NOT NULL, Players INTEGER NOT NULL )";
+            //    conn.Execute(sql);
+            //}
         }
 
         public async Task<ServerStat> GetLatestServerStatAsync(Guid watcherId, Guid sessionId)
