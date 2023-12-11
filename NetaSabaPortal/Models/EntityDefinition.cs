@@ -27,6 +27,8 @@ namespace NetaSabaPortal.Models
         public required string[] Types { get; set; }
         public Dictionary<string,string> EntityNames { get; set; }
         public Dictionary<string,string> EntityDescriptions { get; set; }
+        public string Image { get; set; }
+        public string ImageBackground { get; set; }
         public bool? IsDefault { get; set; }
     }
 }

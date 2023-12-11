@@ -20,35 +20,54 @@
         <converter:EntityNameLocalizeConverter x:Key="EntNameLocalizeConverter"/>
     </UserControl.Resources>
     <Grid Margin="10">
+        <Grid.Background>
+            <ImageBrush ImageSource="{Binding SelectedEntity.ImageBackground}" Stretch="UniformToFill" Opacity="0.25"/>
+        </Grid.Background>
         <Grid.RowDefinitions>
-            <RowDefinition Height="36"/>
-            <RowDefinition/>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="75"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
+
+        <!-- Icon and Dropdown and Button -->
+        <Image Grid.Row="0" Grid.Column="0" Width="50" Height="50" Source="{Binding SelectedEntity.Image}"/>
         <ComboBox x:Name="cbEntities"
-                  FontSize="20" Margin="5,1"
-                  Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
-                  ItemsSource="{Binding EntitiesDefinitions}"
-                  SelectedItem="{Binding SelectedEntity}">
+                  Grid.Column="1"
+          FontSize="20" Margin="5,1"
+          ItemsSource="{Binding EntitiesDefinitions}"
+          SelectedItem="{Binding SelectedEntity}">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding ., Converter={StaticResource EntNameLocalizeConverter}}"/>
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-        <Button
-     Grid.Row="0" Grid.Column="2" Margin="5,1" Command="{Binding ExtractCommand}" Style="{DynamicResource MaterialDesignRaisedAccentButton}"
-     Visibility="{Binding IsExtracting, Converter={StaticResource BoolVisConverter}, ConverterParameter=Inverted}" Content="{lex:Loc _ButtonExtract_Caption}"/>
-        <Image Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Right" Grid.Row="1" gif:AnimationBehavior.SourceUri="pack://application:,,,/Resources/Images/animated/padoru/padoru-smooth.gif"
-Visibility="{Binding IsExtracting, Converter={StaticResource BoolVisConverter}, ConverterParameter=Normal}"/>
-        <TextBlock Grid.Row="1" Margin="0,10" FontSize="16" Text="{Binding SelectedEntity, Converter={StaticResource EntDescriptionLocalizeConverter}}"/>
-        <StackPanel Grid.Row="2" Grid.ColumnSpan="3" Orientation="Vertical"
-                 Visibility="{Binding IsExtracting, Converter={StaticResource BoolVisConverter}, ConverterParameter=Normal}">
+        <Button MinWidth="100" HorizontalAlignment="Left" Margin="5,1" Command="{Binding ExtractCommand}" Style="{DynamicResource MaterialDesignRaisedAccentButton}"
+                Visibility="{Binding IsExtracting, Converter={StaticResource BoolVisConverter}, ConverterParameter=Inverted}" Content="{lex:Loc _ButtonExtract_Caption}"
+                Grid.Column="2"/>
+
+        <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Margin="10,10" FontSize="16" Text="{Binding SelectedEntity, Converter={StaticResource EntDescriptionLocalizeConverter}}"/>
+            <Image Grid.Column="2"
+               HorizontalAlignment="Right" gif:AnimationBehavior.SourceUri="pack://application:,,,/Resources/Images/animated/padoru/padoru-smooth.gif"
+               Visibility="{Binding IsExtracting, Converter={StaticResource BoolVisConverter}, ConverterParameter=Normal}"/>
+        </Grid>
+        
+
+        <!-- Hidden Progress Bar -->
+        <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Vertical" VerticalAlignment="Bottom"
+                    Visibility="{Binding IsExtracting, Converter={StaticResource BoolVisConverter}, ConverterParameter=Normal}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -58,7 +77,7 @@ Visibility="{Binding IsExtracting, Converter={StaticResource BoolVisConverter}, 
                 <TextBlock Grid.Column="1" Text="{Binding ExtractingProgressPercentage}" HorizontalAlignment="Right"/>
             </Grid>
             <ProgressBar 
-              Value="{Binding ExtractingProgressNow}" Maximum="{Binding ExtractingProgressMax}" Minimum="{Binding ExtractingProgressMin}"/>
+                Value="{Binding ExtractingProgressNow}" Maximum="{Binding ExtractingProgressMax}" Minimum="{Binding ExtractingProgressMin}"/>
         </StackPanel>
     </Grid>
 </UserControl>
