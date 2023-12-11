@@ -18,7 +18,12 @@ namespace NetaSabaPortal.Views.Converters
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             if (value == null) return string.Empty;
-            EntityDefinition def = (EntityDefinition)value;
+            if (value is not EntityDefinition def)
+            {
+                // This means no entity is selected. For example, updating list can cause this.
+                return string.Empty;
+            }
+
             if (def.EntityNames == null)
             {
                 return def.EntityName;

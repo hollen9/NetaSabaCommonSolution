@@ -8,6 +8,24 @@
 				<UseWPF>true</UseWPF>
 				<ApplicationIcon>Resources\Images\purplecat_crophead.ico</ApplicationIcon>
 				<InterceptorsPreviewNamespaces>$(InterceptorsPreviewNamespaces);Microsoft.Extensions.Configuration.Binder.SourceGeneration</InterceptorsPreviewNamespaces>
+				<RepositoryUrl>https://github.com/hollen9/NetaSabaCommonSolution.git</RepositoryUrl>
+				<RepositoryType>git</RepositoryType>
+				<Company>Hollen.Tech</Company>
+				<AssemblyVersion>0.3.8745.8699</AssemblyVersion>
+				<Authors>Hollen9</Authors>
+				<Deterministic>false</Deterministic>
+		</PropertyGroup>
+
+		<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		  <ShouldCreateLogs>True</ShouldCreateLogs>
+		  <AdvancedSettingsExpanded>True</AdvancedSettingsExpanded>
+		  <UpdateAssemblyVersion>True</UpdateAssemblyVersion>
+		  <UpdateAssemblyFileVersion>False</UpdateAssemblyFileVersion>
+		  <UpdateAssemblyInfoVersion>False</UpdateAssemblyInfoVersion>
+		  <UpdatePackageVersion>False</UpdatePackageVersion>
+		  <AssemblyInfoVersionType>SettingsVersion</AssemblyInfoVersionType>
+		  <InheritWinAppVersionFrom>None</InheritWinAppVersionFrom>
+		  <AssemblyVersionSettings>IncrementOnDemand.IncrementOnDemand.DeltaDayStamp.HalfOfSecondsSinceMidnight</AssemblyVersionSettings>
 		</PropertyGroup>
 
 		<!--<ItemGroup>

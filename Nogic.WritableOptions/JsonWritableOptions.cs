@@ -176,4 +176,6 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
         if (reload && _configuration is IConfigurationRoot configurationRoot)
             configurationRoot.Reload();
     }
+
+    
 }

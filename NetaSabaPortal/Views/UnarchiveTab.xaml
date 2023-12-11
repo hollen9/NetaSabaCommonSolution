@@ -46,9 +46,13 @@
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-        <Button MinWidth="100" HorizontalAlignment="Left" Margin="5,1" Command="{Binding ExtractCommand}" Style="{DynamicResource MaterialDesignRaisedAccentButton}"
-                Visibility="{Binding IsExtracting, Converter={StaticResource BoolVisConverter}, ConverterParameter=Inverted}" Content="{lex:Loc _ButtonExtract_Caption}"
-                Grid.Column="2"/>
+        
+        <StackPanel Grid.Column="2" Orientation="Horizontal">
+            <Button MinWidth="100" HorizontalAlignment="Left" Margin="5,1" Command="{Binding ExtractCommand}" Style="{DynamicResource MaterialDesignRaisedAccentButton}"
+            Visibility="{Binding IsExtracting, Converter={StaticResource BoolVisConverter}, ConverterParameter=Inverted}" Content="{lex:Loc _ButtonExtract_Caption}"
+            />
+            <Button Content="Update List" MinWidth="100" Margin="10,0,0,0" Command="{Binding UpdateEntListCommand}"/>
+        </StackPanel>
 
         <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3">
             <Grid.RowDefinitions>

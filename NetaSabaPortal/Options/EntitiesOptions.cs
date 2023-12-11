@@ -11,5 +11,7 @@ namespace NetaSabaPortal.Options
     {
         public const string DefaultFileName = "config_entities.json";
         public List<EntityDefinition> Definitions { get; set; }
+        public long EntVersion {get;set;}
+        public string MinVersionRequired { get; set; }
     }
 }

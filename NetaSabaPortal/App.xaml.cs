@@ -23,9 +23,10 @@ using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using DapperAid;
 using Dapper;
 using System.Text.Json;
+using System.Reflection;
 
 
-
+//[assembly: AssemblyVersion("0.3.0")]
 namespace NetaSabaPortal
 {
     /// <summary>
@@ -38,14 +39,22 @@ namespace NetaSabaPortal
             SessionId = Guid.NewGuid();
             Svc = ConfigureServices();
             this.InitializeComponent();
+
+            var ver = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+
+            Version = ver;//$"{@var.Major}.{@var.MajorRevision}.{@var.Minor}";
         }
 
         public new static App Current => (App)Application.Current;
 
         public IServiceProvider Svc { get; }
         public Guid SessionId { get; }
+
+        public Version Version { get; }
+
         public const string AppIdentifier = "NetaSabaPortal";
         public const string ConfigParentFolder = "Hollen.Tech";
+       
 
         private static IServiceProvider ConfigureServices()
         {

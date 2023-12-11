@@ -34,6 +34,9 @@ using Microsoft.Toolkit.Uwp.Notifications;
 using Discord.Webhook;
 using Discord;
 using System.Globalization;
+using System.Net.Http;
+using Microsoft.Extensions.Configuration;
+using System.Windows.Media;
 
 namespace NetaSabaPortal.ViewModels
 {
@@ -46,6 +49,7 @@ namespace NetaSabaPortal.ViewModels
         public EditWatcherItemDialogVM _editWatcherItemDialogVM;
         //public IWritableOptions<DataOptions> _dataOptions;
         public Repositories.WatcherRepository _watcherRepository;
+        public IOptions<AdvancedOptions> _advOptions;
 
         public MainWindowVM(
             IWritableOptions<PathOptions> dirOptions,
@@ -54,7 +58,8 @@ namespace NetaSabaPortal.ViewModels
             IWritableOptions<UiOptions> uiOptions,
             //IWritableOptions<DataOptions> dataOptions,
             EditWatcherItemDialogVM editWatcherItemDialogVM,
-            Repositories.WatcherRepository watcherRepository
+            Repositories.WatcherRepository watcherRepository,
+            IOptions<AdvancedOptions> advOptions
             )
         {
             // This has to be called before any path variable changed event.
@@ -70,6 +75,7 @@ namespace NetaSabaPortal.ViewModels
             _uiOptions = uiOptions;
             //_dataOptions = dataOptions;
             _watcherRepository = watcherRepository;
+            _advOptions = advOptions;
 
             // Orders matter, as each path variable changed event will trigger AutoSetupPath
             CS2AcfPath = _dirOptions.Value.Cs2acf;
@@ -119,6 +125,8 @@ namespace NetaSabaPortal.ViewModels
             SelectedCulture = System.Globalization.CultureInfo.GetCultureInfo(uiOptions.Value.Language);
             LocalizeDictionary.Instance.Culture = SelectedCulture;
         }
+
+        public string AppVersion => App.Current.Version.ToString();
 
         private void HandleUiLanguageChanged(CultureInfo culture)
         {
@@ -471,6 +479,15 @@ namespace NetaSabaPortal.ViewModels
             set => SetProperty(ref _selectedCulture, value);
         }
 
+        public ICommand OpenUrlCommand => new RelayCommand<string>((url) =>
+        {
+            if (string.IsNullOrEmpty(url))
+            {
+                return;
+            }
+            // use launcher to open url
+            Windows.System.Launcher.LaunchUriAsync(new Uri(url));
+        });
 
         #region PathSettings
         private string _steamPath;
@@ -694,6 +711,63 @@ namespace NetaSabaPortal.ViewModels
         private int _extractingProgressMin;
         public int ExtractingProgressMin { get => _extractingProgressMin; set => SetProperty(ref _extractingProgressMin, value); }
         public int ExtractingProgressPercentage => (int)((float)ExtractingProgressNow / (float)ExtractingProgressMax * 100);
+
+        public ICommand UpdateEntListCommand => new RelayCommand(() => 
+        {
+            if (_advOptions.Value.EntitiesUpdateEndpoints.Length < 0)
+            {
+                BarMessageQueue.Enqueue($"No endpoints set, please check {nameof(AdvancedOptions)} ({AdvancedOptions.DefaultFileName})", true);
+                return;
+            }
+            Task.Run(async () =>
+            {
+                try
+                {
+                    foreach (var endpoint in _advOptions.Value.EntitiesUpdateEndpoints)
+                    {
+                        // HttpClient
+                        using (var client = new HttpClient())
+                        {
+                            var response = await client.GetAsync(endpoint);
+                            if (response.IsSuccessStatusCode)
+                            {
+                                var json = await response.Content.ReadAsStringAsync();
+                                var cfgB = new ConfigurationBuilder();
+                                cfgB.AddJsonStream(new MemoryStream(Encoding.UTF8.GetBytes(json)));
+                                var cfg = cfgB.Build();
+                                EntitiesOptions newOpt = new();
+                                cfg.GetSection("entities").Bind(newOpt);
+                                if (newOpt.EntVersion > _entOptions.Value.EntVersion)
+                                {
+                                    _entOptions.Update(newOpt, false); // write to file
+                                    _entOptions.Value.EntVersion = newOpt.EntVersion;
+                                    _entOptions.Value.Definitions = newOpt.Definitions;
+                                    _entOptions.Value.MinVersionRequired = newOpt.MinVersionRequired;
+
+                                    EntitiesDefinitions = new ObservableCollection<EntityDefinition>(newOpt.Definitions);
+                                    foreach (var ent in EntitiesDefinitions)
+                                    {
+                                        if (ent.IsDefault.HasValue && ent.IsDefault == true)
+                                        {
+                                            SelectedEntity = ent;
+                                            break;
+                                        }
+                                    }
+                                    OnPropertyChanged(nameof(SelectedEntity));
+                                    BarMessageQueue.Enqueue($"Entities list updated to version {newOpt.EntVersion}", false);
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                    BarMessageQueue.Enqueue($"No new version found.", false);
+                }
+                catch (Exception ex)
+                {
+                    BarMessageQueue.Enqueue($"Error: {ex.Message}", true);
+                }
+            });
+        });
 
         public ICommand ExtractCommand => new RelayCommand(() =>
         {
