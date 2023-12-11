@@ -1,5 +1,7 @@
 {
   "entities": {
+    "minVersionRequired": "0.3.0",
+    "entVersion": 0,
     "definitions": [
       {
         "entityName": "KuromeKuro - DLC",
@@ -20,33 +22,6 @@
         },
         "image": "https://lh3.googleusercontent.com/0fhY1DpsSwb546LmQQfoIMaOD4cANmTidfu8J9A60-gcuxOkYkUDs77HKCMR7eZ6w73N5y67ctERgm00EGr4UzI=w16383",
         "imageBackground": "https://lh4.googleusercontent.com/H9qp_BlqT5lxpokXemjP73zHLW1D1CK-CGsn2fKbSduys3SZfem0sqwzDgWC5hyCl6jvt7BczvF9qxhgzryynRA=w16383",
-        "copies": [
-          "sounds/kurome"
-        ],
-        "types": [
-          "vsnd_c"
-        ],
-        "isDefault": true
-      },
-      {
-        "entityName": "KuromeKuro - DLC Test",
-        "workshopId": "3101610902",
-        "serverId": "kuromekuro2",
-        "EntityNames": {
-          "ja-jp": "Kuromekuro CS2サーバー DLC。",
-          "zh-cn": "在Kuromekuro CS2服务器 DLC",
-          "zh-tw": "在Kuromekuro CS2伺服器 DLC",
-          "ko-kr": "Kuromekuro CS2 서버에서 DLC"
-        },
-        "EntityDescriptions": {
-          "en": "An essential package for playing on Kuromekuro CS2 Server.",
-          "ja-jp": "Kuromgfdgdg遊ぶための必須パッケージです。",
-          "zh-cn": "在Kuromebfdghdf戏的必备包。",
-          "zh-tw": "在KuromeksgsdgsdfgSSSSSSS",
-          "ko-kr": "Kuromekurod수 패키지입니다."
-        },
-        "image": "https://lh4.googleusercontent.com/H9qp_BlqT5lxpokXemjP73zHLW1D1CK-CGsn2fKbSduys3SZfem0sqwzDgWC5hyCl6jvt7BczvF9qxhgzryynRA=w16383",
-        "imageBackground": "https://lh3.googleusercontent.com/0fhY1DpsSwb546LmQQfoIMaOD4cANmTidfu8J9A60-gcuxOkYkUDs77HKCMR7eZ6w73N5y67ctERgm00EGr4UzI=w16383",
         "copies": [
           "sounds/kurome"
         ],
