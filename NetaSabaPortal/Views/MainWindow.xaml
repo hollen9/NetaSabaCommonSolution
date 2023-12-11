@@ -24,7 +24,7 @@
         TextElement.FontSize="14"
         FontFamily="{materialDesign:MaterialDesignFont}"
         
-        Title="NetaSaba Portal" Height="650" Width="1200" Loaded="Window_Loaded"
+        Title="NetaSaba Portal" Height="600" Width="1050" Loaded="Window_Loaded"
         
         >
     <!--<Window.DataContext>

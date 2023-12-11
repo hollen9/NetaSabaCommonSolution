@@ -140,11 +140,11 @@
                             <materialDesign:PackIcon Kind="Magnify" Height="25" Width="25" Margin="-4,0,0,0"/>
                         </StackPanel>
                     </GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding SearchPort}">
-                        <StackPanel Orientation="Horizontal">
+                    <GridViewColumn DisplayMemberBinding="{Binding SearchPort}" Width="90">
+                        <DockPanel Margin="-20,0,0,0">
                             <materialDesign:PackIcon Kind="Firewall" Height="25" Width="25" Margin="0"/>
                             <materialDesign:PackIcon Kind="Magnify" Height="25" Width="25" Margin="-4,0,0,0"/>
-                        </StackPanel>
+                        </DockPanel>
                     </GridViewColumn>
                     <GridViewColumn DisplayMemberBinding="{Binding SearchTag}">
                         <StackPanel Orientation="Horizontal">
@@ -152,11 +152,11 @@
                             <materialDesign:PackIcon Kind="Magnify" Height="25" Width="25" Margin="-4,0,0,0"/>
                         </StackPanel>
                     </GridViewColumn>
-                    <GridViewColumn>
-                        <StackPanel Orientation="Horizontal">
+                    <GridViewColumn Width="60">
+                        <DockPanel Margin="-40,0,0,0">
                             <materialDesign:PackIcon Kind="Walk" Height="25" Width="25" Margin="0"/>
-                            <materialDesign:PackIcon Kind="HouseAutomation" Height="25" Width="25" Margin="-4,0,0,0"/>
-                        </StackPanel>
+                            <materialDesign:PackIcon Kind="HouseAutomation" Height="25" Width="25" Margin="-7,0,0,0"/>
+                        </DockPanel>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <materialDesign:PackIcon Kind="{Binding IsJoinWhenHostAvailable, Converter={StaticResource BoolMdIconConverter}}"
@@ -164,11 +164,11 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn>
-                        <StackPanel Orientation="Horizontal">
+                    <GridViewColumn Width="60">
+                        <DockPanel Margin="-40,0,0,0">
                             <materialDesign:PackIcon Kind="Walk" Height="25" Width="25" Margin="0"/>
-                            <materialDesign:PackIcon Kind="LoveSeat" Height="25" Width="25" Margin="-4,0,0,0"/>
-                        </StackPanel>
+                            <materialDesign:PackIcon Kind="LoveSeat" Height="25" Width="25" Margin="-7,0,0,0"/>
+                        </DockPanel>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <materialDesign:PackIcon Kind="{Binding IsJoinWhenSlotAvailable, Converter={StaticResource BoolMdIconConverter}}"
@@ -176,11 +176,11 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn>
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="HouseAutomation" Height="25" Width="25" Margin="0"/>
-                            <materialDesign:PackIcon Kind="ChatAlert" Height="25" Width="25" Margin="-4,0,0,0"/>
-                        </StackPanel>
+                    <GridViewColumn Width="60">
+                        <DockPanel Margin="-42,0,0,0">
+                            <materialDesign:PackIcon Kind="HouseAutomation" Height="25" Width="25" Margin="-2,0,0,0"/>
+                            <materialDesign:PackIcon Kind="ChatAlert" Height="25" Width="25" Margin="-5,0,0,0"/>
+                        </DockPanel>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <materialDesign:PackIcon Kind="{Binding IsNotifyWhenHostAvailable, Converter={StaticResource BoolMdIconConverter}}"
@@ -188,11 +188,11 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn>
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="LoveSeat" Height="25" Width="25" Margin="0"/>
-                            <materialDesign:PackIcon Kind="ChatAlert" Height="25" Width="25" Margin="-2,0,0,0"/>
-                        </StackPanel>
+                    <GridViewColumn Width="60">
+                        <DockPanel Margin="-40,0,0,0">
+                            <materialDesign:PackIcon Kind="LoveSeat" Height="25" Width="25" Margin="-6,0,0,0"/>
+                            <materialDesign:PackIcon Kind="ChatAlert" Height="25" Width="25" Margin="-4,0,0,0"/>
+                        </DockPanel>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <materialDesign:PackIcon Kind="{Binding IsNotifyWhenSlotAvailable, Converter={StaticResource BoolMdIconConverter}}"
@@ -200,11 +200,11 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn>
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="MapMarker" Height="25" Width="25" Margin="0"/>
+                    <GridViewColumn Width="60">
+                        <DockPanel Margin="-40,0,0,0">
+                            <materialDesign:PackIcon Kind="MapMarker" Height="25" Width="25" Margin="-6,0,0,0"/>
                             <materialDesign:PackIcon Kind="ChatAlert" Height="25" Width="25" Margin="-5,0,0,0"/>
-                        </StackPanel>
+                        </DockPanel>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <materialDesign:PackIcon Kind="{Binding IsNotifyWhenMapChanged, Converter={StaticResource BoolMdIconConverter}}"
@@ -212,11 +212,10 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn>
-                        <StackPanel Orientation="Horizontal">
-                            
+                    <GridViewColumn Width="60">
+                        <DockPanel Margin="-25,0,0,0">
                             <!--svgc:SvgCanvas x:Name="svgcDiscord" Width="25" Height="25"/>-->
-                            <Image Height="25" Width="25">
+                            <Image Height="20" Width="20" Margin="-20,0,0,0">
                                 <Image.Style>
                                     <Style TargetType="{x:Type Image}">
                                         <Setter Property="Source" Value="{StaticResource imgIconMiniDiscordGray}"/>
@@ -229,7 +228,7 @@
                                 </Image.Style>
                             </Image>
                             <materialDesign:PackIcon Kind="ChatAlert" Height="25" Width="25" Margin="0,0,0,0"/>
-                        </StackPanel>
+                        </DockPanel>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <materialDesign:PackIcon Kind="{Binding IsNotifyViaDiscordWebhook, Converter={StaticResource BoolMdIconConverter}}"
@@ -237,11 +236,11 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn>
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="MicrosoftWindows" Height="25" Width="25" Margin="0"/>
+                    <GridViewColumn Width="60">
+                        <DockPanel Margin="-40,0,0,0">
+                            <materialDesign:PackIcon Kind="MicrosoftWindows" Height="25" Width="25" Margin="-6,0,0,0"/>
                             <materialDesign:PackIcon Kind="ChatAlert" Height="25" Width="25" Margin="-4,0,0,0"/>
-                        </StackPanel>
+                        </DockPanel>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <materialDesign:PackIcon Kind="{Binding IsNotifyViaWindowsNotification, Converter={StaticResource BoolMdIconConverter}}"
@@ -249,11 +248,11 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn>
-                        <StackPanel Orientation="Horizontal">
+                    <GridViewColumn Width="60">
+                        <DockPanel Margin="-47,0,0,0">
                             <materialDesign:PackIcon Kind="Loudspeaker" Height="25" Width="25" Margin="0"/>
                             <materialDesign:PackIcon Kind="ChatAlert" Height="25" Width="25" Margin="-3,0,0,0"/>
-                        </StackPanel>
+                        </DockPanel>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <DockPanel>
