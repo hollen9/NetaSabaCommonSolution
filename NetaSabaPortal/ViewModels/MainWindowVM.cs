@@ -44,7 +44,7 @@ namespace NetaSabaPortal.ViewModels
         public IWritableOptions<WatcherOptions> _watcherOptions;
         public IWritableOptions<UiOptions> _uiOptions;
         public EditWatcherItemDialogVM _editWatcherItemDialogVM;
-        public IWritableOptions<DataOptions> _dataOptions;
+        //public IWritableOptions<DataOptions> _dataOptions;
         public Repositories.WatcherRepository _watcherRepository;
 
         public MainWindowVM(
@@ -52,7 +52,7 @@ namespace NetaSabaPortal.ViewModels
             IWritableOptions<EntitiesOptions> entOptions,
             IWritableOptions<WatcherOptions> watcherOptions,
             IWritableOptions<UiOptions> uiOptions,
-            IWritableOptions<DataOptions> dataOptions,
+            //IWritableOptions<DataOptions> dataOptions,
             EditWatcherItemDialogVM editWatcherItemDialogVM,
             Repositories.WatcherRepository watcherRepository
             )
@@ -68,7 +68,7 @@ namespace NetaSabaPortal.ViewModels
             _entOptions = entOptions;
             _watcherOptions = watcherOptions;
             _uiOptions = uiOptions;
-            _dataOptions = dataOptions;
+            //_dataOptions = dataOptions;
             _watcherRepository = watcherRepository;
 
             // Orders matter, as each path variable changed event will trigger AutoSetupPath
@@ -123,6 +123,11 @@ namespace NetaSabaPortal.ViewModels
         private void HandleUiLanguageChanged(CultureInfo culture)
         {
             OnPropertyChanged(nameof(SelectedEntity));
+            // In order to refresh the UI, we have to re-assign the values. OnPropertyChanged() is not enough. (converter)
+            EntitiesDefinitions = new ObservableCollection<EntityDefinition>(_entOptions.Value.Definitions);
+            
+            _uiOptions.Value.Language = culture.Name;
+            _uiOptions.Update(_uiOptions.Value, false);
         }
 
         private Dictionary<Guid, DateTime> _watcherLastHostNotify = new Dictionary<Guid, DateTime>();
@@ -334,7 +339,7 @@ namespace NetaSabaPortal.ViewModels
                                 JoinGame(host);
                             }
 
-                            _dataOptions.Update(_dataOptions.Value, false);
+                            // _dataOptions.Update(_dataOptions.Value, false);
 
                             // var qq = await GameQueryExtension.CreateServerQueryInstanceAsync("103.219.30.229:27205");
                             // var info = await qq.GetServerInfoAsync(cts.Token);

@@ -72,12 +72,6 @@ namespace NetaSabaPortal
 
             string baseCfgFilename = "config.json";
 
-            bool isFileExists_Base = File.Exists(GetFullCombinedPath(configDir, baseCfgFilename));
-            bool isFileExists_Path = File.Exists(GetFullCombinedPath(configDir, PathOptions.DefaultFileName));
-            bool isFileExists_Advanced = File.Exists(GetFullCombinedPath(configDir, AdvancedOptions.DefaultFileName));
-            bool isFileExists_Entities = File.Exists(GetFullCombinedPath(configDir, EntitiesOptions.DefaultFileName));
-            bool isFileExists_Watcher = File.Exists(GetFullCombinedPath(configDir, WatcherOptions.DefaultFileName));
-
             if (isStoreInAppData)
             {
                 InitConfigIfNotExists(baseCfgFilename);
@@ -87,6 +81,12 @@ namespace NetaSabaPortal
                 InitConfigIfNotExists(UiOptions.DefaultFileName);
                 InitConfigIfNotExists(WatcherOptions.DefaultFileName);
             }
+
+            bool isFileExists_Base = File.Exists(GetFullCombinedPath(configDir, baseCfgFilename));
+            bool isFileExists_Path = File.Exists(GetFullCombinedPath(configDir, PathOptions.DefaultFileName));
+            bool isFileExists_Advanced = File.Exists(GetFullCombinedPath(configDir, AdvancedOptions.DefaultFileName));
+            bool isFileExists_Entities = File.Exists(GetFullCombinedPath(configDir, EntitiesOptions.DefaultFileName));
+            bool isFileExists_Watcher = File.Exists(GetFullCombinedPath(configDir, WatcherOptions.DefaultFileName));
 
             var configurationBuilder = new ConfigurationBuilder()
             .SetBasePath(configDir)
@@ -111,27 +111,28 @@ namespace NetaSabaPortal
             //services.ConfigureWritable<AdvancedOptions>(cfg.GetSection("advanced"), isFileExists_Advanced ? AdvancedOptions.DefaultFileName : baseCfgFilename);
             services.AddOptions<AdvancedOptions>().Configure(x => cfg.Bind("advanced", x));
             
-            string savedataPath = Path.GetFullPath(Path.Combine(configDir, DataOptions.DefaultFileName));
-            if (File.Exists(Path.GetFullPath(Path.Combine(DataOptions.DefaultFileName))) != true)
-            {
-                using (var fs = File.Create(savedataPath))
-                {
-                    var obj = new 
-                    {
-                        data = new DataOptions()
-                    };
-                    string text = System.Text.Json.JsonSerializer.Serialize(obj);
-                    fs.Write(System.Text.Encoding.UTF8.GetBytes(text));
-                    fs.Close();
-                }
-            }
+            //string savedataPath = Path.GetFullPath(Path.Combine(configDir, DataOptions.DefaultFileName));
+
+            //if (File.Exists(Path.GetFullPath(Path.Combine(DataOptions.DefaultFileName))) != true)
+            //{
+            //    using (var fs = File.Create(savedataPath))
+            //    {
+            //        var obj = new 
+            //        {
+            //            data = new DataOptions()
+            //        };
+            //        string text = System.Text.Json.JsonSerializer.Serialize(obj);
+            //        fs.Write(System.Text.Encoding.UTF8.GetBytes(text));
+            //        fs.Close();
+            //    }
+            //}
 
             services.AddSingleton<DapperAid.QueryBuilder>(new QueryBuilder.SQLite());
             services.AddSingleton<Services.IConnectionProvider, Services.SqliteConnectionProvider>();
             services.AddSingleton<Repositories.WatcherRepository>();
 
 
-            services.ConfigureWritable<DataOptions>(cfg.GetSection("data"), DataOptions.DefaultFileName);
+            //services.ConfigureWritable<DataOptions>(cfg.GetSection("data"), DataOptions.DefaultFileName);
 
             services.AddSingleton<MainWindowVM>();
             services.AddSingleton<EditWatcherItemDialogVM>();
@@ -194,8 +195,7 @@ namespace NetaSabaPortal
             
             rlp.SearchCultures = culList;
             rlp.UpdateCultureList("NetaSabaPortal", "Strings");
-            LocalizeDictionary.Instance.DefaultProvider = rlp;
-
+            LocalizeDictionary.Instance.DefaultProvider = rlp;            
             //var dappererSettings = svcs.GetRequiredService<Dapperer.IDappererSettings>();
             //dappererSettings = new Extensions.DappererSettings() { ConnectionString = advOpts.Value.ConnectionString };
             

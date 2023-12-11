@@ -51,7 +51,7 @@ namespace NetaSabaPortal.ViewModels
                 {
                     i = 255;
                 }
-                string value = LocalizeDictionary.Instance.GetLocalizedObject("_RegionItems_" + i, null, culture).ToString();
+                string value = LocalizeDictionary.Instance.GetLocalizedObject("_RegionItems_" + i, null, culture)?.ToString();
                 RegionItems.Add(new MasterServerRegionItem() { Region = (QueryMaster.MasterServer.Region)i, DisplayName = value });
             }
 

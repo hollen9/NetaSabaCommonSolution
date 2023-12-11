@@ -25,6 +25,7 @@ namespace NetaSabaPortal.Models
         public required string ServerId { get; set; }
         public required string[] Copies { get; set; }
         public required string[] Types { get; set; }
+        public Dictionary<string,string> EntityNames { get; set; }
         public Dictionary<string,string> EntityDescriptions { get; set; }
         public bool? IsDefault { get; set; }
     }
