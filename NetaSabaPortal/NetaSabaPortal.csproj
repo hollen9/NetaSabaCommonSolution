@@ -11,7 +11,7 @@
 				<RepositoryUrl>https://github.com/hollen9/NetaSabaCommonSolution.git</RepositoryUrl>
 				<RepositoryType>git</RepositoryType>
 				<Company>Hollen.Tech</Company>
-				<AssemblyVersion>0.3.8745.9528</AssemblyVersion>
+				<AssemblyVersion>0.3.8745.10834</AssemblyVersion>
 				<Authors>Hollen9</Authors>
 				<Deterministic>false</Deterministic>
 		</PropertyGroup>

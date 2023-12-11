@@ -194,4 +194,7 @@
   <data name="_RegionItems_255" xml:space="preserve">
     <value>Rest of the world</value>
   </data>
+  <data name="TabUnarchive_UpdateList_Button" xml:space="preserve">
+    <value>Update List</value>
+  </data>
 </root>

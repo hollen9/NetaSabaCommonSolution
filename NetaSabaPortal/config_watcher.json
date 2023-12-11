@@ -1,57 +1,10 @@
 {
   "watcher": {
-    "IsEnabled": true,
-    "Interval": 30,
-    "NotifyCooldown": 30,
-    "AutoJoinCooldown": 60,
+    "IsEnabled": false,
+    "Interval": 60,
+    "NotifyCooldown": 59,
+    "AutoJoinCooldown": 3600,
     "IsTurnOffTimerAfterJoin": true,
-    "List": [
-      {
-        "Id": "f6715cd3-d3f5-4ac1-9964-bf4c0b992281",
-        "DisplayName": "Test01",
-        "SearchName": "TG死斗服 CS2 DM FFA 上海顶配 Mir",
-        "SearchPort": 27105,
-        "SearchRegion": 4,
-        "SearchTag": "",
-        "IsEnabled": true,
-        "Host": "",
-        "Password": "",
-        "IsJoinWhenHostAvailable": false,
-        "IsJoinWhenSlotAvailable": false,
-        "IsNotifyWhenHostAvailable": true,
-        "IsNotifyWhenSlotAvailable": true,
-        "IsNotifyWhenMapChanged": true,
-        "IsNotifyViaDiscordWebhook": false,
-        "NotifyDiscordWebhookUrl": "",
-        "IsNotifyViaWindowsNotification": false,
-        "IsNotifyPlaySound": false,
-        "NotifySoundPath": "",
-        "NotifySoundLoop": null,
-        "NotifySoundVolume": null
-      },
-      {
-        "Id": "c4f67403-a42a-4ace-957b-fa7483d1c6e8",
-        "DisplayName": "Test Ip",
-        "SearchName": "",
-        "SearchPort": null,
-        "SearchRegion": 4,
-        "SearchTag": "",
-        "IsEnabled": false,
-        "Host": "45.125.47.230:27035",
-        "Password": "",
-        "IsJoinWhenHostAvailable": false,
-        "IsJoinWhenSlotAvailable": false,
-        "IsNotifyWhenHostAvailable": true,
-        "IsNotifyWhenSlotAvailable": true,
-        "IsNotifyWhenMapChanged": true,
-        "IsNotifyViaDiscordWebhook": true,
-        "NotifyDiscordWebhookUrl": "https://discord.com/api/webhooks/1183163015617597491/MXtYyPheocdYyrC43IPy7q7-5ubZINSeZJzFXNnQgTmUKrWJR2G690GmTF_dOCux4_Fx",
-        "IsNotifyViaWindowsNotification": true,
-        "IsNotifyPlaySound": false,
-        "NotifySoundPath": "D:\\Libraries\\GameFiles\\SteamLib\\steamapps\\common\\Counter-Strike Global Offensive\\csgo\\sound\\n\\saysound\\deta.mp3",
-        "NotifySoundLoop": null,
-        "NotifySoundVolume": null
-      }
-    ]
+    "List": []
   }
 }

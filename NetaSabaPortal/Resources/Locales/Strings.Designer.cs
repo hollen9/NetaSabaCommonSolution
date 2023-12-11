@@ -97,11 +97,83 @@ namespace NetaSabaPortal.Resources.Locales {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to US East Cost.
+        ///   Looks up a localized string similar to US East Coast.
         /// </summary>
-        internal static string _Region_0 {
+        internal static string _RegionItems_0 {
             get {
-                return ResourceManager.GetString("_Region_0", resourceCulture);
+                return ResourceManager.GetString("_RegionItems_0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to US West Coast.
+        /// </summary>
+        internal static string _RegionItems_1 {
+            get {
+                return ResourceManager.GetString("_RegionItems_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to South America.
+        /// </summary>
+        internal static string _RegionItems_2 {
+            get {
+                return ResourceManager.GetString("_RegionItems_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rest of the world.
+        /// </summary>
+        internal static string _RegionItems_255 {
+            get {
+                return ResourceManager.GetString("_RegionItems_255", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Europe.
+        /// </summary>
+        internal static string _RegionItems_3 {
+            get {
+                return ResourceManager.GetString("_RegionItems_3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Asia.
+        /// </summary>
+        internal static string _RegionItems_4 {
+            get {
+                return ResourceManager.GetString("_RegionItems_4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Australia.
+        /// </summary>
+        internal static string _RegionItems_5 {
+            get {
+                return ResourceManager.GetString("_RegionItems_5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Middle East.
+        /// </summary>
+        internal static string _RegionItems_6 {
+            get {
+                return ResourceManager.GetString("_RegionItems_6", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Africa.
+        /// </summary>
+        internal static string _RegionItems_7 {
+            get {
+                return ResourceManager.GetString("_RegionItems_7", resourceCulture);
             }
         }
         
@@ -264,6 +336,15 @@ namespace NetaSabaPortal.Resources.Locales {
         internal static string TabSettings_SteamPathLabel_2 {
             get {
                 return ResourceManager.GetString("TabSettings_SteamPathLabel_2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update List.
+        /// </summary>
+        internal static string TabUnarchive_UpdateList_Button {
+            get {
+                return ResourceManager.GetString("TabUnarchive_UpdateList_Button", resourceCulture);
             }
         }
     }

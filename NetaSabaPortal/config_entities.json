@@ -4,14 +4,14 @@
     "entVersion": 0,
     "definitions": [
       {
-        "entityName": "KuromeKuro - DLC",
+        "entityName": "KuromeKuro DLC",
         "workshopId": "3101610901",
         "serverId": "kuromekuro",
         "EntityNames": {
           "ja-jp": "Kuromekuro CS2サーバー DLC。",
-          "zh-cn": "在Kuromekuro CS2服务器 DLC",
-          "zh-tw": "在Kuromekuro CS2伺服器 DLC",
-          "ko-kr": "Kuromekuro CS2 서버에서 DLC"
+          "zh-cn": "Kuromekuro CS2服务器 DLC",
+          "zh-tw": "Kuromekuro CS2伺服器 DLC",
+          "ko-kr": "Kuromekuro CS2서버에서 DLC"
         },
         "EntityDescriptions": {
           "en": "An essential package for playing on Kuromekuro CS2 Server.",
@@ -20,8 +20,8 @@
           "zh-tw": "在Kuromekuro CS2伺服器上玩遊戲的必備包。",
           "ko-kr": "Kuromekuro CS2 서버에서 플레이하기 위한 필수 패키지입니다."
         },
-        "image": "https://lh3.googleusercontent.com/0fhY1DpsSwb546LmQQfoIMaOD4cANmTidfu8J9A60-gcuxOkYkUDs77HKCMR7eZ6w73N5y67ctERgm00EGr4UzI=w16383",
-        "imageBackground": "https://lh4.googleusercontent.com/H9qp_BlqT5lxpokXemjP73zHLW1D1CK-CGsn2fKbSduys3SZfem0sqwzDgWC5hyCl6jvt7BczvF9qxhgzryynRA=w16383",
+        "image": "http://sabapo.hollen9.com/kuromekuro/images/kuromekuro_icon.jpg",
+        "imageBackground": "http://sabapo.hollen9.com/kuromekuro/images/kuromekuro_big.png",
         "copies": [
           "sounds/kurome"
         ],

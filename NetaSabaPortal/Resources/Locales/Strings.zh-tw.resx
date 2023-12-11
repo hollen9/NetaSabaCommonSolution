@@ -172,4 +172,7 @@
   <data name="_RegionItems_255" xml:space="preserve">
     <value>世界其他地域</value>
   </data>
+  <data name="TabUnarchive_UpdateList_Button" xml:space="preserve">
+    <value>更新列表</value>
+  </data>
 </root>

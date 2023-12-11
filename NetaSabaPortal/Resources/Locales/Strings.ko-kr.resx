@@ -172,4 +172,7 @@
   <data name="_RegionItems_255" xml:space="preserve">
     <value>기타 지역</value>
   </data>
+  <data name="TabUnarchive_UpdateList_Button" xml:space="preserve">
+    <value>업데이트 목록</value>
+  </data>
 </root>
