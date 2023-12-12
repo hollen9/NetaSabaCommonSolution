@@ -20,11 +20,11 @@ namespace NetaSabaPortal.Models
     /// </summary>
     public class EntityDefinition
     {
-        public required string EntityName { get; set; }
-        public required string WorkshopId { get; set; }
-        public required string ServerId { get; set; }
-        public required string[] Copies { get; set; }
-        public required string[] Types { get; set; }
+        public string EntityName { get; set; }
+        public string WorkshopId { get; set; }
+        public string ServerId { get; set; }
+        public string[] Copies { get; set; }
+        public string[] Types { get; set; }
         public Dictionary<string,string> EntityNames { get; set; }
         public Dictionary<string,string> EntityDescriptions { get; set; }
         public string Image { get; set; }

@@ -4,16 +4,17 @@
   xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
   xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
   xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
-  IgnorableNamespaces="uap rescap">
+  xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3"
+  IgnorableNamespaces="uap rescap uap3">
 
   <Identity
-    Name="2964d0c2-3010-47a6-bc37-eca0c33b2f79"
-    Publisher="CN=Hollen9"
-    Version="1.0.0.0" />
+    Name="1050Hollen.Tech.191309D3E4F20"
+    Publisher="CN=BA082162-02DE-4096-9635-5F3777DEA6DF"
+    Version="0.3.0.0" />
 
   <Properties>
-    <DisplayName>NetaSabaPortalWap</DisplayName>
-    <PublisherDisplayName>Hollen9</PublisherDisplayName>
+    <DisplayName>NetaSaba Portal</DisplayName>
+    <PublisherDisplayName>Hollen.Tech</PublisherDisplayName>
     <Logo>Images\StoreLogo.png</Logo>
   </Properties>
 
@@ -31,7 +32,7 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="$targetentrypoint$">
       <uap:VisualElements
-        DisplayName="Neta Saba Portal"
+        DisplayName="NetaSaba Portal"
         Description="NetaSabaPortalWap"
         BackgroundColor="transparent"
         Square150x150Logo="Images\Square150x150Logo.png"
@@ -41,6 +42,7 @@
         <uap:InitialRotationPreference>
           <uap:Rotation Preference="landscape"/>
           <uap:Rotation Preference="portrait"/></uap:InitialRotationPreference>
+        <uap:LockScreen BadgeLogo="Images\BadgeLogo.png" Notification="badgeAndTileText"/>
       </uap:VisualElements>
     </Application>
   </Applications>
@@ -48,5 +50,6 @@
   <Capabilities>
     <Capability Name="internetClient" />
     <rescap:Capability Name="runFullTrust" />
+    <uap3:Capability Name="backgroundMediaPlayback"/>
   </Capabilities>
 </Package>

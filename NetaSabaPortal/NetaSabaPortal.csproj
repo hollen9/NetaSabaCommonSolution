@@ -11,12 +11,49 @@
 				<RepositoryUrl>https://github.com/hollen9/NetaSabaCommonSolution.git</RepositoryUrl>
 				<RepositoryType>git</RepositoryType>
 				<Company>Hollen.Tech</Company>
-				<AssemblyVersion>0.3.8745.10834</AssemblyVersion>
+				<AssemblyVersion>0.3.8745.13093</AssemblyVersion>
 				<Authors>Hollen9</Authors>
 				<Deterministic>false</Deterministic>
+				<Platforms>AnyCPU;x64;x86;ARM64;ARM32</Platforms>
 		</PropertyGroup>
 
 		<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		  <ShouldCreateLogs>True</ShouldCreateLogs>
+		  <AdvancedSettingsExpanded>True</AdvancedSettingsExpanded>
+		  <UpdateAssemblyVersion>True</UpdateAssemblyVersion>
+		  <UpdateAssemblyFileVersion>False</UpdateAssemblyFileVersion>
+		  <UpdateAssemblyInfoVersion>False</UpdateAssemblyInfoVersion>
+		  <UpdatePackageVersion>False</UpdatePackageVersion>
+		  <AssemblyInfoVersionType>SettingsVersion</AssemblyInfoVersionType>
+		  <InheritWinAppVersionFrom>None</InheritWinAppVersionFrom>
+		  <AssemblyVersionSettings>IncrementOnDemand.IncrementOnDemand.DeltaDayStamp.HalfOfSecondsSinceMidnight</AssemblyVersionSettings>
+		</PropertyGroup>
+
+		<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM32'">
+		  <ShouldCreateLogs>True</ShouldCreateLogs>
+		  <AdvancedSettingsExpanded>True</AdvancedSettingsExpanded>
+		  <UpdateAssemblyVersion>True</UpdateAssemblyVersion>
+		  <UpdateAssemblyFileVersion>False</UpdateAssemblyFileVersion>
+		  <UpdateAssemblyInfoVersion>False</UpdateAssemblyInfoVersion>
+		  <UpdatePackageVersion>False</UpdatePackageVersion>
+		  <AssemblyInfoVersionType>SettingsVersion</AssemblyInfoVersionType>
+		  <InheritWinAppVersionFrom>None</InheritWinAppVersionFrom>
+		  <AssemblyVersionSettings>IncrementOnDemand.IncrementOnDemand.DeltaDayStamp.HalfOfSecondsSinceMidnight</AssemblyVersionSettings>
+		</PropertyGroup>
+
+		<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+		  <ShouldCreateLogs>True</ShouldCreateLogs>
+		  <AdvancedSettingsExpanded>True</AdvancedSettingsExpanded>
+		  <UpdateAssemblyVersion>True</UpdateAssemblyVersion>
+		  <UpdateAssemblyFileVersion>False</UpdateAssemblyFileVersion>
+		  <UpdateAssemblyInfoVersion>False</UpdateAssemblyInfoVersion>
+		  <UpdatePackageVersion>False</UpdatePackageVersion>
+		  <AssemblyInfoVersionType>SettingsVersion</AssemblyInfoVersionType>
+		  <InheritWinAppVersionFrom>None</InheritWinAppVersionFrom>
+		  <AssemblyVersionSettings>IncrementOnDemand.IncrementOnDemand.DeltaDayStamp.HalfOfSecondsSinceMidnight</AssemblyVersionSettings>
+		</PropertyGroup>
+
+		<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
 		  <ShouldCreateLogs>True</ShouldCreateLogs>
 		  <AdvancedSettingsExpanded>True</AdvancedSettingsExpanded>
 		  <UpdateAssemblyVersion>True</UpdateAssemblyVersion>
