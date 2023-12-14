@@ -43,7 +43,13 @@ public class WatcherOptions
     public bool IsTurnOffTimerAfterJoin { get; set; }
 
     public List<WatcherItem> List { get => _list; set => _list = value; }
-    public WatcherOptions() { }
+    public WatcherOptions() 
+    {
+        List = new List<WatcherItem>();
+        NotifyCooldown = 60;
+        AutoJoinCooldown = 3600;
+        IsTurnOffTimerAfterJoin = true;
+    }
     public WatcherOptions(bool isEnabled, int interval, List<WatcherItem> list)
     {
         IsEnabled = isEnabled;

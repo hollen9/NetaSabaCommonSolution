@@ -245,7 +245,18 @@ namespace NetaSabaPortal
             }
             else
             {
-                LocalizeDictionary.Instance.Culture = System.Globalization.CultureInfo.CurrentUICulture;
+                var cc = System.Globalization.CultureInfo.CurrentUICulture;
+                #if DEBUG
+                    cc = System.Globalization.CultureInfo.GetCultureInfo("zh-HK");
+                #endif
+                if (cc.Name == "zh-HK")
+                {
+                    // 現在顯示語言的括號會寫香港特別行政區，且尚未有 zh-HK 的語言檔，所以暫時用 zh-TW 代替。
+                    cc = System.Globalization.CultureInfo.GetCultureInfo("zh-TW");
+                }
+                LocalizeDictionary.Instance.Culture = cc;
+                uiOpts.Value.Language = cc.Name;
+                uiOpts.Update(uiOpts.Value);
             }
             
             var mainWindow = Svc.GetRequiredService<MainWindow>();

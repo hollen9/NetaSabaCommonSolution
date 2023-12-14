@@ -49,7 +49,7 @@
 
   <Capabilities>
     <Capability Name="internetClient" />
-    <rescap:Capability Name="runFullTrust" />
+		<rescap:Capability Name="runFullTrust" />
     <uap3:Capability Name="backgroundMediaPlayback"/>
   </Capabilities>
 </Package>
