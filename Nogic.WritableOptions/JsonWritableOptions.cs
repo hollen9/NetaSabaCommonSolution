@@ -27,7 +27,7 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
     /// <summary>
     /// <inheritdoc cref="JsonWritableOptions(string, string, IOptionsMonitor{TOptions}, IConfiguration?)" path="/param[@name='options']"/>
     /// </summary>
-    private readonly IOptionsMonitor<TOptions> _options;
+    private IOptionsMonitor<TOptions> _options;
     /// <summary>
     /// <inheritdoc cref="JsonWritableOptions(string, string, IOptionsMonitor{TOptions}, IConfiguration?)" path="/param[@name='configuration']"/>
     /// </summary>
@@ -177,5 +177,41 @@ public class JsonWritableOptions<TOptions> : IWritableOptions<TOptions> where TO
             configurationRoot.Reload();
     }
 
-    
+    public void Reload()
+    {
+        
+        //// Re read value from file
+        //using (var stream = new FileStream(_jsonFilePath, FileMode.Open, FileAccess.Read, FileShare.Read))
+        //{
+        //    byte[] buffer = ArrayPool<byte>.Shared.Rent((int)stream.Length);
+        //    try
+        //    {
+        //        _ = stream.Read(buffer, 0, buffer.Length);
+        //        ReadOnlySpan<byte> utf8Json = buffer.AsSpan();
+
+        //        // Check BOM
+        //        var utf8bom = Encoding.UTF8.GetPreamble();
+        //        if (utf8Json.StartsWith(utf8bom))
+        //        {
+        //            utf8Json = utf8Json.Slice(utf8bom.Length);
+        //        }
+
+        //        var reader = new Utf8JsonReader(utf8Json, new JsonReaderOptions() { CommentHandling = JsonCommentHandling.Skip, AllowTrailingCommas = true });
+        //        var reloadedOptions = JsonSerializer.Deserialize<TOptions>(ref reader);
+
+        //        if (reloadedOptions != null)
+        //        {
+        //            // update options
+                    
+        //        }¡@
+        //    }
+        //    finally
+        //    {
+        //        ArrayPool<byte>.Shared.Return(buffer);
+        //    }
+        //}
+        
+        if (_configuration is IConfigurationRoot configurationRoot)
+            configurationRoot.Reload();
+    }
 }

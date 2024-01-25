@@ -74,14 +74,15 @@
                     </TabItem.Header>
                     <views:WatcherTab/>
                 </TabItem>
-                <!--<TabItem>
+                <TabItem>
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="🐝" Foreground="Black" />
                             <TextBlock Text="{lex:Loc _TabCreator_Caption}" />
                         </StackPanel>
                     </TabItem.Header>
-                </TabItem>-->
+                    <views:CreatorTab/>
+                </TabItem>
                 <TabItem>
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
