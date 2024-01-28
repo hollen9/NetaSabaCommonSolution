@@ -1,0 +1,46 @@
+{
+  "entities": {
+    "minVersionRequired": "0.3.0",
+    "entVersion": 1,
+    "definitions": [
+      {
+        "entityName": "KuromeKuro DLC",
+        "workshopId": "3101610901",
+        "serverId": "kuromekuro",
+        "EntityNames": {
+          "ja-jp": "Kuromekuro CS2サーバー DLC。",
+          "zh-cn": "Kuromekuro CS2服务器 DLC",
+          "zh-tw": "Kuromekuro CS2伺服器 DLC",
+          "ko-kr": "Kuromekuro CS2서버에서 DLC"
+        },
+        "EntityDescriptions": {
+          "en": "An essential package for playing on Kuromekuro CS2 Server.",
+          "ja-jp": "Kuromekuro CS2サーバーで遊ぶための必須パッケージです。",
+          "zh-cn": "在Kuromekuro CS2服务器上玩游戏的必备包。",
+          "zh-tw": "在Kuromekuro CS2伺服器上玩遊戲的必備包。",
+          "ko-kr": "Kuromekuro CS2 서버에서 플레이하기 위한 필수 패키지입니다."
+        },
+        "image": "http://sabapo.hollen9.com/kuromekuro/images/kuromekuro_icon.jpg",
+        "imageBackground": "http://sabapo.hollen9.com/kuromekuro/images/kuromekuro_big.png",
+        "copies": [
+          "sounds/kurome", "characters/models"
+        ],
+        "types": [
+          "vsnd_c", "*"
+        ],
+        "nested": [
+          "maps/de_kuromeop.vpk0"
+        ],
+        "deleteExplicitly": [
+          "sounds/kurome/crb",
+          "sounds/kurome/cybertabi",
+          "sounds/kurome/dolls",
+          "sounds/kurome/mb",
+          "sounds/kurome/mfragmovie"
+        ],
+        "isDeleteObsolete": true,
+        "isDefault": true
+      }
+    ]
+  }
+}
