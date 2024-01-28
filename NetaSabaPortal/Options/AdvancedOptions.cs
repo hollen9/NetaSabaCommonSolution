@@ -17,5 +17,6 @@ namespace NetaSabaPortal.Options
         public bool IsStoreInAppData { get; set; }
         public bool IsForceInitEntities { get; set; }
         public string[] EntitiesUpdateEndpoints { get; set; }
+        public bool IsKeepAdvancedOptions { get; set; }
     }
 }

@@ -3,6 +3,7 @@
 // UNLESS YOU KNOW WHAT YOU ARE DOING!!
 {
   "advanced": {
+    "isKeepAdvancedOptions": false,
     "isDisabledAutoDelete": false,
     // ==== isPermanentDeleteNoRecycleBin ======================
     // DO NOT ENABLE IT BY SETTING TO 'true',
@@ -15,6 +16,7 @@
     "isStoreInAppData": true,
     "isForceInitEntities": true,
     "entitiesUpdateEndpoints": [
+      "http://sabapo.hollen9.com/config_entities.json",
       "https://raw.githubusercontent.com/hollen9/NetaSabaCommonSolution/master/NetaSabaPortal/config_entities.json"
     ]
   }

@@ -67,6 +67,7 @@ namespace NetaSabaPortal
             var preCfgAdv = preCfg.GetSection("advanced");
             bool isStoreInAppData = preCfgAdv.GetValue<bool>(nameof(AdvancedOptions.IsStoreInAppData));
             bool isForceInitEntities = preCfgAdv.GetValue<bool>(nameof(AdvancedOptions.IsForceInitEntities));
+            bool isKeepAdv = preCfgAdv.GetValue<bool>(nameof(AdvancedOptions.IsKeepAdvancedOptions));
 
 
             if (isStoreInAppData)
@@ -86,7 +87,7 @@ namespace NetaSabaPortal
                 InitConfigIfNotExists(baseCfgFilename);
                 InitConfigIfNotExists(PathOptions.DefaultFileName);
                 InitConfigIfNotExists(EntitiesOptions.DefaultFileName, isForceInitEntities);
-                InitConfigIfNotExists(AdvancedOptions.DefaultFileName);
+                InitConfigIfNotExists(AdvancedOptions.DefaultFileName, !isKeepAdv);
                 InitConfigIfNotExists(UiOptions.DefaultFileName);
                 InitConfigIfNotExists(WatcherOptions.DefaultFileName);
             }
