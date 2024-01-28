@@ -23,7 +23,10 @@
         "image": "http://sabapo.hollen9.com/kuromekuro/images/kuromekuro_icon.jpg",
         "imageBackground": "http://sabapo.hollen9.com/kuromekuro/images/kuromekuro_big.png",
         "copies": [
-          "sounds/kurome", "characters/models"
+          "sounds/kurome",
+          "characters/models/kurome",
+          "characters/models/toppiofficial_unofficial",
+          "characters/models/whblanc"
         ],
         "types": [
           "vsnd_c", "*"
