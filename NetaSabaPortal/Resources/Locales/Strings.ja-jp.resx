@@ -175,4 +175,25 @@
   <data name="TabUnarchive_UpdateList_Button" xml:space="preserve">
     <value>リスト更新</value>
   </data>
+  <data name="_Button_ConfirmCancel" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
+  <data name="_Button_ConfirmOk" xml:space="preserve">
+    <value>はい</value>
+  </data>
+  <data name="ExtractingTab_ConfirmDateLabel" xml:space="preserve">
+    <value>投稿日：</value>
+  </data>
+  <data name="ExtractingTab_ConfirmMainLabel" xml:space="preserve">
+    <value>進行してもよろしいですか？</value>
+  </data>
+  <data name="ExtractingTab_ConfirmTitleLabel" xml:space="preserve">
+    <value>タイトル：</value>
+  </data>
+  <data name="ExtractingTab_Msg_WorkFinished" xml:space="preserve">
+    <value>展開が完了しました。</value>
+  </data>
+  <data name="ExtractingTab_Msg_WorkStarted" xml:space="preserve">
+    <value>展開中...</value>
+  </data>
 </root>

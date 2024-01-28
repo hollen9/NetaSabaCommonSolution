@@ -10,7 +10,7 @@
   <Identity
     Name="1050Hollen.Tech.191309D3E4F20"
     Publisher="CN=BA082162-02DE-4096-9635-5F3777DEA6DF"
-    Version="0.3.0.0" />
+    Version="0.5.0.0" />
 
   <Properties>
     <DisplayName>NetaSaba Portal</DisplayName>

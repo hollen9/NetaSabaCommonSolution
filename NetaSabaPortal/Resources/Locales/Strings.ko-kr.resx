@@ -175,4 +175,25 @@
   <data name="TabUnarchive_UpdateList_Button" xml:space="preserve">
     <value>업데이트 목록</value>
   </data>
+  <data name="_Button_ConfirmCancel" xml:space="preserve">
+    <value>취소</value>
+  </data>
+  <data name="_Button_ConfirmOk" xml:space="preserve">
+    <value>확인</value>
+  </data>
+  <data name="ExtractingTab_ConfirmDateLabel" xml:space="preserve">
+    <value>게시일：</value>
+  </data>
+  <data name="ExtractingTab_ConfirmMainLabel" xml:space="preserve">
+    <value>진행하시겠습니까?</value>
+  </data>
+  <data name="ExtractingTab_ConfirmTitleLabel" xml:space="preserve">
+    <value>제목：</value>
+  </data>
+  <data name="ExtractingTab_Msg_WorkFinished" xml:space="preserve">
+    <value>전개가 완료되었습니다.</value>
+  </data>
+  <data name="ExtractingTab_Msg_WorkStarted" xml:space="preserve">
+    <value>전개 중...</value>
+  </data>
 </root>

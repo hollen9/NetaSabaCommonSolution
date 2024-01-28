@@ -1,7 +1,7 @@
 {
   "entities": {
     "minVersionRequired": "0.3.0",
-    "entVersion": 0,
+    "entVersion": 1,
     "definitions": [
       {
         "entityName": "KuromeKuro DLC",
@@ -23,11 +23,22 @@
         "image": "http://sabapo.hollen9.com/kuromekuro/images/kuromekuro_icon.jpg",
         "imageBackground": "http://sabapo.hollen9.com/kuromekuro/images/kuromekuro_big.png",
         "copies": [
-          "sounds/kurome"
+          "sounds/kurome", "characters/models"
         ],
         "types": [
-          "vsnd_c"
+          "vsnd_c", "*"
         ],
+        "nested": [
+          "maps/de_kuromeop.vpk0"
+        ],
+        "deleteExplicitly": [
+          "sounds/kurome/crb",
+          "sounds/kurome/cybertabi",
+          "sounds/kurome/dolls",
+          "sounds/kurome/mb",
+          "sounds/kurome/mfragmovie"
+        ],
+        "isDeleteObsolete": true,
         "isDefault": true
       }
     ]

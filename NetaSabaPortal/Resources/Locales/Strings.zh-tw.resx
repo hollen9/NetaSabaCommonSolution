@@ -175,4 +175,25 @@
   <data name="TabUnarchive_UpdateList_Button" xml:space="preserve">
     <value>更新列表</value>
   </data>
+  <data name="_Button_ConfirmOk" xml:space="preserve">
+    <value>確定</value>
+  </data>
+  <data name="_Button_ConfirmCancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="ExtractingTab_ConfirmDateLabel" xml:space="preserve">
+    <value>發布日期：</value>
+  </data>
+  <data name="ExtractingTab_ConfirmMainLabel" xml:space="preserve">
+    <value>您確定要繼續嗎？</value>
+  </data>
+  <data name="ExtractingTab_ConfirmTitleLabel" xml:space="preserve">
+    <value>標題：</value>
+  </data>
+  <data name="ExtractingTab_Msg_WorkFinished" xml:space="preserve">
+    <value>展開完成。</value>
+  </data>
+  <data name="ExtractingTab_Msg_WorkStarted" xml:space="preserve">
+    <value>正在展開...</value>
+  </data>
 </root>

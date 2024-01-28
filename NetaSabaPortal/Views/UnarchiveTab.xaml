@@ -9,7 +9,7 @@
              xmlns:lex="http://wpflocalizeextension.codeplex.com"
              lex:LocalizeDictionary.DesignCulture="zh-tw"
              xmlns:gif="https://github.com/XamlAnimatedGif/XamlAnimatedGif"
-             
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" d:Background="White"
              Loaded="UserControl_Loaded">
@@ -18,6 +18,7 @@
         <converter:InvertableBooleanToVisibilityConverter x:Key="BoolVisConverter"/>
         <converter:EntityDescriptionLocalizeConverter x:Key="EntDescriptionLocalizeConverter"/>
         <converter:EntityNameLocalizeConverter x:Key="EntNameLocalizeConverter"/>
+        <converter:DateTimeOffsetToLocalConverter x:Key="DateTimeOffsetToLocalConverter"/>
     </UserControl.Resources>
     <Grid Margin="10">
         <Grid.Background>
@@ -83,5 +84,55 @@
             <ProgressBar 
                 Value="{Binding ExtractingProgressNow}" Maximum="{Binding ExtractingProgressMax}" Minimum="{Binding ExtractingProgressMin}"/>
         </StackPanel>
+
+        <DockPanel Grid.ColumnSpan="3" Grid.Row="1" d:Visibility="Visible" Visibility="{Binding IsExtractConfirmDialogShown, Converter={StaticResource BoolVisConverter}, ConverterParameter=Normal}"
+                   Background="#CCFFFFFF">
+
+            <Grid Height="{Binding Path=ActualHeight, ElementName=watcherTab}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="3*" MinHeight="120"/>
+                    <RowDefinition Height="4*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Row="0" Grid.Column="0" Margin="10" VerticalAlignment="Bottom" HorizontalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="{lex:Loc ExtractingTab_ConfirmMainLabel}" FontSize="30"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="{lex:Loc ExtractingTab_ConfirmTitleLabel}" FontSize="18" Margin="20,0,10,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding ExtractingVpkTitle}" FontSize="18" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="{lex:Loc ExtractingTab_ConfirmDateLabel}" FontSize="18" Margin="20,0,10,0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding ExtractingVpkPublishedDate, Converter={StaticResource DateTimeOffsetToLocalConverter}}" FontSize="14" VerticalAlignment="Center"/>
+                    
+                    
+                </Grid>
+                <StackPanel Grid.Row="1" Grid.Column="1" Width="200">
+                    <Button Margin="5,10" MinWidth="110"
+                    Command="{Binding ExtractConfirmYesCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Check" Height="25" Width="50" Margin="-20,0,-10,0"/>
+                            <TextBlock Text="{lex:Loc _Button_ConfirmOk}" FontSize="20"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Margin="5,10" MinWidth="110" Style="{DynamicResource MaterialDesignRaisedAccentButton}"
+                    Command="{Binding ExtractConfirmNoCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Cancel" Height="25" Width="50" Margin="-20,0,-10,0"/>
+                            <TextBlock Text="{lex:Loc _Button_ConfirmCancel}" FontSize="20"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+
+            </Grid>
+        </DockPanel>
     </Grid>
 </UserControl>

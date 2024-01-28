@@ -25,10 +25,14 @@ namespace NetaSabaPortal.Models
         public string ServerId { get; set; }
         public string[] Copies { get; set; }
         public string[] Types { get; set; }
+        public string[] Nested { get; set; }
         public Dictionary<string,string> EntityNames { get; set; }
         public Dictionary<string,string> EntityDescriptions { get; set; }
         public string Image { get; set; }
         public string ImageBackground { get; set; }
         public bool? IsDefault { get; set; }
+
+        public bool? IsDeleteObsolete { get; set; }
+        public string[] DeleteExplicitly { get; set; }
     }
 }

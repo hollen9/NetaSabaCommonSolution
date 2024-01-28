@@ -37,10 +37,12 @@ using System.Globalization;
 using System.Net.Http;
 using Microsoft.Extensions.Configuration;
 using System.Windows.Media;
+using ValveKeyValue;
+using Microsoft.VisualBasic.FileIO;
 
 namespace NetaSabaPortal.ViewModels
 {
-    public class MainWindowVM : ObservableObject
+    public partial class MainWindowVM : ObservableObject
     {
         public IWritableOptions<PathOptions> _dirOptions;
         public IWritableOptions<EntitiesOptions> _entOptions;
@@ -692,6 +694,13 @@ namespace NetaSabaPortal.ViewModels
 
         private bool _isExtracting = false;
         public bool IsExtracting { get => _isExtracting; set => SetProperty(ref _isExtracting, value); }
+        private bool _isExtractConfirmDialogShown;
+
+        public bool IsExtractConfirmDialogShown
+        {
+            get => _isExtractConfirmDialogShown;
+            set => SetProperty(ref _isExtractConfirmDialogShown, value);
+        }
 
         private SnackbarMessageQueue _barMessageQueue;
         public SnackbarMessageQueue BarMessageQueue { get => _barMessageQueue; set => SetProperty(ref _barMessageQueue, value); }
@@ -711,6 +720,21 @@ namespace NetaSabaPortal.ViewModels
         private int _extractingProgressMin;
         public int ExtractingProgressMin { get => _extractingProgressMin; set => SetProperty(ref _extractingProgressMin, value); }
         public int ExtractingProgressPercentage => (int)((float)ExtractingProgressNow / (float)ExtractingProgressMax * 100);
+        private DateTimeOffset? _extractingVpkPublishedDate;
+
+        public DateTimeOffset? ExtractingVpkPublishedDate
+        {
+            get => _extractingVpkPublishedDate;
+            set => SetProperty(ref _extractingVpkPublishedDate, value);
+        }
+        private string _extractingVpkTitle;
+
+        public string ExtractingVpkTitle
+        {
+            get => _extractingVpkTitle;
+            set => SetProperty(ref _extractingVpkTitle, value);
+        }
+
 
         public ICommand UpdateEntListCommand => new RelayCommand(() => 
         {
@@ -769,7 +793,8 @@ namespace NetaSabaPortal.ViewModels
             });
         });
 
-        public ICommand ExtractCommand => new RelayCommand(() =>
+        [RelayCommand(CanExecute = nameof(CanExtract))]
+        public async Task Extract()
         {
             if (SelectedEntity == null)
             {
@@ -794,6 +819,7 @@ namespace NetaSabaPortal.ViewModels
 
             string workshopDir = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(CS2AcfPath), @"content\730"));
             string vpkPath = Path.Combine(workshopDir, $"{SelectedEntity.WorkshopId}\\{SelectedEntity.WorkshopId}.vpk");
+            string publishInfoTxtPath = Path.Combine(workshopDir, $"{SelectedEntity.WorkshopId}\\publish_data.txt");
 
             // Optionally verify hashes and signatures of the file if there are any
             // package.VerifyHashes();
@@ -803,7 +829,45 @@ namespace NetaSabaPortal.ViewModels
                 BarMessageQueue.Enqueue($"CS2(CSGO) Root Folder not found.\r\n{destFolder}", true);
                 return;
             }
-            ExtractSpecificFilesFromVpk(vpkPath, SelectedEntity.Copies, SelectedEntity.Types, destFolder);
+            if (!File.Exists(vpkPath))
+            {
+                BarMessageQueue.Enqueue($"VPK file not found.\r\n{vpkPath}", true);
+                return;
+            }
+
+            if (File.Exists(publishInfoTxtPath))
+            {
+                DateTimeOffset? dt = null;
+                string title = string.Empty;
+                try
+                {
+                    var stream = File.OpenRead(publishInfoTxtPath);
+                    var kv = KVSerializer.Create(KVSerializationFormat.KeyValues1Text);
+                    KVObject data = kv.Deserialize(stream);
+                    title = data["title"].ToString();
+                    if (long.TryParse(data["publish_time"].ToString(), out long pubTick))
+                    {
+                        dt = DateTimeOffset.FromUnixTimeSeconds(pubTick);
+                    }
+                    else
+                    {
+                        dt = null;
+                    }
+                    
+                }
+                catch (Exception)
+                {}
+                finally
+                {
+                    ExtractingVpkPublishedDate = dt;
+                    ExtractingVpkTitle = title;
+                }
+            }
+
+            VpkExtractDestination = destFolder;
+            PathVpkToBeExtracted = vpkPath;
+            IsExtractConfirmDialogShown = true;
+
 
             // Extract filtered files to directory "J:\Test"
             // filtered rules are defined in SelectedEntity.Copy (List)
@@ -826,39 +890,146 @@ namespace NetaSabaPortal.ViewModels
             ////read UTF8 bytes[] into string
             //var rawText = Encoding.UTF8.GetString(fileContents);
             //RawText = rawText;
-        }, () => !IsExtracting);
+        }
 
-        private void ExtractSpecificFilesFromVpk(string vpkPath, string[] copies, string[] types, string dest)
+        private bool CanExtract()
         {
+             return !IsExtracting;
+        }
+
+        [RelayCommand(CanExecute = nameof(CanExtract))]
+        public void ExtractConfirmYes()
+        {
+            IsExtractConfirmDialogShown = false;
             Task.Run(() =>
             {
-                if (!File.Exists(vpkPath))
+                //FileStream fs = new FileStream(vpkPath, FileMode.Open, FileAccess.Read);
+                ExtractSpecificFilesFromVpk(PathVpkToBeExtracted, SelectedEntity, VpkExtractDestination);
+            });
+        }
+        [RelayCommand]
+        public void ExtractConfirmNo() => IsExtractConfirmDialogShown = false;
+        private string _vpkPathToBeExtracted;
+
+        public string PathVpkToBeExtracted
+        {
+            get => _vpkPathToBeExtracted;
+            set => SetProperty(ref _vpkPathToBeExtracted, value);
+        }
+        private string _vpkExtractDestination;
+
+        public string VpkExtractDestination
+        {
+            get => _vpkExtractDestination;
+            set => SetProperty(ref _vpkExtractDestination, value);
+        }
+
+
+
+        //public ICommand ExtractCommand => new RelayCommand(() =>
+        //{
+
+        //}, () => !IsExtracting);
+
+        private void ExtractSpecificFilesFromVpk(string filepath, EntityDefinition ent, string dest)
+        {
+            IsExtracting = true;
+            //ExtractCommand.CanExecute(false);
+            using var mainPackage = new SteamDatabase.ValvePak.Package();
+            //mainPackage.SetFileName(filestream.)
+            mainPackage.Read(filepath);
+            // Get file count without looping and filtering
+            int fileCountTotal = mainPackage.Entries.Sum(x => x.Value.Count);
+
+            var nestFileTypes = ent.Nested.Select(x => Path.GetExtension(x)).ToHashSet();
+
+            //Dictionary<string, List<ValvePackageEntry>> dictEntriesType =
+            //    mainPackage.Entries.ToDictionary(
+            //        entry => entry.Key,
+            //        entry => entry.Value.Select(pe => pe as ValvePackageEntry).ToList()
+            //    );
+
+            ExtractingProgressMax = fileCountTotal;
+            ExtractingProgressMin = 0;
+            ExtractingProgressNow = 0;
+
+            if (ent.DeleteExplicitly != null && ent.DeleteExplicitly.Length > 0)
+            {
+                foreach (var relativePath in ent.DeleteExplicitly)
                 {
-                    return;
-                }
-                IsExtracting = true;
-                ExtractCommand.CanExecute(false);
-                using var package = new SteamDatabase.ValvePak.Package();
-                package.Read(vpkPath);
-
-                // Get file count without looping and filtering
-                int fileCountTotal = package.Entries.Sum(x => x.Value.Count);
-
-                ExtractingProgressMax = fileCountTotal;
-                ExtractingProgressMin = 0;
-                ExtractingProgressNow = 0;
-
-                foreach (var kv in package.Entries)
-                {
-                    string fileType = kv.Key;
-                    if (types == null || types.Length == 0 || types.Contains(fileType.ToLower()))
+                    string fullpath = Path.GetFullPath(Path.Combine(dest, relativePath));
+                    if (Directory.Exists(fullpath))
                     {
-                        var fileEntries = kv.Value;
-                        foreach (var copy in copies)
+                        // 刪除資料夾及其內容
+                        Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(fullpath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+                    }
+                    else if (File.Exists(fullpath))
+                    {
+                        // 刪除一個特定的檔案
+                        Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(fullpath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+                    }
+                    else if (fullpath.Contains("*"))
+                    {
+                        // 刪除特定類型的所有檔案
+                        var directory = Path.GetDirectoryName(fullpath);
+                        var searchPattern = Path.GetFileName(fullpath);
+
+                        foreach (var file in Directory.GetFiles(directory, searchPattern))
                         {
-                            string copy_p = copy.Trim().ToLower();
-                            foreach (var fileEntry in fileEntries)
+                            FileSystem.DeleteFile(file, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+                        }
+                    }
+                }
+            }
+
+            //if (ent.IsDeleteObsolete == true)
+            //{
+            //    foreach (var relativePath in ent.Copies)
+            //    {
+            //        string fullpath = Path.GetFullPath(Path.Combine(dest, relativePath));
+            //        if (Directory.Exists(fullpath))
+            //        {
+            //            Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(fullpath, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+            //        }
+            //    }
+            //}
+
+            bool allowAllTypes = ent.Types == null || ent.Types.Length == 0 || ent.Types.Contains("*");
+
+            HashSet<string> copiedFiles = new();
+
+            if (ent.Nested != null && ent.Nested.Length > 0)
+            {
+                foreach (var nestEntPath in ent.Nested)
+                {
+                    var nestEntry = mainPackage.FindEntry(nestEntPath);
+                    mainPackage.ReadEntry(nestEntry, out byte[] nestFileContents);
+
+                    using var nestPackage = new SteamDatabase.ValvePak.Package();
+                    if (nestEntry == null || nestFileContents == null || nestFileContents.Length == 0)
+                    {
+                        continue;
+                    }
+                    nestPackage.SetFileName(nestEntry.FileName);
+                    nestPackage.Read(new MemoryStream(nestFileContents));
+                    fileCountTotal += nestPackage.Entries.Sum(x => x.Value.Count);
+
+                    // Now we actually extract the files from the nested package
+                    foreach (var kv in nestPackage.Entries)
+                    {
+                        string fileType = kv.Key;
+
+                        if (!allowAllTypes && ent.Types != null && ent.Types.Length > 0 && !ent.Types.Contains(fileType.ToLower()))
+                        {
+                            continue;
+                        }
+
+                        var fileEntries = kv.Value;
+                        foreach (var fileEntry in fileEntries)
+                        {
+                            foreach (var copy in ent.Copies)
                             {
+                                string copy_p = copy.Trim().ToLower();
                                 // Skip if entry is not in the copy list
                                 if (!fileEntry.DirectoryName.StartsWith(copy_p))
                                 {
@@ -869,24 +1040,145 @@ namespace NetaSabaPortal.ViewModels
                                 string destPath = Path.GetFullPath(Path.Combine(dest, fileEntry.DirectoryName, $"{Path.GetFileName(fileEntry.FileName)}.{fileType}"));
                                 string destDir = Path.GetDirectoryName(destPath);
 
-                                if (!Directory.Exists(destDir))
-                                {
-                                    Directory.CreateDirectory(destDir);
-                                }
+                                Directory.CreateDirectory(destDir);
 
-                                package.ReadEntry(fileEntry, out byte[] fileContents);
+                                nestPackage.ReadEntry(fileEntry, out byte[] fileContents);
 
                                 // If file already exists, overwrite it
                                 File.WriteAllBytes(destPath, fileContents);
+                                copiedFiles.Add(destPath);
                                 ExtractingProgressNow++;
                             }
                         }
                     }
                 }
-                ExtractCommand.CanExecute(true);
-                IsExtracting = false;
-            });
+            }
+
+            foreach (var kv in mainPackage.Entries)//dictEntriesType)
+            {
+                string fileType = kv.Key;
+                if (!allowAllTypes && ent.Types != null && ent.Types.Length > 0 && !ent.Types.Contains(fileType.ToLower()))
+                {
+                    continue;
+                }
+
+                if (nestFileTypes.Contains(fileType))
+                {
+                    continue;
+                }
+
+                var fileEntries = kv.Value;
+
+                foreach (var fileEntry in fileEntries)
+                {
+                    foreach (var copy in ent.Copies)
+                    {
+                        string copy_p = copy.Trim().ToLower();
+                        // Skip if entry is not in the copy list
+                        if (!fileEntry.DirectoryName.StartsWith(copy_p))
+                        {
+                            ExtractingProgressNow++;
+                            continue;
+                        }
+
+                        string destPath = Path.GetFullPath(Path.Combine(dest, fileEntry.DirectoryName, $"{Path.GetFileName(fileEntry.FileName)}.{fileType}"));
+                        string destDir = Path.GetDirectoryName(destPath);
+
+                        Directory.CreateDirectory(destDir);
+
+                        mainPackage.ReadEntry(fileEntry, out byte[] fileContents);
+
+                        // If file already exists, overwrite it
+                        File.WriteAllBytes(destPath, fileContents);
+                        copiedFiles.Add(destPath);
+                        ExtractingProgressNow++;
+                    }
+                }
+            }
+
+            // Delete obsolete files
+            if (ent.IsDeleteObsolete == true)
+            {
+                foreach (var copy in ent.Copies)
+                {
+                    // Try to find all files in the folder
+                    string fullpath = Path.GetFullPath(Path.Combine(dest, copy));
+                    var files = Directory.GetFiles(fullpath, "*.*", System.IO.SearchOption.AllDirectories);
+                    // If file is not in the copied list, delete it
+                    foreach (var file in files)
+                    {
+                        if (!copiedFiles.Contains(file))
+                        {
+                            // Delete file
+                            Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(file, UIOption.OnlyErrorDialogs, RecycleOption.SendToRecycleBin);
+                        }
+                    }
+                }
+            }
+            
+            //ExtractCommand.CanExecute(true);
+            IsExtracting = false;
         }
+
+        //private void ExtractSpecificFilesFromVpk(string vpkPath, string[] copies, string[] types, string dest)
+        //{
+        //    Task.Run(() =>
+        //    {
+        //        if (!File.Exists(vpkPath))
+        //        {
+        //            return;
+        //        }
+        //        IsExtracting = true;
+        //        ExtractCommand.CanExecute(false);
+        //        using var package = new SteamDatabase.ValvePak.Package();
+        //        package.Read(vpkPath);
+
+        //        // Get file count without looping and filtering
+        //        int fileCountTotal = package.Entries.Sum(x => x.Value.Count);
+
+        //        ExtractingProgressMax = fileCountTotal;
+        //        ExtractingProgressMin = 0;
+        //        ExtractingProgressNow = 0;
+
+        //        foreach (var kv in package.Entries)
+        //        {
+        //            string fileType = kv.Key;
+        //            if (types == null || types.Length == 0 || types.Contains(fileType.ToLower()))
+        //            {
+        //                var fileEntries = kv.Value;
+        //                foreach (var copy in copies)
+        //                {
+        //                    string copy_p = copy.Trim().ToLower();
+        //                    foreach (var fileEntry in fileEntries)
+        //                    {
+        //                        // Skip if entry is not in the copy list
+        //                        if (!fileEntry.DirectoryName.StartsWith(copy_p))
+        //                        {
+        //                            ExtractingProgressNow++;
+        //                            continue;
+        //                        }
+
+        //                        string destPath = Path.GetFullPath(Path.Combine(dest, fileEntry.DirectoryName, $"{Path.GetFileName(fileEntry.FileName)}.{fileType}"));
+        //                        string destDir = Path.GetDirectoryName(destPath);
+
+        //                        if (!Directory.Exists(destDir))
+        //                        {
+        //                            Directory.CreateDirectory(destDir);
+        //                        }
+
+        //                        package.ReadEntry(fileEntry, out byte[] fileContents);
+
+        //                        // If file already exists, overwrite it
+        //                        File.WriteAllBytes(destPath, fileContents);
+        //                        ExtractingProgressNow++;
+        //                    }
+        //                }
+        //            }
+        //        }
+        //        ExtractCommand.CanExecute(true);
+        //        IsExtracting = false;
+        //    });
+        //}
         #endregion
 
         #region Watcher
@@ -899,11 +1191,11 @@ namespace NetaSabaPortal.ViewModels
         }
         public event EventHandler<WatcherTimerHandlerType> WatcherTimerHandlerStateChanged;
 
-        private Action _actionToBeConfirmed;
-        public Action ActionToBeConfirmed
+        private Action _watcherActionToBeConfirmed;
+        public Action WatcherActionToBeConfirmed
         {
-            get => _actionToBeConfirmed;
-            set => SetProperty(ref _actionToBeConfirmed, value);
+            get => _watcherActionToBeConfirmed;
+            set => SetProperty(ref _watcherActionToBeConfirmed, value);
         }
         private bool _isWatcherEditConfirmDialogShown;
 
@@ -914,12 +1206,12 @@ namespace NetaSabaPortal.ViewModels
         }
         public ICommand WatcherConfirmCancelCmd => new RelayCommand(() =>
         {
-            ActionToBeConfirmed = null;
+            WatcherActionToBeConfirmed = null;
             IsWatcherEditConfirmDialogShown = false;
         });
         public ICommand WatcherConfirmOkCmd => new RelayCommand(() =>
         {
-            ActionToBeConfirmed?.Invoke();
+            WatcherActionToBeConfirmed?.Invoke();
             IsWatcherEditConfirmDialogShown = false;
         });
         public ICommand WatcherStopSound => new RelayCommand(() =>
@@ -1036,7 +1328,7 @@ namespace NetaSabaPortal.ViewModels
 
             // Confirm
 
-            ActionToBeConfirmed = () =>
+            WatcherActionToBeConfirmed = () =>
             {
                 foreach (var item in items)
                 {

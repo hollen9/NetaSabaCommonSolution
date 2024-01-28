@@ -74,7 +74,7 @@
                     </TabItem.Header>
                     <views:WatcherTab/>
                 </TabItem>
-                <TabItem>
+                <!--<TabItem>
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="🐝" Foreground="Black" />
@@ -82,7 +82,7 @@
                         </StackPanel>
                     </TabItem.Header>
                     <views:CreatorTab/>
-                </TabItem>
+                </TabItem>-->
                 <TabItem>
                     <TabItem.Header>
                         <StackPanel Orientation="Horizontal">

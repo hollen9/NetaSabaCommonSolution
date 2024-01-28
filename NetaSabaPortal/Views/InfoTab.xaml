@@ -72,7 +72,7 @@
             <Button Style="{DynamicResource MaterialDesignToolButton}" Height="45" Width="45" Command="{Binding OpenUrlCommand}" CommandParameter="https://github.com/hollen9/NetaSabaCommonSolution">
                 <materialDesign:PackIcon Kind="Github"  Height="35" Width="35"  Margin="0,0,0,0"/>
             </Button>
-            <Button Style="{DynamicResource MaterialDesignToolButton}" Height="45" Width="45" Command="{Binding OpenUrlCommand}" CommandParameter="https://steamcommunity.com/hollen9">
+            <Button Style="{DynamicResource MaterialDesignToolButton}" Height="45" Width="45" Command="{Binding OpenUrlCommand}" CommandParameter="https://steamcommunity.com/id/hollen9">
                 <materialDesign:PackIcon Kind="Steam"  Height="35" Width="35"  Margin="0,0,0,0"/>
             </Button>
             <Button Style="{DynamicResource MaterialDesignToolButton}" Height="45" Width="45" Command="{Binding OpenUrlCommand}" CommandParameter="https://twitter.com/hollen9_tw">

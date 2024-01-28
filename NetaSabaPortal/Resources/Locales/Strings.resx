@@ -197,4 +197,19 @@
   <data name="TabUnarchive_UpdateList_Button" xml:space="preserve">
     <value>Update List</value>
   </data>
+  <data name="ExtractingTab_ConfirmMainLabel" xml:space="preserve">
+    <value>Are you sure to proceed?</value>
+  </data>
+  <data name="ExtractingTab_ConfirmTitleLabel" xml:space="preserve">
+    <value>Title:</value>
+  </data>
+  <data name="ExtractingTab_ConfirmDateLabel" xml:space="preserve">
+    <value>Published Date:</value>
+  </data>
+  <data name="_Button_ConfirmOk" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="_Button_ConfirmCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
 </root>
