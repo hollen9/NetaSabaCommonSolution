@@ -140,7 +140,7 @@
     <value>Path to </value>
   </data>
   <data name="TabSettings_Cs2AcfPathLabel_1" xml:space="preserve">
-    <value>appmanifest_730.acf</value>
+    <value>appworkshop_730.acf</value>
     <comment>@Invariant</comment>
   </data>
   <data name="TabSettings_Cs2AcfPathLabel_2" xml:space="preserve">
@@ -211,5 +211,35 @@
   </data>
   <data name="_Button_ConfirmCancel" xml:space="preserve">
     <value>Cancel</value>
+  </data>
+  <data name="TabSettings_Msg_SettingsSaved" xml:space="preserve">
+    <value>Settings saved.</value>
+  </data>
+  <data name="SettingsTab_Msg_AutoCs2NotFound" xml:space="preserve">
+    <value>CS2 Client Installation Folder not found. Please select manually.</value>
+  </data>
+  <data name="SettingsTab_Msg_AutoSteamNotFound" xml:space="preserve">
+    <value>Steam Client Installation Folder not found. Please select manually.</value>
+  </data>
+  <data name="SettingsTab_Msg_AutoWorkshopAcfNotFound" xml:space="preserve">
+    <value>"appworkshop_730.acf" not found. Please select manually.</value>
+  </data>
+  <data name="ExtractingTab_Msg_Cs2PathEmpty" xml:space="preserve">
+    <value>CS2 Client path not specified.</value>
+  </data>
+  <data name="ExtractingTab_Msg_SteamPathEmpty" xml:space="preserve">
+    <value>Steam Client path not specified.</value>
+  </data>
+  <data name="ExtractingTab_Msg_WorkshopAcfPathEmpty" xml:space="preserve">
+    <value>CS2 Workshop ACF file's path not specified.</value>
+  </data>
+  <data name="ExtractingTab_Msg_NoEntitySelected" xml:space="preserve">
+    <value>No item has been selected yet, please select one first.</value>
+  </data>
+  <data name="ExtractingTab_Msg_VpkNotFoundError" xml:space="preserve">
+    <value>Error: Vpk file not found. Perhaps the Steam Workshop item has not been subscribed to? Or Steam has not been initiated to download the subscribed item?</value>
+  </data>
+  <data name="ExtractingTab_Msg_Cs2ActualRootDirNotFoundError" xml:space="preserve">
+    <value>Error: Cannot find the real root directory of CS2. Perhaps the CS2 update has changed the folder structure, or your game folder has been replaced through means such as HardLink?</value>
   </data>
 </root>

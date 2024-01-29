@@ -39,6 +39,9 @@ using Microsoft.Extensions.Configuration;
 using System.Windows.Media;
 using ValveKeyValue;
 using Microsoft.VisualBasic.FileIO;
+using System.Runtime.CompilerServices;
+using NetaSabaPortal.Extensions;
+using NetaSabaPortal.Resources.Locales;
 
 namespace NetaSabaPortal.ViewModels
 {
@@ -126,6 +129,7 @@ namespace NetaSabaPortal.ViewModels
 
             SelectedCulture = System.Globalization.CultureInfo.GetCultureInfo(uiOptions.Value.Language);
             LocalizeDictionary.Instance.Culture = SelectedCulture;
+            Task.Run(async () => { await UpdateEntitiesListAsync(showInfoMessage: false, showErrorMessage: true); });
         }
 
         public string AppVersion => App.Current.Version.ToString();
@@ -633,12 +637,12 @@ namespace NetaSabaPortal.ViewModels
                         }
                         else
                         {
-                            BarMessageQueue.Enqueue("CS2 Client Installation Folder not found. Please select manually.", false);
+                            BarMessageQueue.Enqueue(Strings.SettingsTab_Msg_AutoCs2NotFound, false);
                         }
                     }
                     else
                     {
-                        BarMessageQueue.Enqueue("Steam Client path not specified. Please set it first or select manually.", false);
+                        BarMessageQueue.Enqueue(Strings.SettingsTab_Msg_AutoSteamNotFound, false);
                     }
                 }
             }
@@ -664,19 +668,18 @@ namespace NetaSabaPortal.ViewModels
                             }
                             else
                             {
-                                // Show Error Message on MsgBox
-                                BarMessageQueue.Enqueue("CS2 Workshop ACF not found. Please select manually.");
+                                BarMessageQueue.Enqueue(Strings.SettingsTab_Msg_AutoWorkshopAcfNotFound);
                             }
                         }
                         else
                         {
-                            BarMessageQueue.Enqueue("Steam Client path not specified. Please set it first or select manually.", false);
+                            BarMessageQueue.Enqueue(Strings.SettingsTab_Msg_AutoSteamNotFound, false);
                         }
                     }
                 }
                 else
                 {
-                    BarMessageQueue.Enqueue("CS2 Client path not specified. Please set it first or select manually.", false);
+                    BarMessageQueue.Enqueue(Strings.SettingsTab_Msg_AutoCs2NotFound, false);
                 }
             }
             else
@@ -735,85 +738,101 @@ namespace NetaSabaPortal.ViewModels
             set => SetProperty(ref _extractingVpkTitle, value);
         }
 
-
-        public ICommand UpdateEntListCommand => new RelayCommand(() => 
+        [RelayCommand]
+        public void UpdateEntList()
+        {
+            Task.Run(async () => 
+            {
+                await UpdateEntitiesListAsync(showInfoMessage: true, showErrorMessage: true);
+            });
+        }
+        private async Task UpdateEntitiesListAsync(bool showInfoMessage, bool showErrorMessage)
         {
             if (_advOptions.Value.EntitiesUpdateEndpoints.Length < 0)
             {
-                BarMessageQueue.Enqueue($"No endpoints set, please check {nameof(AdvancedOptions)} ({AdvancedOptions.DefaultFileName})", true);
+                if (showErrorMessage)
+                {
+                    BarMessageQueue.Enqueue($"No endpoints set, please check {nameof(AdvancedOptions)} ({AdvancedOptions.DefaultFileName})", true);
+                }
                 return;
             }
-            Task.Run(async () =>
+            try
             {
-                try
+                foreach (var endpoint in _advOptions.Value.EntitiesUpdateEndpoints)
                 {
-                    foreach (var endpoint in _advOptions.Value.EntitiesUpdateEndpoints)
+                    // HttpClient
+                    using (var client = new HttpClient())
                     {
-                        // HttpClient
-                        using (var client = new HttpClient())
+                        var response = await client.GetAsync(endpoint);
+                        if (response.IsSuccessStatusCode)
                         {
-                            var response = await client.GetAsync(endpoint);
-                            if (response.IsSuccessStatusCode)
+                            var json = await response.Content.ReadAsStringAsync();
+                            var cfgB = new ConfigurationBuilder();
+                            cfgB.AddJsonStream(new MemoryStream(Encoding.UTF8.GetBytes(json)));
+                            var cfg = cfgB.Build();
+                            EntitiesOptions newOpt = new();
+                            cfg.GetSection("entities").Bind(newOpt);
+                            if (newOpt.EntVersion > _entOptions.Value.EntVersion)
                             {
-                                var json = await response.Content.ReadAsStringAsync();
-                                var cfgB = new ConfigurationBuilder();
-                                cfgB.AddJsonStream(new MemoryStream(Encoding.UTF8.GetBytes(json)));
-                                var cfg = cfgB.Build();
-                                EntitiesOptions newOpt = new();
-                                cfg.GetSection("entities").Bind(newOpt);
-                                if (newOpt.EntVersion > _entOptions.Value.EntVersion)
-                                {
-                                    _entOptions.Update(newOpt, false); // write to file
-                                    _entOptions.Value.EntVersion = newOpt.EntVersion;
-                                    _entOptions.Value.Definitions = newOpt.Definitions;
-                                    _entOptions.Value.MinVersionRequired = newOpt.MinVersionRequired;
+                                _entOptions.Update(newOpt, false); // write to file
+                                _entOptions.Value.EntVersion = newOpt.EntVersion;
+                                _entOptions.Value.Definitions = newOpt.Definitions;
+                                _entOptions.Value.MinVersionRequired = newOpt.MinVersionRequired;
 
-                                    EntitiesDefinitions = new ObservableCollection<EntityDefinition>(newOpt.Definitions);
-                                    foreach (var ent in EntitiesDefinitions)
+                                EntitiesDefinitions = new ObservableCollection<EntityDefinition>(newOpt.Definitions);
+                                foreach (var ent in EntitiesDefinitions)
+                                {
+                                    if (ent.IsDefault.HasValue && ent.IsDefault == true)
                                     {
-                                        if (ent.IsDefault.HasValue && ent.IsDefault == true)
-                                        {
-                                            SelectedEntity = ent;
-                                            break;
-                                        }
+                                        SelectedEntity = ent;
+                                        break;
                                     }
-                                    OnPropertyChanged(nameof(SelectedEntity));
-                                    BarMessageQueue.Enqueue($"Entities list updated to version {newOpt.EntVersion}", false);
-                                    return;
                                 }
+                                OnPropertyChanged(nameof(SelectedEntity));
+                                if (showInfoMessage)
+                                {
+                                    BarMessageQueue.Enqueue($"Entities list updated to version {newOpt.EntVersion}", false);
+                                }
+                                return;
                             }
                         }
                     }
+                }
+                if (showInfoMessage)
+                {
                     BarMessageQueue.Enqueue($"No new version found.", false);
                 }
-                catch (Exception ex)
+            }
+            catch (Exception ex)
+            {
+                if (showErrorMessage)
                 {
                     BarMessageQueue.Enqueue($"Error: {ex.Message}", true);
                 }
-            });
-        });
+            }
+        }
 
         [RelayCommand(CanExecute = nameof(CanExtract))]
         public async Task Extract()
         {
             if (SelectedEntity == null)
             {
-                BarMessageQueue.Enqueue("No entity is selected.", true);
+                BarMessageQueue.Enqueue(Strings.ExtractingTab_Msg_NoEntitySelected, true);
                 return;
             }
             if (!IsSteamPathValid)
             {
-                BarMessageQueue.Enqueue("Steam Client path not specified.", true);
+                BarMessageQueue.Enqueue(Strings.ExtractingTab_Msg_SteamPathEmpty, true);
                 return;
             }
             if (!IsCS2PathValid)
             {
-                BarMessageQueue.Enqueue("CS2 Client path not specified.", true);
+                BarMessageQueue.Enqueue(Strings.ExtractingTab_Msg_Cs2PathEmpty, true);
                 return;
             }
             if (!IsCS2AcfPathValid)
             {
-                BarMessageQueue.Enqueue("CS2 Workshop ACF path not specified.", true);
+                BarMessageQueue.Enqueue(Strings.ExtractingTab_Msg_WorkshopAcfPathEmpty, true);
                 return;
             }
 
@@ -826,12 +845,12 @@ namespace NetaSabaPortal.ViewModels
             string destFolder = Path.GetFullPath(Path.Combine(CS2Path, $"../../../../game/csgo"));
             if (!Directory.Exists(destFolder))
             {
-                BarMessageQueue.Enqueue($"CS2(CSGO) Root Folder not found.\r\n{destFolder}", true);
+                BarMessageQueue.Enqueue($"{Strings.ExtractingTab_Msg_Cs2ActualRootDirNotFoundError} ~ {destFolder}", true);
                 return;
             }
             if (!File.Exists(vpkPath))
             {
-                BarMessageQueue.Enqueue($"VPK file not found.\r\n{vpkPath}", true);
+                BarMessageQueue.Enqueue($"{Strings.ExtractingTab_Msg_VpkNotFoundError} ~ {vpkPath}", true);
                 return;
             }
 
@@ -1450,7 +1469,7 @@ namespace NetaSabaPortal.ViewModels
                         pathOpt.Cs2acf != _dirOptions.Value.Cs2acf)
                     {
                         _dirOptions.Update(pathOpt, false);
-                        BarMessageQueue.Enqueue("Settings saved.", false);
+                        BarMessageQueue.Enqueue(Strings.TabSettings_Msg_SettingsSaved, false);
                     }
                 }
                 else
@@ -1460,15 +1479,15 @@ namespace NetaSabaPortal.ViewModels
             }
             #endregion
             #region Extract
-            else if (e.PropertyName == "IsExtracting")
+            else if (e.PropertyName == nameof(IsExtracting))
             {
                 if (IsExtracting)
                 {
-                    BarMessageQueue.Enqueue("Extracting...", false);
+                    BarMessageQueue.Enqueue(Strings.ExtractingTab_Msg_WorkStarted, false);
                 }
                 else
                 {
-                    BarMessageQueue.Enqueue("Extracting finished.", false);
+                    BarMessageQueue.Enqueue(Strings.ExtractingTab_Msg_WorkFinished, false);
                     ExtractingProgressNow = 0;
                 }
             }

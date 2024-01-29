@@ -61,6 +61,24 @@ namespace NetaSabaPortal.Resources.Locales {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        internal static string _Button_ConfirmCancel {
+            get {
+                return ResourceManager.GetString("_Button_ConfirmCancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        internal static string _Button_ConfirmOk {
+            get {
+                return ResourceManager.GetString("_Button_ConfirmOk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Auto Detect.
         /// </summary>
         internal static string _ButtonAuto_Caption {
@@ -223,11 +241,92 @@ namespace NetaSabaPortal.Resources.Locales {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Published Date:.
+        /// </summary>
+        internal static string ExtractingTab_ConfirmDateLabel {
+            get {
+                return ResourceManager.GetString("ExtractingTab_ConfirmDateLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure to proceed?.
+        /// </summary>
+        internal static string ExtractingTab_ConfirmMainLabel {
+            get {
+                return ResourceManager.GetString("ExtractingTab_ConfirmMainLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title:.
+        /// </summary>
+        internal static string ExtractingTab_ConfirmTitleLabel {
+            get {
+                return ResourceManager.GetString("ExtractingTab_ConfirmTitleLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error: Cannot find the real root directory of CS2. Perhaps the CS2 update has changed the folder structure, or your game folder has been replaced through means such as HardLink?.
+        /// </summary>
+        internal static string ExtractingTab_Msg_Cs2ActualRootDirNotFoundError {
+            get {
+                return ResourceManager.GetString("ExtractingTab_Msg_Cs2ActualRootDirNotFoundError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CS2 Client path not specified..
+        /// </summary>
+        internal static string ExtractingTab_Msg_Cs2PathEmpty {
+            get {
+                return ResourceManager.GetString("ExtractingTab_Msg_Cs2PathEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No item has been selected yet, please select one first..
+        /// </summary>
+        internal static string ExtractingTab_Msg_NoEntitySelected {
+            get {
+                return ResourceManager.GetString("ExtractingTab_Msg_NoEntitySelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Steam Client path not specified..
+        /// </summary>
+        internal static string ExtractingTab_Msg_SteamPathEmpty {
+            get {
+                return ResourceManager.GetString("ExtractingTab_Msg_SteamPathEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error: Vpk file not found. Perhaps the Steam Workshop item has not been subscribed to? Or Steam has not been initiated to download the subscribed item?.
+        /// </summary>
+        internal static string ExtractingTab_Msg_VpkNotFoundError {
+            get {
+                return ResourceManager.GetString("ExtractingTab_Msg_VpkNotFoundError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Extracting finished..
         /// </summary>
         internal static string ExtractingTab_Msg_WorkFinished {
             get {
                 return ResourceManager.GetString("ExtractingTab_Msg_WorkFinished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to CS2 Workshop ACF file&apos;s path not specified..
+        /// </summary>
+        internal static string ExtractingTab_Msg_WorkshopAcfPathEmpty {
+            get {
+                return ResourceManager.GetString("ExtractingTab_Msg_WorkshopAcfPathEmpty", resourceCulture);
             }
         }
         
@@ -241,6 +340,33 @@ namespace NetaSabaPortal.Resources.Locales {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to CS2 Client Installation Folder not found. Please select manually..
+        /// </summary>
+        internal static string SettingsTab_Msg_AutoCs2NotFound {
+            get {
+                return ResourceManager.GetString("SettingsTab_Msg_AutoCs2NotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Steam Client Installation Folder not found. Please select manually..
+        /// </summary>
+        internal static string SettingsTab_Msg_AutoSteamNotFound {
+            get {
+                return ResourceManager.GetString("SettingsTab_Msg_AutoSteamNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &quot;appworkshop_730.acf&quot; not found. Please select manually..
+        /// </summary>
+        internal static string SettingsTab_Msg_AutoWorkshopAcfNotFound {
+            get {
+                return ResourceManager.GetString("SettingsTab_Msg_AutoWorkshopAcfNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Path to .
         /// </summary>
         internal static string TabSettings_Cs2AcfPathLabel_0 {
@@ -250,7 +376,7 @@ namespace NetaSabaPortal.Resources.Locales {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to appmanifest_730.acf.
+        ///   Looks up a localized string similar to appworkshop_730.acf.
         /// </summary>
         internal static string TabSettings_Cs2AcfPathLabel_1 {
             get {
@@ -309,6 +435,15 @@ namespace NetaSabaPortal.Resources.Locales {
         internal static string TabSettings_Cs2PathLabel_4 {
             get {
                 return ResourceManager.GetString("TabSettings_Cs2PathLabel_4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings saved..
+        /// </summary>
+        internal static string TabSettings_Msg_SettingsSaved {
+            get {
+                return ResourceManager.GetString("TabSettings_Msg_SettingsSaved", resourceCulture);
             }
         }
         

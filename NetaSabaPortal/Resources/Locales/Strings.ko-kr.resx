@@ -196,4 +196,31 @@
   <data name="ExtractingTab_Msg_WorkStarted" xml:space="preserve">
     <value>전개 중...</value>
   </data>
+  <data name="TabSettings_Msg_SettingsSaved" xml:space="preserve">
+    <value>설정이 저장되었습니다.</value>
+  </data>
+  <data name="SettingsTab_Msg_AutoCs2NotFound" xml:space="preserve">
+    <value>CS2 클라이언트 설치 폴더를 찾을 수 없습니다. 수동으로 선택해 주세요.</value>
+  </data>
+  <data name="SettingsTab_Msg_AutoSteamNotFound" xml:space="preserve">
+    <value>Steam 클라이언트 설치 폴더를 찾을 수 없습니다. 수동으로 선택해 주세요.</value>
+  </data>
+  <data name="SettingsTab_Msg_AutoWorkshopAcfNotFound" xml:space="preserve">
+    <value>"appworkshop_730.acf" 를 찾을 수 없습니다. 수동으로 선택해 주세요.</value>
+  </data>
+  <data name="ExtractingTab_Msg_SteamPathEmpty" xml:space="preserve">
+    <value>Steam 클라이언트 경로가 지정되지 않았습니다.</value>
+  </data>
+  <data name="ExtractingTab_Msg_WorkshopAcfPathEmpty" xml:space="preserve">
+    <value>CS2 워크샵 ACF 파일의 경로가 지정되지 않았습니다.</value>
+  </data>
+  <data name="ExtractingTab_Msg_Cs2PathEmpty" xml:space="preserve">
+    <value>CS2 클라이언트 경로가 지정되지 않았습니다.</value>
+  </data>
+  <data name="ExtractingTab_Msg_NoEntitySelected" xml:space="preserve">
+    <value>아직 어떤 항목도 선택되지 않았습니다. 먼저 선택해 주세요.</value>
+  </data>
+  <data name="ExtractingTab_Msg_VpkNotFoundError" xml:space="preserve">
+    <value>오류: Vpk 파일을 찾을 수 없습니다. 아마도 해당 Steam Workshop 항목이 아직 구독되지 않았을까요? 아니면 구독한 항목을 다운로드하기 위해 Steam이 아직 시작되지 않았을까요?</value>
+  </data>
 </root>

@@ -149,7 +149,7 @@
     <value>美国东岸</value>
   </data>
   <data name="_RegionItems_1" xml:space="preserve">
-    <value>美国西岸 </value>
+    <value>美国西岸</value>
   </data>
   <data name="_RegionItems_2" xml:space="preserve">
     <value>南美洲</value>
@@ -195,5 +195,35 @@
   </data>
   <data name="ExtractingTab_Msg_WorkStarted" xml:space="preserve">
     <value>正在展开...</value>
+  </data>
+  <data name="TabSettings_Msg_SettingsSaved" xml:space="preserve">
+    <value>已保存设置。</value>
+  </data>
+  <data name="SettingsTab_Msg_AutoCs2NotFound" xml:space="preserve">
+    <value>未找到 CS2 客户端安装文件夹。请手动选择。</value>
+  </data>
+  <data name="SettingsTab_Msg_AutoSteamNotFound" xml:space="preserve">
+    <value>未找到 Steam 客户端安装文件夹。请手动选择。</value>
+  </data>
+  <data name="SettingsTab_Msg_AutoWorkshopAcfNotFound" xml:space="preserve">
+    <value>未找到 “appworkshop_730.acf”。请手动选择。</value>
+  </data>
+  <data name="ExtractingTab_Msg_SteamPathEmpty" xml:space="preserve">
+    <value>未指定 Steam 客户端路径。</value>
+  </data>
+  <data name="ExtractingTab_Msg_WorkshopAcfPathEmpty" xml:space="preserve">
+    <value>未指定 CS2 工作坊 ACF 文件的路径。</value>
+  </data>
+  <data name="ExtractingTab_Msg_Cs2PathEmpty" xml:space="preserve">
+    <value>未指定 CS2 客户端路径。</value>
+  </data>
+  <data name="ExtractingTab_Msg_NoEntitySelected" xml:space="preserve">
+    <value>尚未選擇任何項目，請先選擇。</value>
+  </data>
+  <data name="ExtractingTab_Msg_VpkNotFoundError" xml:space="preserve">
+    <value>错误：找不到 Vpk 文件。可能该 Steam Workshop 项目尚未订阅？或是尚未启动 Steam 下载该订阅项目？</value>
+  </data>
+  <data name="ExtractingTab_Msg_Cs2ActualRootDirNotFoundError" xml:space="preserve">
+    <value>找不到 CS2 真正的遊戲根目錄。也許 CS2 更新改變了資料夾架構，或是您的遊戲資料夾有透過 HardLink 等手段置換？</value>
   </data>
 </root>

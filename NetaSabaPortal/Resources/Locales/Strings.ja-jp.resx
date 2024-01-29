@@ -196,4 +196,31 @@
   <data name="ExtractingTab_Msg_WorkStarted" xml:space="preserve">
     <value>展開中...</value>
   </data>
+  <data name="TabSettings_Msg_SettingsSaved" xml:space="preserve">
+    <value>設定を保存しました。</value>
+  </data>
+  <data name="SettingsTab_Msg_AutoCs2NotFound" xml:space="preserve">
+    <value>CS2 クライアントのインストールフォルダが見つかりません。手動で選択してください。</value>
+  </data>
+  <data name="SettingsTab_Msg_AutoSteamNotFound" xml:space="preserve">
+    <value>Steam クライアントのインストールフォルダが見つかりません。手動で選択してください。</value>
+  </data>
+  <data name="SettingsTab_Msg_AutoWorkshopAcfNotFound" xml:space="preserve">
+    <value>「appworkshop_730.acf」が見つかりません。手動で選択してください。</value>
+  </data>
+  <data name="ExtractingTab_Msg_SteamPathEmpty" xml:space="preserve">
+    <value>Steam クライアントのパスが指定されていません。</value>
+  </data>
+  <data name="ExtractingTab_Msg_WorkshopAcfPathEmpty" xml:space="preserve">
+    <value>CS2 ワークショップ ACF ファイルのパスが指定されていません。</value>
+  </data>
+  <data name="ExtractingTab_Msg_Cs2PathEmpty" xml:space="preserve">
+    <value>CS2 クライアントのパスが指定されていません。</value>
+  </data>
+  <data name="ExtractingTab_Msg_NoEntitySelected" xml:space="preserve">
+    <value>まだ何も選択されていません。先に選択してください。</value>
+  </data>
+  <data name="ExtractingTab_Msg_VpkNotFoundError" xml:space="preserve">
+    <value>エラー：Vpk ファイルが見つかりません。もしかして、その Steam Workshop アイテムはまだサブスクライブされていないのでしょうか？または、サブスクライブしたアイテムをダウンロードするために Steam がまだ起動されていないのでしょうか？</value>
+  </data>
 </root>

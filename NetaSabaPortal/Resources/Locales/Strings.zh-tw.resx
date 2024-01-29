@@ -196,4 +196,34 @@
   <data name="ExtractingTab_Msg_WorkStarted" xml:space="preserve">
     <value>正在展開...</value>
   </data>
+  <data name="TabSettings_Msg_SettingsSaved" xml:space="preserve">
+    <value>已儲存設定。</value>
+  </data>
+  <data name="SettingsTab_Msg_AutoCs2NotFound" xml:space="preserve">
+    <value>未找到 CS2 客戶端安裝資料夾。請手動選擇。</value>
+  </data>
+  <data name="SettingsTab_Msg_AutoSteamNotFound" xml:space="preserve">
+    <value>未找到 Steam 客戶端安裝資料夾。請手動選擇。</value>
+  </data>
+  <data name="SettingsTab_Msg_AutoWorkshopAcfNotFound" xml:space="preserve">
+    <value>未找到「appworkshop_730.acf」。請手動選擇。</value>
+  </data>
+  <data name="ExtractingTab_Msg_SteamPathEmpty" xml:space="preserve">
+    <value>未指定 Steam 客戶端路徑。</value>
+  </data>
+  <data name="ExtractingTab_Msg_WorkshopAcfPathEmpty" xml:space="preserve">
+    <value>未指定 CS2 工作坊 ACF 檔案的路徑。</value>
+  </data>
+  <data name="ExtractingTab_Msg_Cs2PathEmpty" xml:space="preserve">
+    <value>未指定 CS2 客戶端路徑。</value>
+  </data>
+  <data name="ExtractingTab_Msg_NoEntitySelected" xml:space="preserve">
+    <value>尚未选择任何项目，请先选择。</value>
+  </data>
+  <data name="ExtractingTab_Msg_VpkNotFoundError" xml:space="preserve">
+    <value>錯誤：找不到 Vpk 檔案。也許該 Steam Workshop 項目尚未訂閱？或是尚未啟動 Steam 下載該訂閱項目？</value>
+  </data>
+  <data name="ExtractingTab_Msg_Cs2ActualRootDirNotFoundError" xml:space="preserve">
+    <value>找不到 CS2 真正的游戏根目录。也许 CS2 更新改变了文件夹结构，或是您的游戏文件夹已通过 HardLink 等方式替换？</value>
+  </data>
 </root>
